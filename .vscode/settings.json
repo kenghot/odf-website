@@ -1,0 +1,6 @@
+{
+  "git.ignoreLimitWarning": true,
+  "tslint.autoFixOnSave": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2
+}

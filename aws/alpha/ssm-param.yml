@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Environment variables for pdmo"
+Resources:
+  PdmoKey:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "ODF_KEY"
+      Type: "String"
+      Value: "odfWebsite"
+  PdmoVpc:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "ODF_VPC"
+      Type: "String"
+      Value: "odf-vpc"
+  PdmoSg:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "ODF_SG"
+      Type: "String"
+      Value: "odf-sg"

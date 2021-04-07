@@ -1,0 +1,28 @@
+const filesPath = {
+  systemActivationRequestForm: require("../assets/documents/แบบคำขอเปิดใช้งานระบบฯ.pdf"),
+  debtorLitigationReport: require("../assets/documents/debtcollectionreport/รายงานการดำเนินคดีของลูกหนี้.xls"),
+  debtRepaymentReport: require("../assets/documents/debtcollectionreport/รายงานการรับชำระหนี้.xls"),
+  debtAdjustmentReport: require("../assets/documents/debtcollectionreport/รายงานปรับสภาพหนี้.xls"),
+  accountClosingReport: require("../assets/documents/debtcollectionreport/รายงานปิดบัญชี.xls"),
+  outstandingAccountReceivableReport: require("../assets/documents/debtcollectionreport/รายงานผลลูกหนี้ค้างชำระ_ตามประเภทลูกหนี้.xls"),
+  outstandingByProvinceAndRegionReport: require("../assets/documents/debtcollectionreport/รายงานผลลูกหนี้ค้างชำระ_รายจังหวัด+รายภาค.xls"),
+  visitReport: require("../assets/documents/debtcollectionreport/รายงานเยี่ยมบ้าน.xls"),
+  defaultStatisticsReport: require("../assets/documents/debtcollectionreport/รายงานสถิติการผิดนัด.xls"),
+  summaryReportForLoansByOccupation: require("../assets/documents/debtcollectionreport/รายงานสรุปขอกู้ตามประเภทอาชีพ.xls"),
+  contractExpireReport: require("../assets/documents/debtcollectionreport/รายงานสัญญาที่จะขาดอายุความ.xls"),
+  // overallRepaymentReport: require("../assets/documents/debtrepaymentreport/รายงานการชำระหนี้โดยรวม.xls"),
+  // debtRepaymentByOrganizeReport: require("../assets/documents/debtrepaymentreport/รายงานการชำระหนี้แยกตามหน่วยงาน.xls"),
+  // debtRepaymentByTypeReport: require("../assets/documents/debtrepaymentreport/รายงานการชำระหนี้แยกประเภท.xls"),
+  // cancelRepaymentReport: require("../assets/documents/debtrepaymentreport/รายงานยกเลิกการชำระ.xls"),
+  // receiptReprintReport: require("../assets/documents/debtrepaymentreport/รายงานการพิมพ์ใบเสร็จซ้ำ.xls")
+  overallRepaymentReport: require("../assets/documents/debtrepaymentreportv2/report5.xlsx"),
+  debtRepaymentByOrganizeReport: require("../assets/documents/debtrepaymentreportv2/report2.xlsx"),
+  debtRepaymentByTypeReport: require("../assets/documents/debtrepaymentreportv2/report1.xlsx"),
+  cancelRepaymentReport: require("../assets/documents/debtrepaymentreportv2/report3.xlsx"),
+  receiptReprintReport: require("../assets/documents/debtrepaymentreportv2/report4.xlsx"),
+  documentsTest1: require("../assets/documents/donation/หนังสือขอบคุณ.pdf"),
+  documentsTest2: require("../assets/documents/donation/ซองจดหมาย.pdf"),
+  donationTempalte: require("../assets/documents/donation/ไฟล์ข้อมูลผู้บริจาคเบี้ยยังชีพผู้สูงอายุ.xlsx"),
+  eDonation: require("../assets/documents/donation/e-donation.txt"),
+};
+export default filesPath;

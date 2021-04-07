@@ -1,0 +1,1 @@
+export { Factsheet } from "./ConfigService";

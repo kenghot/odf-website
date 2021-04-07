@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Service: odf-website'
+Parameters:
+  ECSClusterName:
+    Type: String
+    Description: 'Refer to existing ECSCluster StackName'
+    Default: odf-ecs
+Resources:
+  PdmoTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: odf
+      ContainerDefinitions:
+        - Name: odf
+          Cpu: 900
+          Essential: 'true'
+          Image: 172818316967.dkr.ecr.ap-southeast-1.amazonaws.com/odf-website
+          Memory: 900
+          PortMappings:
+            - ContainerPort: '80'
+              HostPort: '80'
+      Volumes:
+        - Name: odf
+  ODFService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Fn::ImportValue: !Sub ${ECSClusterName}-Cluster
+      DeploymentConfiguration:
+        MaximumPercent: '100'
+        MinimumHealthyPercent: '0'
+      DesiredCount: '1'
+      ServiceName: odf
+      TaskDefinition: !Ref PdmoTaskDefinition
+Outputs:
+  ODFService:
+    Value: !Ref ODFService
+    Export:
+      Name: !Sub ${AWS::StackName}-ODFService
