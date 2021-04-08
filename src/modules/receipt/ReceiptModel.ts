@@ -417,7 +417,7 @@ export const ReceiptModel = types
       try {
         self.setField({ fieldname: "loading", value: true });
         for (const item of self.receiptItems) {
-          if (item.refType === "D") {
+          if (item.refType === "D" || item.refType === "PR") {
             if (self.paymentMethod === "TRANSFER") {
               item.setField({
                 fieldname: "description3",
