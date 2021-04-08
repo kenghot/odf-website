@@ -145,6 +145,11 @@ const printBody = (receipt: IReceiptModel) => {
           `${mainCharLabel(item.description4, 40, false, true)}`,
           true
         );
+        epos.printThai4Pass(
+          receipt.paymentMethod === "TRANSFER"
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(receipt.tempTransferDate)}  ${receipt.tempPaymentRefNo}`, 40)} `
+          : undefined
+        );
         break;
       case "D":
         printItem(
@@ -165,11 +170,14 @@ const printBody = (receipt: IReceiptModel) => {
           `${item.name}`,
           `${mainCharLabel(`${item.description1} ${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${item.description2} ` + `${item.ref2}`
+          `${item.description2} ` + `${item.ref2}`,
+          receipt.paymentMethod === "TRANSFER"
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+            : undefined
         );
-        epos.printThai4Pass(
-          `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
-        );
+        // epos.printThai4Pass(
+        //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+        // );
         break;
       default:
         printItem(
