@@ -400,12 +400,9 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
         `${mainCharLabel(`${appStore.enumItemLabel("officePaymentMethod", "MONEYORDER")} `, 20)}` +
         `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 20, true)}`
       );
-      epos.printThai4Pass(
-        `${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`
-      );
-      epos.printThai4Pass(
-        `${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20, true)}`
-      );
+      epos.setTextLeft();
+      epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`);
+      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20)}` );
       break;
     case "CHECK":
       epos.printThai4Pass(
