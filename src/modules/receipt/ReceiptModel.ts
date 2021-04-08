@@ -351,7 +351,7 @@ export const ReceiptModel = types
     setOrganizationName: (org: IOrgModel) => {
       self.setField({
         fieldname: "organizationName",
-        value: `${org.orgName}${org.orgCode ? ` (${org.orgCode})` : ""}`,
+        value: `${org.address.province}${org.orgCode ? ` (${org.orgCode})` : ""}`,
       });
     },
     setOrganizationAddress: (address: IAddressModel) => {
