@@ -167,6 +167,9 @@ const printBody = (receipt: IReceiptModel) => {
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`
         );
+        epos.printThai4Pass(
+          `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+        );
         break;
       default:
         printItem(
