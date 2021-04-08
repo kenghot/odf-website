@@ -151,10 +151,10 @@ const printBody = (receipt: IReceiptModel) => {
           item.ref1 === "D01" ? "เงินบริจาคสำหรับโครงการบริจาคเบี้ยยังชีพผู้สูงอายุ" : `${item.name}`,
           item.ref1 === "D01" ? "เข้ากองทุนผู้สูงอายุ" : ``,
           `${mainCharLabel(item.description1, 30)}` + `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          item.description2 ? `${mainCharLabel(`หมายเหตุ:`, 30)}` : undefined,
-          item.description2 ? `${mainCharLabel(`${item.description2}`, 30)} ` : undefined,
-          false,
-          true,
+          //item.description2 ? `${mainCharLabel(`หมายเหตุ:`, 30)}` : undefined,
+          //item.description2 ? `${mainCharLabel(`${item.description2}`, 30)} ` : undefined,
+          //false,
+          //true,
           receipt.paymentMethod === "TRANSFER"
             ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
             : undefined
@@ -163,8 +163,8 @@ const printBody = (receipt: IReceiptModel) => {
       case "PR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.description1} ${item.ref1}`, 30)}` +
-          `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
+          `${mainCharLabel(`${item.description1} ${item.ref1}`, 30)}`,
+          //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`
         );
         break;
@@ -401,7 +401,9 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
         `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 20, true)}`
       );
       epos.printThai4Pass(
-        `${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}` +
+        `${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`
+      );
+      epos.printThai4Pass(
         `${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20, true)}`
       );
       break;
