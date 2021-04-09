@@ -173,8 +173,12 @@ export const ReceiptItem = types
       //   fieldname: "description3",
       //   value: "รหัสจังหวัด/ปี/เลขที่สัญญา",
       // });
+      // self.setField({
+      //   fieldname: "description4",
+      //   value: ar.name,
+      // });
       self.setField({
-        fieldname: "description4",
+        fieldname: "description1",
         value: ar.name,
       });
       self.setField({ fieldname: "refType", value: "AR" });
@@ -438,11 +442,11 @@ export const ReceiptModel = types
           if(item.refType === "AR"){
             if (self.paymentMethod === "TRANSFER") {
               item.setField({
-                fieldname: "description1",
+                fieldname: "description2",
                 value: self.tempTransferDate,
               });
               item.setField({
-                fieldname: "description2",
+                fieldname: "description3",
                 value: self.tempPaymentRefNo,
               });
             }

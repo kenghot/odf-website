@@ -142,12 +142,12 @@ const printBody = (receipt: IReceiptModel) => {
           `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${mainCharLabel(`หมายเลขอ้างอิงลูกหนี้ ` + `${item.ref2ArLabel}`, 40)}`,
           `${mainCharLabel(`รหัสจังหวัด/ปี/เลขที่สัญญา ` + `${item.ref3}`, 40)}`,
-          `${mainCharLabel(item.description4, 40, false, true)}`,
+          `${mainCharLabel(item.description1, 40, false, true)}`,
           true
         );
         if(receipt.paymentMethod === "TRANSFER")
         {
-        epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description1)}  ${item.description2}`, 40)} `);
+        epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `);
         }
         
         break;
