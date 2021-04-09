@@ -138,18 +138,18 @@ const printBody = (receipt: IReceiptModel) => {
       case "AR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.description1} ${item.ref1IdCardNo}`, 30)}` +
+          `${mainCharLabel(`บัตรประชาชน ${item.ref1IdCardNo}`, 30)}` +
           `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${mainCharLabel(`${item.description2} ` + `${item.ref2ArLabel}`, 40)}`,
-          `${mainCharLabel(`${item.description3} ` + `${item.ref3}`, 40)}`,
+          `${mainCharLabel(`หมายเลขอ้างอิงลูกหนี้ ` + `${item.ref2ArLabel}`, 40)}`,
+          `${mainCharLabel(`รหัสจังหวัด/ปี/เลขที่สัญญา ` + `${item.ref3}`, 40)}`,
           `${mainCharLabel(item.description4, 40, false, true)}`,
           true
         );
-        epos.printThai4Pass(
-          receipt.paymentMethod === "TRANSFER"
-          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(receipt.tempTransferDate)}  ${receipt.tempPaymentRefNo}`, 40)} `
-          : undefined
-        );
+        if(receipt.paymentMethod === "TRANSFER")
+        {
+        epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description1)}  ${item.description2}`, 40)} `);
+        }
+        
         break;
       case "D":
         printItem(
@@ -168,7 +168,7 @@ const printBody = (receipt: IReceiptModel) => {
       case "PR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.description1} ${item.ref1}`, 30)}`,
+          `${mainCharLabel(`รหัสโครงการ ${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
           receipt.paymentMethod === "TRANSFER"
