@@ -11,6 +11,8 @@ import {
   DonationDirectByProvinceReport,
   DonationByAgeReport,
   DonationByGenderReport,
+  DonationAllowancesSummarize,
+  DonationDirectSummarize,
 } from "../modules/report/containers";
 
 interface IDonationReportListPage extends WithTranslation, RouteComponentProps {
@@ -37,6 +39,8 @@ class DonationReportListPage extends React.Component<IDonationReportListPage> {
         <DonationDirectByProvinceReport errorObject={this.errorObject} />
         <DonationByAgeReport errorObject={this.errorObject} />
         <DonationByGenderReport errorObject={this.errorObject} />
+        <DonationAllowancesSummarize errorObject={this.errorObject} />
+        <DonationDirectSummarize errorObject={this.errorObject} />
         <ErrorMessage errorobj={this.errorObject} float timeout={3000} />
       </Form>
     );

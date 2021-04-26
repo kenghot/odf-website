@@ -35,6 +35,7 @@ class DonationByGenderReport extends React.Component<IDonationByGenderReport> {
           <Grid columns={"equal"} doubling stackable>
             <Grid.Column>
               <Form.Field
+              required
                 label={t("module.report.public.fiscalYear")}
                 control={FiscalYearDDL}
                 placeholder={t("module.report.public.pleaseSelectFiscalYear")}

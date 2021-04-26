@@ -34,6 +34,7 @@ class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceB
           <Grid columns={"equal"} doubling stackable>
             <Grid.Column>
               <Form.Field
+              required
                 label={t("module.report.public.fiscalYearStart")}
                 control={FiscalYearDDL}
                 placeholder={t("module.report.public.pleaseSelectFiscalYearStart")}
@@ -43,6 +44,7 @@ class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceB
             </Grid.Column>
             <Grid.Column>
               <Form.Field
+              required
                 label={t("module.report.public.fiscalYearEnd")}
                 control={FiscalYearDDL}
                 placeholder={t("module.report.public.pleaseSelectFiscalYearEnd")}
@@ -52,6 +54,7 @@ class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceB
             </Grid.Column>
             <Grid.Column>
               <Form.Input
+              required
                 label={t("module.report.public.province")}
                 placeholder={t("module.report.public.pleaseSpecifyProvince")}
                 control={ProvinceDDL}

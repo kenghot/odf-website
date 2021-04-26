@@ -12,6 +12,7 @@ import { LocationModel } from "../../../components/address";
 import { fetchNoService } from "../../../utils/request-noservice";
 import { DonationDocUrl } from "../../donation/DonationService";
 
+
 interface IDonationDirectByMonthReport
   extends WithTranslation,
     RouteComponentProps {
@@ -22,7 +23,7 @@ interface IDonationDirectByMonthReport
 @inject("appStore")
 @observer
 class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonthReport> {
-  public state = { fiscalYearStart: "",fiscalYearEnd:"", province: "" };
+  public state = { fiscalYearStart: "",fiscalYearEnd:"", province: ""};
   public locationStore = LocationModel.create({});
 
   public render() {
@@ -34,6 +35,7 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
           <Grid columns={"equal"} doubling stackable>
             <Grid.Column>
               <Form.Field
+                required
                 label={t("module.report.public.fiscalYearStart")}
                 control={FiscalYearDDL}
                 placeholder={t("module.report.public.pleaseSelectFiscalYearStart")}
@@ -43,6 +45,7 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
             </Grid.Column>
             <Grid.Column>
               <Form.Field
+              required
                 label={t("module.report.public.fiscalYearEnd")}
                 control={FiscalYearDDL}
                 placeholder={t("module.report.public.pleaseSelectFiscalYearEnd")}
@@ -52,6 +55,7 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
             </Grid.Column>
             <Grid.Column>
               <Form.Input
+                required
                 label={t("module.report.public.province")}
                 placeholder={t("module.report.public.pleaseSpecifyProvince")}
                 control={ProvinceDDL}
@@ -77,7 +81,7 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
   private onSelectedProvince = (value: any) => {
     this.setState({ province: value });
   };
-
+ 
   private onGetReport = async () => {
     const { errorObject } = this.props;
     try {
