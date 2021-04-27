@@ -71,6 +71,7 @@ class DonationAllowancesSummarize extends React.Component<IDonationAllowancesSum
             </Grid.Column>
             <Grid.Column>
             <Form.Input
+            maxLength="13"
             fluid
             label={t("page.DonationReportListPage.idcard_noOptionsLabel")}
             placeholder={t("page.DonationReportListPage.idcard_noOptionsPlaceholder")}

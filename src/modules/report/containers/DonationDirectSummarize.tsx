@@ -15,7 +15,6 @@ import { OrganizationDDL } from "../../admin/organization/components";
 import { OrgListModel } from "../../admin/organization/OrgListModel";
 import { DateInput } from "../../../components/common";
 
-
 interface IDonationDirectSummarize
   extends WithTranslation,
     RouteComponentProps {
@@ -30,7 +29,7 @@ class DonationDirectSummarize extends React.Component<IDonationDirectSummarize> 
   public locationStore = LocationModel.create({});
   private orgList = OrgListModel.create({});
   public render() {
-    const { appStore, t } = this.props;
+    const { appStore, t} = this.props;
     return (
       <ReportCard
         title={t("page.DonationReportListPage.report07")}
@@ -71,6 +70,7 @@ class DonationDirectSummarize extends React.Component<IDonationDirectSummarize> 
             </Grid.Column>
             <Grid.Column>
             <Form.Input
+            maxLength="13"
             fluid
             label={t("page.DonationReportListPage.idcard_noOptionsLabel")}
             placeholder={t("page.DonationReportListPage.idcard_noOptionsPlaceholder")}
