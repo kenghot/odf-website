@@ -16,6 +16,12 @@ interface ISearchOverdueByDateRange extends WithTranslation {
   inputFieldNameEndDate: string;
   valueFieldNameEndDate: string;
   filterFiscalYear?: string;
+  idInputFieldNameStartYear?: string;
+  inputFieldNameStartYear: string;
+  valueFieldNameStartYear: string;
+  idInputFieldNameEndYear: string;
+  inputFieldNameEndYear: string;
+  valueFieldNameEndYear: string;
   onChangeFiscalYearDDL?: () => void;
   clearable?: boolean;
 }

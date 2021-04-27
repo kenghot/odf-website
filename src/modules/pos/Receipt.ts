@@ -138,23 +138,28 @@ const printBody = (receipt: IReceiptModel) => {
       case "AR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.description1} ${item.ref1IdCardNo}`, 30)}` +
+          `${mainCharLabel(`บัตรประชาชน ${item.ref1IdCardNo}`, 30)}` +
           `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${mainCharLabel(`${item.description2} ` + `${item.ref2ArLabel}`, 40)}`,
-          `${mainCharLabel(`${item.description3} ` + `${item.ref3}`, 40)}`,
-          `${mainCharLabel(item.description4, 40, false, true)}`,
+          `${mainCharLabel(`หมายเลขอ้างอิงลูกหนี้ ` + `${item.ref2ArLabel}`, 40)}`,
+          `${mainCharLabel(`รหัสจังหวัด/ปี/เลขที่สัญญา ` + `${item.ref3}`, 40)}`,
+          `${mainCharLabel(item.description1, 40, false, true)}`,
           true
         );
+        if(receipt.paymentMethod === "TRANSFER")
+        {
+        epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `);
+        }
+        
         break;
       case "D":
         printItem(
           item.ref1 === "D01" ? "เงินบริจาคสำหรับโครงการบริจาคเบี้ยยังชีพผู้สูงอายุ" : `${item.name}`,
           item.ref1 === "D01" ? "เข้ากองทุนผู้สูงอายุ" : ``,
           `${mainCharLabel(item.description1, 30)}` + `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          item.description2 ? `${mainCharLabel(`หมายเหตุ:`, 30)}` : undefined,
-          item.description2 ? `${mainCharLabel(`${item.description2}`, 30)} ` : undefined,
-          false,
-          true,
+          //item.description2 ? `${mainCharLabel(`หมายเหตุ:`, 30)}` : undefined,
+          //item.description2 ? `${mainCharLabel(`${item.description2}`, 30)} ` : undefined,
+          //false,
+          //true,
           receipt.paymentMethod === "TRANSFER"
             ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
             : undefined
@@ -163,10 +168,16 @@ const printBody = (receipt: IReceiptModel) => {
       case "PR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.description1} ${item.ref1}`, 30)}` +
-          `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${item.description2} ` + `${item.ref2}`
+          `${mainCharLabel(`รหัสโครงการ ${item.ref1}`, 30)}`,
+          //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
+          `${item.description2} ` + `${item.ref2}`,
+          receipt.paymentMethod === "TRANSFER"
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+            : undefined
         );
+        // epos.printThai4Pass(
+        //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+        // );
         break;
       default:
         printItem(
@@ -400,10 +411,9 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
         `${mainCharLabel(`${appStore.enumItemLabel("officePaymentMethod", "MONEYORDER")} `, 20)}` +
         `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 20, true)}`
       );
-      epos.printThai4Pass(
-        `${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}` +
-        `${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20, true)}`
-      );
+      epos.setTextLeft();
+      epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`);
+      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20)}` );
       break;
     case "CHECK":
       epos.printThai4Pass(

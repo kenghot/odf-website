@@ -37,4 +37,8 @@ export { default as DonationAllowanceByMonthReport } from "./DonationAllowanceBy
 export { default as DonationDirectByProvinceReport } from "./DonationDirectByProvinceReport";
 export { default as DonationByAgeReport } from "./DonationByAgeReport";
 export { default as DonationByGenderReport } from "./DonationByGenderReport";
+export { default as DonationAllowancesSummarize } from "./DonationAllowancesSummarize";
+export { default as DonationDirectSummarize } from "./DonationDirectSummarize";
+
+
 

@@ -11,9 +11,11 @@ import ProvinceDDL from "../../../components/address/ProvinceDDL";
 import { LocationModel } from "../../../components/address";
 import { fetchNoService } from "../../../utils/request-noservice";
 import { DonationDocUrl } from "../../donation/DonationService";
+import { OrganizationDDL } from "../../admin/organization/components";
+import { OrgListModel } from "../../admin/organization/OrgListModel";
 import { DateInput } from "../../../components/common";
 
-interface IDonationDirectByProvinceReport
+interface IDonationDirectSummarize
   extends WithTranslation,
     RouteComponentProps {
   errorObject: IErrorModel;
@@ -22,20 +24,30 @@ interface IDonationDirectByProvinceReport
 
 @inject("appStore")
 @observer
-class DonationDirectByProvinceReport extends React.Component<IDonationDirectByProvinceReport> {
-  public state = { fiscalYear: "", yearMonth: "" };
+class DonationDirectSummarize extends React.Component<IDonationDirectSummarize> {
+  public state = { fiscalYear: "", yearMonth: "",id_card_no:"",org_id:"",firstname:"",lastname:"",organizationId: "" };
   public locationStore = LocationModel.create({});
-
+  private orgList = OrgListModel.create({});
   public render() {
-    const { appStore, t } = this.props;
+    const { appStore, t} = this.props;
     return (
       <ReportCard
-        title={t("page.DonationReportListPage.report03")}
+        title={t("page.DonationReportListPage.report07")}
         filter={
           <Grid columns={"equal"} doubling stackable>
-            <Grid.Column>
+             <Grid.Column width={8}>
               <Form.Field
-              required
+                required
+                label={t("module.report.public.organization")}
+                control={OrganizationDDL}
+                orgList={this.orgList}
+                value={this.state.organizationId}
+                onChange={this.onSelectedOrganizeDDL}
+              />
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <Form.Field
+                required
                 label={t("module.report.public.fiscalYear")}
                 control={FiscalYearDDL}
                 placeholder={t("module.report.public.pleaseSelectFiscalYear")}
@@ -43,8 +55,9 @@ class DonationDirectByProvinceReport extends React.Component<IDonationDirectByPr
                 onChange={this.onSelectedFiscalYear}
               />
             </Grid.Column>
-            <Grid.Column>
-              <Form.Field
+            <Grid.Column width={4}>
+            <Form.Field
+                required
                 label={t("module.report.DateFilterDDL.month")}
                 control={DateInput}
                 type="month"
@@ -52,8 +65,42 @@ class DonationDirectByProvinceReport extends React.Component<IDonationDirectByPr
                 value={this.state.yearMonth}
                 fieldName={"yearMonth"}
                 onChangeInputField={this.onSelectedMonth}
-                // id={"paymentviaCounterServiceReportMonth"}
+                id={"DonationDirectSummarizeReportMonth"}
               />
+            </Grid.Column>
+            <Grid.Column>
+            <Form.Input
+            maxLength="13"
+            fluid
+            label={t("page.DonationReportListPage.idcard_noOptionsLabel")}
+            placeholder={t("page.DonationReportListPage.idcard_noOptionsPlaceholder")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputFieldIdCardNo(data.value)
+            }
+            value={this.state.id_card_no}
+          />
+            </Grid.Column>
+            <Grid.Column>
+            <Form.Input
+            fluid
+            label={t("page.DonationReportListPage.firstnameOptionsLabel")}
+            placeholder={t("page.DonationReportListPage.firstnameOptionsPlaceholder")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputFieldFirstname(data.value)
+            }
+            value={this.state.firstname}
+          />
+            </Grid.Column>
+            <Grid.Column>
+            <Form.Input
+            fluid
+            label={t("page.DonationReportListPage.lastnameOptionsLabel")}
+            placeholder={t("page.DonationReportListPage.lastnameOptionsPlaceholder")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputFieldLastname(data.value)
+            }
+            value={this.state.lastname}
+          />
             </Grid.Column>
           </Grid>
         }
@@ -75,16 +122,32 @@ class DonationDirectByProvinceReport extends React.Component<IDonationDirectByPr
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     this.onSelectedYearMonth(fieldName, `${month}`);
+  }; 
+  private onSelectedOrganizeDDL = (value: any) => {
+    this.setState({ organizationId: value });
+  };
+  private onChangeInputFieldIdCardNo = ( value: any) => {
+    this.setState({ id_card_no: value });
+  };
+  private onChangeInputFieldFirstname = ( value: any) => {
+    this.setState({ firstname: value });
+  };
+  private onChangeInputFieldLastname= ( value: any) => {
+    this.setState({ lastname: value });
   };
 
   private onGetReport = async () => {
     const { errorObject } = this.props;
     try {
       const result: any = await fetchNoService(
-        `${DonationDocUrl}/report_03.php`,
+        `${DonationDocUrl}/report_07.php`,
         {
           the_month: this.state.yearMonth || "0",
           the_year: this.state.fiscalYear || "0",
+          id_card_no: this.state.id_card_no || "0",
+          org_id: this.state.organizationId || "0",
+          firstname: this.state.firstname || "",
+          lastname: this.state.lastname || "",
           the_format: "excel",
         },
         "report_"
@@ -102,4 +165,4 @@ class DonationDirectByProvinceReport extends React.Component<IDonationDirectByPr
   };
 }
 
-export default withRouter(withTranslation()(DonationDirectByProvinceReport));
+export default withRouter(withTranslation()(DonationDirectSummarize));

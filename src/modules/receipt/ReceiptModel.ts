@@ -161,20 +161,24 @@ export const ReceiptItem = types
         fieldname: "ref3",
         value: ar.agreement.documentNumber,
       });
+      // self.setField({
+      //   fieldname: "description1",
+      //   value: "บัตรประชาชน",
+      // });
+      // self.setField({
+      //   fieldname: "description2",
+      //   value: "หมายเลขอ้างอิงลูกหนี้",
+      // });
+      // self.setField({
+      //   fieldname: "description3",
+      //   value: "รหัสจังหวัด/ปี/เลขที่สัญญา",
+      // });
+      // self.setField({
+      //   fieldname: "description4",
+      //   value: ar.name,
+      // });
       self.setField({
         fieldname: "description1",
-        value: "บัตรประชาชน",
-      });
-      self.setField({
-        fieldname: "description2",
-        value: "หมายเลขอ้างอิงลูกหนี้",
-      });
-      self.setField({
-        fieldname: "description3",
-        value: "รหัสจังหวัด/ปี/เลขที่สัญญา",
-      });
-      self.setField({
-        fieldname: "description4",
         value: ar.name,
       });
       self.setField({ fieldname: "refType", value: "AR" });
@@ -351,7 +355,7 @@ export const ReceiptModel = types
     setOrganizationName: (org: IOrgModel) => {
       self.setField({
         fieldname: "organizationName",
-        value: `${org.orgName}${org.orgCode ? ` (${org.orgCode})` : ""}`,
+        value: `${org.address.province}${org.orgCode ? ` (${org.orgCode})` : ""}`,
       });
     },
     setOrganizationAddress: (address: IAddressModel) => {
@@ -417,7 +421,7 @@ export const ReceiptModel = types
       try {
         self.setField({ fieldname: "loading", value: true });
         for (const item of self.receiptItems) {
-          if (item.refType === "D") {
+          if (item.refType === "D" || item.refType === "PR") {
             if (self.paymentMethod === "TRANSFER") {
               item.setField({
                 fieldname: "description3",
@@ -434,6 +438,18 @@ export const ReceiptModel = types
                 self.clientLastname || ""
               }`,
             });
+          }
+          if(item.refType === "AR"){
+            if (self.paymentMethod === "TRANSFER") {
+              item.setField({
+                fieldname: "description2",
+                value: self.tempTransferDate,
+              });
+              item.setField({
+                fieldname: "description3",
+                value: self.tempPaymentRefNo,
+              });
+            }
           }
         }
         let body = { ...self };

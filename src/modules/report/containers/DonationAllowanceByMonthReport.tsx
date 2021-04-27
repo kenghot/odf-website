@@ -22,7 +22,7 @@ interface IDonationAllowanceByMonthReport
 @inject("appStore")
 @observer
 class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceByMonthReport> {
-  public state = { fiscalYear: "" };
+  public state = { fiscalYearStart: "",fiscalYearEnd:"", province: "" };
   public locationStore = LocationModel.create({});
 
   public render() {
@@ -34,11 +34,33 @@ class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceB
           <Grid columns={"equal"} doubling stackable>
             <Grid.Column>
               <Form.Field
-                label={t("module.report.public.fiscalYear")}
+              required
+                label={t("module.report.public.fiscalYearStart")}
                 control={FiscalYearDDL}
-                placeholder={t("module.report.public.pleaseSelectFiscalYear")}
-                value={this.state.fiscalYear}
-                onChange={this.onSelectedFiscalYear}
+                placeholder={t("module.report.public.pleaseSelectFiscalYearStart")}
+                value={this.state.fiscalYearStart}
+                onChange={this.onSelectedFiscalYearStart}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Form.Field
+              required
+                label={t("module.report.public.fiscalYearEnd")}
+                control={FiscalYearDDL}
+                placeholder={t("module.report.public.pleaseSelectFiscalYearEnd")}
+                value={this.state.fiscalYearEnd}
+                onChange={this.onSelectedFiscalYearEnd}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Form.Input
+              required
+                label={t("module.report.public.province")}
+                placeholder={t("module.report.public.pleaseSpecifyProvince")}
+                control={ProvinceDDL}
+                selectedValue={this.state.province}
+                locationStore={this.locationStore}
+                onChange={this.onSelectedProvince}
               />
             </Grid.Column>
           </Grid>
@@ -48,8 +70,15 @@ class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceB
     );
   }
 
-  private onSelectedFiscalYear = (value: any) => {
-    this.setState({ fiscalYear: value });
+  private onSelectedFiscalYearStart = (value: any) => {
+    this.setState({ fiscalYearStart: value });
+  };
+  private onSelectedFiscalYearEnd = (value: any) => {
+    this.setState({ fiscalYearEnd: value });
+  };
+
+  private onSelectedProvince = (value: any) => {
+    this.setState({ province: value });
   };
 
   private onGetReport = async () => {
@@ -58,7 +87,9 @@ class DonationAllowanceByMonthReport extends React.Component<IDonationAllowanceB
       const result: any = await fetchNoService(
         `${DonationDocUrl}/report_02.php`,
         {
-          the_year: this.state.fiscalYear || "0",
+          the_province: this.state.province || "0",
+          start_year: this.state.fiscalYearStart || "0",
+          end_year: this.state.fiscalYearEnd || "0",
           the_format: "excel",
         },
         "report_"

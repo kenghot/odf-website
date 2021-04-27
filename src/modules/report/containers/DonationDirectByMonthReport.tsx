@@ -12,6 +12,7 @@ import { LocationModel } from "../../../components/address";
 import { fetchNoService } from "../../../utils/request-noservice";
 import { DonationDocUrl } from "../../donation/DonationService";
 
+
 interface IDonationDirectByMonthReport
   extends WithTranslation,
     RouteComponentProps {
@@ -22,7 +23,7 @@ interface IDonationDirectByMonthReport
 @inject("appStore")
 @observer
 class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonthReport> {
-  public state = { fiscalYear: "", province: "" };
+  public state = { fiscalYearStart: "",fiscalYearEnd:"", province: ""};
   public locationStore = LocationModel.create({});
 
   public render() {
@@ -34,15 +35,27 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
           <Grid columns={"equal"} doubling stackable>
             <Grid.Column>
               <Form.Field
-                label={t("module.report.public.fiscalYear")}
+                required
+                label={t("module.report.public.fiscalYearStart")}
                 control={FiscalYearDDL}
-                placeholder={t("module.report.public.pleaseSelectFiscalYear")}
-                value={this.state.fiscalYear}
-                onChange={this.onSelectedFiscalYear}
+                placeholder={t("module.report.public.pleaseSelectFiscalYearStart")}
+                value={this.state.fiscalYearStart}
+                onChange={this.onSelectedFiscalYearStart}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Form.Field
+              required
+                label={t("module.report.public.fiscalYearEnd")}
+                control={FiscalYearDDL}
+                placeholder={t("module.report.public.pleaseSelectFiscalYearEnd")}
+                value={this.state.fiscalYearEnd}
+                onChange={this.onSelectedFiscalYearEnd}
               />
             </Grid.Column>
             <Grid.Column>
               <Form.Input
+                required
                 label={t("module.report.public.province")}
                 placeholder={t("module.report.public.pleaseSpecifyProvince")}
                 control={ProvinceDDL}
@@ -58,14 +71,17 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
     );
   }
 
-  private onSelectedFiscalYear = (value: any) => {
-    this.setState({ fiscalYear: value });
+  private onSelectedFiscalYearStart = (value: any) => {
+    this.setState({ fiscalYearStart: value });
+  };
+  private onSelectedFiscalYearEnd = (value: any) => {
+    this.setState({ fiscalYearEnd: value });
   };
 
   private onSelectedProvince = (value: any) => {
     this.setState({ province: value });
   };
-
+ 
   private onGetReport = async () => {
     const { errorObject } = this.props;
     try {
@@ -73,7 +89,8 @@ class DonationDirectByMonthReport extends React.Component<IDonationDirectByMonth
         `${DonationDocUrl}/report_01.php`,
         {
           the_province: this.state.province || "0",
-          the_year: this.state.fiscalYear || "0",
+          start_year: this.state.fiscalYearStart || "0",
+          end_year: this.state.fiscalYearEnd || "0",
           the_format: "excel",
         },
         "report_"

@@ -1875,7 +1875,11 @@
     "report": {
       "public": {
         "fiscalYear": "Fiscal year",
+        "fiscalYearStart": "Fiscal year start",
+        "fiscalYearEnd": "Fiscal  end",
         "pleaseSelectFiscalYear": "Please select fiscal year",
+        "pleaseSelectFiscalYearStart": "Please select fiscal year start",
+        "pleaseSelectFiscalYearEnd": "Please select fiscal year end",
         "organization": "Organization",
         "status": "Request status",
         "pleaseSelectStatus": "Please select a request status.",
