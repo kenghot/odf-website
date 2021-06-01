@@ -31,7 +31,6 @@ import {
 import { hasPermission } from "../../../../utils/render-by-permission";
 import { IAgreementListModel } from "../AgreementListModel";
 import { IAgreementModel } from "../AgreementModel";
-import  { useState } from 'react';
 
 
 interface IAgreementTable extends WithTranslation, RouteComponentProps {
@@ -246,7 +245,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
 
   private renderButtonCreateVoucher() {
     const { agreementListStore, t, documentStatusPage } = this.props;
-    const [double, setDouble] = useState(false);
+    const [double, setDouble] = React.useState(false);
     return (
       <PermissionControl codes={["AGREEMENT.GENERATE.VOUCHER"]}>
         {agreementListStore.filterStatus === "NW" &&
