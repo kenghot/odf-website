@@ -31,8 +31,6 @@ import {
 import { hasPermission } from "../../../../utils/render-by-permission";
 import { IAgreementListModel } from "../AgreementListModel";
 import { IAgreementModel } from "../AgreementModel";
-import  { useState } from 'react';
-
 
 interface IAgreementTable extends WithTranslation, RouteComponentProps {
   agreementListStore: IAgreementListModel;
@@ -246,7 +244,6 @@ class AgreementTable extends React.Component<IAgreementTable> {
 
   private renderButtonCreateVoucher() {
     const { agreementListStore, t, documentStatusPage } = this.props;
-    const [double, setDouble] = useState(false);
     return (
       <PermissionControl codes={["AGREEMENT.GENERATE.VOUCHER"]}>
         {agreementListStore.filterStatus === "NW" &&
@@ -260,7 +257,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
                 disabled={agreementListStore.statusMenu}
                 style={styles.button}
                 color="purple"
-                onClick={() => {this.setCurrentDate();setDouble(false);}}
+                onClick={this.setCurrentDate}
               >
                 {t("module.loan.agreementTable.createVoucher")}
               </Button>
@@ -286,7 +283,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
                     onChangeInputField={this.onChangeInputField}
                   />
                   {this.renderAgreementCheckList()}
-                  <Form.Button fluid color="purple" type="submit"  disabled={double}  onClick={() => {this.onClickCreateVouchers();setDouble(true);}}>
+                  <Form.Button fluid color="purple" type="submit" onDoubleClick={this.onClickCreateVouchers}>
                     {t(
                       "module.loan.agreementDetail.submitVoucherSubstituteReceipt"
                     )}
