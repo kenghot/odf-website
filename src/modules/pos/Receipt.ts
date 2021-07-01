@@ -64,6 +64,9 @@ export const printFromTemplate = async (
 
     epos.printThai4Pass(`ผู้บันทึกรายการ ${pos.lastestPosShift.currentCashier.fullname}`);
     printFooterLogo()
+    epos.printLineSpace();
+    epos.printLineSpace();
+    epos.printLineSpace();
     epos.submit();
     return printedDatetime;
   } catch (error) {
@@ -145,11 +148,10 @@ const printBody = (receipt: IReceiptModel) => {
           `${mainCharLabel(item.description1, 40, false, true)}`,
           true
         );
-        if(receipt.paymentMethod === "TRANSFER")
-        {
-        epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `);
+        if (receipt.paymentMethod === "TRANSFER") {
+          epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `);
         }
-        
+
         break;
       case "D":
         printItem(
@@ -231,8 +233,8 @@ const printBodySummary = (
     epos.printThai4Pass(`( ${convertFullMoney(+receipt.total)} )`);
     epos.setTextRight();
     paymentMethodType(appStore, receipt);
-    printSignature("ผู้รับเงิน", pos.lastestPosShift.onDutymanager.fullname);
-    epos.printThai4Pass(`ตำแหน่ง ${pos.lastestPosShift.onDutymanager.position}`);
+    printSignature("ผู้รับเงิน", pos.lastestPosShift.currentCashier.fullname);
+    epos.printThai4Pass(`ตำแหน่ง ${pos.lastestPosShift.currentCashier.position}`);
   }
 
   epos.printLine();
@@ -271,19 +273,19 @@ const printFooterLogo = () => {
   epos.printer.addTextAlign(epos.printer.ALIGN_CENTER);
   const { odf_w_text_logo } = IMAGES;
   const canvas = document.createElement("canvas") as any;
-  canvas.setAttribute("width", "74");
-  canvas.setAttribute("height", "74");
+  canvas.setAttribute("width", "55");
+  canvas.setAttribute("height", "70");
   // canvas.setAttribute("width", "54");
   // canvas.setAttribute("height", "250");
   const context = canvas && canvas.getContext("2d");
   const logo = document.createElement("IMG") as any;
   logo.setAttribute("src", odf_w_text_logo);
-  logo.setAttribute("width", "74");
+  logo.setAttribute("width", "55");
   // logo.setAttribute("height", "250");
 
   if (canvas && logo) {
     //epos.printThai4Pass(`${garuda_logo} (logo)`);
-    context.drawImage(logo, +canvas.width / 2 - +logo.width / 2, 0, 74, 74);
+    context.drawImage(logo, +canvas.width / 2 - +logo.width / 2, 0, 55, 70);
 
     epos.printer.addImage(context, 0, 0, canvas.width, canvas.height);
   }
@@ -413,7 +415,7 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
       );
       epos.setTextLeft();
       epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`);
-      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20)}` );
+      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20)}`);
       break;
     case "CHECK":
       epos.printThai4Pass(
