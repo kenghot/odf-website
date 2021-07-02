@@ -177,6 +177,13 @@ IM35302CancelPaymentModal
           "CL",
           appStore!
         );
+        //printออก2ใบใน1รายการ
+        printedDatetime = await printFromTemplate(
+          pos,
+          this.receiptTemp,
+          "CL",
+          appStore!
+        );
       }
       await this.receiptTemp.reprintReceiptPrintLog(printedDatetime, "CL");
       await receipt.setAllField(this.receiptTemp.receiptJSON);
