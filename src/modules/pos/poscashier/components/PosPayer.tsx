@@ -177,6 +177,13 @@ class PosPayer extends React.Component<IPosPayer> {
           "PD",
           appStore!
         );
+        //printออก2ใบใน1รายการ
+        await printFromTemplate(
+          pos,
+          receipt,
+          "PD",
+          appStore!
+        );
       }
       await receipt.createReceiptPrintLog(printedDatetime);
       receipt.setField({ fieldname: "loading", value: true });

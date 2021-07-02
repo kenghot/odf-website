@@ -206,8 +206,24 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           appStore!,
           printedTime
         );
+        //printออก2ใบใน1รายการ
+        await printFromTemplate(
+          pos,
+          previousReceipt,
+          "CL",
+          appStore!,
+          printedTime
+        );
       } else {
         await previousReceipt.reprintReceiptPrintLog(printedTime, "RP");
+        await printFromTemplate(
+          pos,
+          previousReceipt,
+          "PD",
+          appStore!,
+          printedTime
+        );
+        //printออก2ใบใน1รายการ
         await printFromTemplate(
           pos,
           previousReceipt,
