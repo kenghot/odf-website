@@ -64,9 +64,6 @@ export const printFromTemplate = async (
 
     epos.printThai4Pass(`ผู้บันทึกรายการ ${pos.lastestPosShift.currentCashier.fullname}`);
     printFooterLogo()
-    epos.printLineSpace();
-    epos.printLineSpace();
-    epos.printLineSpace();
     epos.submit();
     return printedDatetime;
   } catch (error) {
