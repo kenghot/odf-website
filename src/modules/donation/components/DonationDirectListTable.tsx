@@ -28,7 +28,7 @@ import { IDonationDirectModel } from "../DonationDirectModel";
 
 interface IDonationOlderFundListTable
   extends WithTranslation,
-    RouteComponentProps {
+  RouteComponentProps {
   donationDirectListStore: IDonationDirectListModel;
   appStore?: IAppModel;
   authStore?: IAuthModel;
@@ -308,6 +308,7 @@ class DonationDirectListTable extends React.Component<IDonationOlderFundListTabl
             value: clone(item.receipt.posShift),
           });
           await connectPrinter(item.receipt.pos, item.receipt);
+          await printReceipt(item.receipt, item.receipt.pos, appStore, t);
           await printReceipt(item.receipt, item.receipt.pos, appStore, t);
         }
       }
