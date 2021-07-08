@@ -15,6 +15,7 @@ interface ISequenceDDL extends WithTranslation {
   onChange: (value: any) => void;
   SequenceType?: "request" | "agreement" | "guarantee" | "voucher" | "receipt";
   placeholder?: string;
+  SequencePerpage?: "10" | "10000";
 }
 
 @observer
@@ -25,6 +26,10 @@ class SequenceDDL extends React.Component<ISequenceDDL> {
     await this.sequenceList.setField({
       fieldname: "filterSequenceType",
       value: this.props.SequenceType || "request"
+    });
+    await this.sequenceList.setField({
+      fieldname: "filterPerpage",
+      value: this.props.SequencePerpage || "10"
     });
     await this.sequenceList.load_data();
     if (this.props.sequence.id) {

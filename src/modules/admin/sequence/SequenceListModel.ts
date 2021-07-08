@@ -16,7 +16,8 @@ export const SequenceListModel = types
     currentPage: types.optional(types.number, 1),
     perPage: types.optional(types.number, 10),
     totalPages: types.optional(types.number, 1),
-    loading: types.optional(types.boolean, false)
+    loading: types.optional(types.boolean, false),
+    filterPerpage: types.optional(types.string, ""),
   })
   .views((self: any) => ({
     get statusMenu() {
@@ -37,14 +38,15 @@ export const SequenceListModel = types
     setField: ({ fieldname, value }: IInput) => {
       self[fieldname] = value;
     },
-    load_data: flow(function*() {
+    load_data: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
           sequenceType: self.filterSequenceType || "request",
           prefixYear: self.filterPrefixYear,
           prefixCode: self.filterPrefixCode,
-          perPage: self.perPage,
+          // perPage: self.perPage,
+          perPage: self.filterPerpage || self.perPage,
           currentPage: self.currentPage
         };
         const result: any = yield Sequence.get(body);
@@ -54,8 +56,12 @@ export const SequenceListModel = types
             fieldname: "sequenceType",
             value: self.filterSequenceType
           });
+          item.setField({
+            fieldname: "perPage",
+            value: self.filterPerpage || self.perPage
+          });
         });
-        self.setPerPage(result.perPage);
+        // self.setPerPage(result.perPage);
         self.setPagination(result.currentPage, result.totalPages, result.total);
         self.error.setField({ fieldname: "tigger", value: false });
       } catch (e) {
@@ -80,12 +86,13 @@ export const SequenceListModel = types
         sequence.setField({ fieldname: "isSelected", value: selected });
       });
     },
-    resetFilter: flow(function*() {
+    resetFilter: flow(function* () {
       try {
         self.filterPrefixYear = "";
         self.filterPrefixCode = "";
         const result: any = yield Sequence.get({
-          perPage: self.perPage,
+          // perPage: self.perPage,
+          perPage: self.filterPerpage || self.perPage,
           sequenceType: self.filterSequenceType || "request"
         });
         self.setField({ fieldname: "list", value: result.data });
