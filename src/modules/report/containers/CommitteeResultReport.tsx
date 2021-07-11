@@ -8,6 +8,9 @@ import { IErrorModel } from "../../../components/common/error/ErrorModel";
 import { FiscalYearDDL } from "../../../components/project/year";
 import { Request } from "../../loan/request/RequestsService";
 import { ReportCard } from "../components";
+import { OrganizationDDL } from "../../admin/organization/components";
+import { OrgListModel } from "../../admin/organization/OrgListModel";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 interface ICommitteeResultReport extends WithTranslation, RouteComponentProps {
   errorObject: IErrorModel;
@@ -17,7 +20,8 @@ interface ICommitteeResultReport extends WithTranslation, RouteComponentProps {
 @inject("appStore")
 @observer
 class CommitteeResultReport extends React.Component<ICommitteeResultReport> {
-  public state = { fiscalYear: "", committee: "", meetingNumber: "" };
+  private orgList = OrgListModel.create({});
+  public state = { fiscalYear: "", organizationId: "", committee: "", meetingNumber: "" };
   public render() {
     const { appStore, t } = this.props;
     return (
@@ -32,6 +36,15 @@ class CommitteeResultReport extends React.Component<ICommitteeResultReport> {
                 placeholder={t("module.report.public.pleaseSelectFiscalYear")}
                 value={this.state.fiscalYear}
                 onChange={this.onSelectedFiscalYear}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Form.Field
+                label={t("module.report.public.organization")}
+                control={OrganizationDDL}
+                orgList={this.orgList}
+                value={this.state.organizationId}
+                onChange={this.onSelectedOrganizeDDL}
               />
             </Grid.Column>
             <Grid.Column>
@@ -67,7 +80,9 @@ class CommitteeResultReport extends React.Component<ICommitteeResultReport> {
   private onSelectedFiscalYear = (value: any) => {
     this.setState({ fiscalYear: value });
   };
-
+  private onSelectedOrganizeDDL = (value: any) => {
+    this.setState({ organizationId: value });
+  };
   private onSelectedCommittee = (event: any, data: any) => {
     this.setState({ committee: data.value });
   };
@@ -84,6 +99,8 @@ class CommitteeResultReport extends React.Component<ICommitteeResultReport> {
           fiscalYear: this.state.fiscalYear,
           committee: this.state.committee,
           meetingNumber: this.state.meetingNumber,
+          organizationId: this.state.organizationId,
+          permissonGetAll: hasPermission("DATA.ALL.ORG") ? "getAll" : null,
         },
         { name: "printCommitteeResultReport" }
       );
