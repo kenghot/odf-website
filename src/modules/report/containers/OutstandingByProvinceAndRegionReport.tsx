@@ -14,6 +14,7 @@ import { DebtCollection, DebtReport } from "../../debtCollection/DebtCollections
 import { SearchOverdueByDateRange } from "../../../components/search";
 import { fetchNoService } from "../../../utils/request-noservice";
 import OrganizationCodeDDL from "../../admin/organization/components/OrganizationCodeDDL";
+import { hasPermission } from "../../../utils/render-by-permission";
 const reportUrl = `${process.env.REACT_APP_DEBT_ENDPOINT}`;
 
 interface IOutstandingByProvinceAndRegionReport extends WithTranslation, RouteComponentProps {
@@ -101,6 +102,7 @@ class OutstandingByProvinceAndRegionReport extends React.Component<IOutstandingB
           organizationId: this.state.organizationId,
           startDocumentDate: this.state.startDocumentDate,
           endDocumentDate: this.state.endDocumentDate,
+          permissonGetAll: hasPermission("DATA.ALL.ORG") ? "getAll" : null,
         },
         { name: "printDebtAcknowledgementReport" }
       );
