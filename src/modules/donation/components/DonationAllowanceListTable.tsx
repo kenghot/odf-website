@@ -38,7 +38,7 @@ import { IDonationAllowanceModel } from "../DonationAllowanceModel";
 
 interface IDonationElderlyLivingListTable
   extends WithTranslation,
-    RouteComponentProps {
+  RouteComponentProps {
   donationAllowanceListStore: IDonationAllowanceListModel;
   appStore?: IAppModel;
   authStore?: IAuthModel;
@@ -448,6 +448,7 @@ class DonationAllowanceListTable extends React.Component<IDonationElderlyLivingL
             value: clone(item.receipt.posShift),
           });
           await connectPrinter(item.pos, item.receipt);
+          await printReceipt(item.receipt, item.pos, appStore, t);
           await printReceipt(item.receipt, item.pos, appStore, t);
         }
       }

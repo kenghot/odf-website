@@ -10,7 +10,7 @@ interface IPosManagementReceiptForm extends WithTranslation {
 }
 @observer
 class PosManagementReceiptForm extends React.Component<
-  IPosManagementReceiptForm
+IPosManagementReceiptForm
 > {
   public render() {
     const { t, pos } = this.props;
@@ -36,6 +36,7 @@ class PosManagementReceiptForm extends React.Component<
             value={pos.receiptSequenceId ? pos.receiptSequenceId : ""}
             onChange={this.onChangeReceiptSequenceDDL}
             SequenceType="receipt"
+            SequencePerpage="10000"
           />
           <Form.Group widths="equal" style={styles.formGroup}>
             <Form.Field />
