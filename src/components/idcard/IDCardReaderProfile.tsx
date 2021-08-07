@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Form, Segment } from "semantic-ui-react";
+import { Form, Segment, Header, Popup, Grid } from "semantic-ui-react";
 import { IProfileModel } from "../../modules/share/profile/ProfileModel";
 import { AddressFormBody, IAddressModel } from "../address";
 import { LocationModel } from "../address/LocationModel";
@@ -113,8 +113,75 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             }}
             error={profile.idCardIsIncorrectFormat}
           />
-          <Form.Button
-            width={7}
+          {/* Beer07082021 */}
+          <Popup trigger={
+            <Form.Button
+              width={3}
+              style={styles.formButton}
+              fluid
+              color="teal"
+              type="button"
+            >
+              {t("component.idCardReader.retrieveIDCard")}
+            </Form.Button>
+          } flowing hoverable>
+            <Grid centered divided columns={2}>
+              <Grid.Column textAlign='center'>
+                <Header as='h4'>ดึงข้อมูลจากกรมการปกครอง</Header>
+                <Form.Input required
+                  id={`form-input-id-card-${fieldname}`}
+                  label={t("component.idCardReader.iDCardNumberAgentId", {
+                    value: profile.idCardNoAgentIdIncorrectFormat
+                      ? t("component.idCardReader.invalidCardNumber")
+                      : "",
+                  })}
+                  icon="id card"
+                  iconPosition="left"
+                  placeholder="0-0000-00000-00-0"
+                  width="4"
+                  maxLength="17"
+                  value={profile.idCardNoAgentIdformated}
+                  onChange={(event, data) => {
+                    const dataFormated = data.value.replace(/\D/g, "");
+                    profile.setField({
+                      fieldname: "idCardNoAgentId",
+                      value: dataFormated,
+                    });
+                  }}
+                  error={profile.idCardNoAgentIdIncorrectFormat}
+                />
+                <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
+                <Form.Button
+                  width={1}
+                  style={styles.formButton}
+                  fluid
+                  color="teal"
+                  type="button"
+                  onClick={() => this.onClickButtonGdx()}
+                >
+                  {"ดึงข้อมูล"}
+                </Form.Button>
+              </Grid.Column>
+              <Grid.Column textAlign='center'>
+                <Header as='h4'>ดึงข้อมูลจากอุปกรณ์อ่านบัตรประชาชน</Header>
+                <p></p><p></p>
+                <Form.Button
+                  width={1}
+                  style={styles.formButton}
+                  fluid
+                  color="teal"
+                  type="button"
+                  onClick={() => this.onClickButton()}
+                  loading={profile.loading}
+                >
+                  {"ดึงข้อมูล"}
+                </Form.Button>
+              </Grid.Column>
+
+            </Grid>
+          </Popup>
+          {/* <Form.Button
+            width={3}
             style={styles.formButton}
             fluid
             color="teal"
@@ -123,7 +190,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             loading={profile.loading}
           >
             {t("component.idCardReader.retrieveIDCard")}
-          </Form.Button>
+          </Form.Button> */}
         </Form.Group>
         {this.props.displayMode === "mini" ? null : this.renderCardInfo()}
         {this.renderPersonInfo()}
@@ -329,6 +396,66 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
     try {
       await profile.getCardData();
       await this.idCard.getCardData();
+      await address.setAllField(profile.idCardAddress);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await this.locationStore.loadSubdistrict(address.subDistrict);
+      await this.locationStore.loadDistrict(address.district);
+      await this.locationStore.loadProvince(address.province);
+      await address.setField({
+        fieldname: "provinceCode",
+        value: this.locationStore.provinces[0]
+          ? this.locationStore.provinces[0].refCode
+          : "",
+      });
+      const subDistrict = this.locationStore.subdistricts.find((item: any) => {
+        if (item.province) {
+          return (
+            item.province.refCode === address.provinceCode &&
+            item.thName === address.subDistrict
+          );
+        } else {
+          return "";
+        }
+      });
+      const districtCode = this.locationStore.districts.find((item: any) => {
+        if (item.province) {
+          return item.province.refCode === address.provinceCode;
+        } else {
+          return "";
+        }
+      });
+      await address.setField({
+        fieldname: "subDistrictCode",
+        value: subDistrict ? subDistrict.refCode : "",
+      });
+      await address.setField({
+        fieldname: "zipcode",
+        value: subDistrict ? subDistrict.zipcode : "",
+      });
+      await address.setField({
+        fieldname: "districtCode",
+        value: districtCode ? districtCode.refCode : "",
+      });
+      await this.setState({
+        subDistrict: subDistrict ? subDistrict.thName : "",
+      });
+      await this.setState({
+        district: districtCode ? districtCode.thName : "",
+      });
+      await this.setState({
+        province: this.locationStore.provinces[0]
+          ? this.locationStore.provinces[0].thName
+          : "",
+      });
+    }
+  }
+  private async onClickButtonGdx() {
+    const { address, profile } = this.props;
+    try {
+      await profile.getCardDataGdx();
+      // await this.idCard.getCardData();
       await address.setAllField(profile.idCardAddress);
     } catch (e) {
       console.log(e);

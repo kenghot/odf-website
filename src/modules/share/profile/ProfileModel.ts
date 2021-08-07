@@ -22,6 +22,7 @@ import {
 export const ProfileModel = types
   .model("ProfileModel", {
     idCardNo: types.optional(types.string, ""),
+    idCardNoAgentId: types.optional(types.string, ""),
     title: types.optional(types.string, ""),
     firstname: types.optional(types.string, ""),
     lastname: types.optional(types.string, ""),
@@ -69,6 +70,12 @@ export const ProfileModel = types
     get idCardIsIncorrectFormat() {
       return isInValidThaiIdCard(self.idCardNo);
     },
+    get idCardNoAgentIdformated() {
+      return self.idCardNoAgentId !== "" ? idcardFormatting(self.idCardNoAgentId) : "";
+    },
+    get idCardNoAgentIdIncorrectFormat() {
+      return isInValidThaiIdCard(self.idCardNoAgentId);
+    },
     get idCardIssuedDateFormated() {
       return dateFormatingYYYYMMDD(self.idCardIssuedDate);
     },
@@ -107,12 +114,12 @@ export const ProfileModel = types
     resetAll: () => {
       applySnapshot(self, {});
     },
-    getCardData: flow(function*() {
+    getCardData: flow(function* () {
       try {
         self.loading = true;
         const res: any = yield fetch(`http://localhost:9999`);
         const response: any = yield res.json();
-        // self.setAllField(response.data);
+        //self.setAllField(response.data);
         self.setField({
           fieldname: "idCardNo",
           value: response.data.id
@@ -182,7 +189,102 @@ export const ProfileModel = types
         self.loading = false;
       }
     }),
-    requestsVerifyBorrower: flow(function*(requestType: string) {
+    getCardDataGdx: flow(function* () {
+      if (self.idCardNo == '' || self.idCardNo.length != 13) {
+        self.error.tigger = true;
+        self.error.title = "ไม่สามารถดึงข้อมูลได้";
+        self.error.message =
+          "โปรดกรอกหมายเลขบัตรประชาชน ให้ถูกต้อง";
+      } else if (self.idCardNoAgentId == '' || self.idCardNoAgentId.length != 13) {
+        self.error.tigger = true;
+        self.error.title = "ไม่สามารถดึงข้อมูลได้";
+        self.error.message =
+          "โปรดกรอกหมายเลขบัตรประชาชนผู้ดึงข้อมูล ให้ถูกต้อง";
+      } else {
+        try {
+          self.loading = true;
+          const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_idcard.php`;
+          const res: any = yield fetch(`${gdxApiUrl}?serviceid=009&citizenid=${self.idCardNo}&agentid=${self.idCardNoAgentId}`);
+          const response: any = yield res.json();
+          // console.log(response);
+          // self.setAllField(response.data);
+          self.setField({
+            fieldname: "idCardNo",
+            value: self.idCardNo
+          });
+          self.setField({
+            fieldname: "firstname",
+            value: response.nameTHlastName
+          });
+          self.setField({
+            fieldname: "lastname",
+            value: response.nameTHfirstName
+          });
+          self.setField({
+            fieldname: "title",
+            value: response.nameTHtitle
+          });
+          self.idCardIssuedDate = date_YYYYMMDD_BE_TO_CE(
+            response.issueDate
+          );
+          if (response.expireDate === "99999999") {
+            self.idCardExpireDate = undefined;
+            self.idCardLifetime = true;
+          } else {
+            self.idCardLifetime = false;
+            self.idCardExpireDate = date_YYYYMMDD_BE_TO_CE(
+              response.expireDate
+            );
+          }
+          self.birthDate = date_YYYYMMDD_BE_TO_CE(response.birthDate);
+          self.idCardAddress.setField({
+            fieldname: "houseNo",
+            value: response.address.houseNo.toString()
+          });
+          self.idCardAddress.setField({
+            fieldname: "hmoo",
+            value: response.address.villageNo.toString()
+          });
+          self.idCardAddress.setField({
+            fieldname: "soi",
+            value: response.address.alleyDesc.toString()
+          });
+          self.idCardAddress.setField({
+            fieldname: "street",
+            value: response.address.roadDesc.toString()
+          });
+          self.idCardAddress.setField({
+            fieldname: "subDistrict",
+            value: response.address.subdistrictDesc.toString().replace(/ตำบล|แขวง/g, "")
+          });
+          self.idCardAddress.setField({
+            fieldname: "district",
+            value: response.address.districtDesc.toString().replace(/อำเภอ|เขต/g, "")
+          });
+          self.idCardAddress.setField({
+            fieldname: "province",
+            value: response.address.provinceDesc.toString().replace(/จังหวัด/g, "")
+          });
+          self.setField({
+            fieldname: "telephone",
+            value: response.phoneNumber.toString()
+          });
+          self.error.tigger = false;
+        } catch (e) {
+          //---Beer05082021--
+          self.error.tigger = true;
+          self.error.title = "ไม่สามารถดึงข้อมูลได้";
+          self.error.message =
+            "ไม่สามารถดึงข้อมูลจากกรมการปกครองได้หรือเนื่องจากไม่ได้ Login โปรแกรม Government AMI";
+          console.log(e);
+          throw e;
+        } finally {
+          self.loading = false;
+        }
+      }
+
+    }),
+    requestsVerifyBorrower: flow(function* (requestType: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -229,7 +331,7 @@ export const ProfileModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    requestsVerifyGuarantor: flow(function*(requestType: string) {
+    requestsVerifyGuarantor: flow(function* (requestType: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {

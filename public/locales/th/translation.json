@@ -106,6 +106,7 @@
     },
     "idCardReader": {
       "iDCardNumber": "หมายเลขบัตรประชาชน {{value}}",
+      "iDCardNumberAgentId": "หมายเลขบัตรประชาชนผู้ดึงข้อมูล {{value}}",
       "invalidCardNumber": "(หมายเลขบัตรไม่ถูกต้อง)",
       "retrieveIDCard": "ดึงข้อมูลจากบัตรประชาชน",
       "out": "ออกโดย",
