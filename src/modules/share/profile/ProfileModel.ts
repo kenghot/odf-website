@@ -204,7 +204,7 @@ export const ProfileModel = types
         try {
           self.loading = true;
           const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_idcard.php`;
-          const res: any = yield fetch(`${gdxApiUrl}?serviceid=009&citizenid=${self.idCardNo}&agentid=${self.idCardNoAgentId}`);
+          const res: any = yield fetch(`${gdxApiUrl}?ServiceId=009&CitizenId=${self.idCardNo}&AgentId=${self.idCardNoAgentId}`);
           const response: any = yield res.json();
           // console.log(response);
           // self.setAllField(response.data);
