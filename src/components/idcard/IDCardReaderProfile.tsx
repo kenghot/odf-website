@@ -11,6 +11,7 @@ import { DateInput } from "../common/input";
 import { TitleDDL } from "../project";
 import { FormFieldCheckbox } from "./../common/formfield";
 import { IIDCardModel } from "./IDCardModel";
+import { fetchNoService } from "../../utils/request-noservice";
 
 interface IIDCardReaderProfile extends WithTranslation {
   idCardReadingStore: IIDCardModel;
@@ -150,6 +151,14 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
                   }}
                   error={profile.idCardNoAgentIdIncorrectFormat}
                 />
+                <p></p>
+                <FormFieldCheckbox
+                  id={`form-input-is-check-death-data-${fieldname}`}
+                  label_checkbox={"ดึงข้อมูลผู้กู้กรณีเสียชีวิต"}
+                  fieldName="isCheckDeathData"
+                  onChangeInputField={this.onChangeCheckboxDeathData}
+                  checked={profile.isCheckDeathData}
+                />
                 <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
                 <Form.Button
                   width={1}
@@ -158,6 +167,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
                   color="teal"
                   type="button"
                   onClick={() => this.onClickButtonGdx()}
+                  loading={profile.loading}
                 >
                   {"ดึงข้อมูล"}
                 </Form.Button>
@@ -457,6 +467,10 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
       await profile.getCardDataGdx();
       // await this.idCard.getCardData();
       await address.setAllField(profile.idCardAddress);
+      //ฺbeer08082021 ดึงข้อมูลผู้เสียชีวิต
+      if (profile.isCheckDeathData) {
+        this.getReportDeathData();
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -511,6 +525,30 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
       });
     }
   }
+  private async getReportDeathData() {
+    const { address, profile } = this.props;
+    try {
+      const result: any = await fetchNoService(
+        `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_deathcertificate.php`,
+        {
+          CitizenId: profile.idCardNo,
+          AgentId: profile.idCardNoAgentId,
+          report_format: "excel",
+        },
+        "report_"
+      );
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+  private onChangeCheckboxDeathData = (fieldname: string, value: any) => {
+    const { profile } = this.props;
+    profile.setField({ fieldname, value });
+    if (value) {
+      profile.setField({ fieldname: "isCheckDeathData", value: true });
+    }
+  };
 }
 const styles: any = {
   formButton: {
