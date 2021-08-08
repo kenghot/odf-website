@@ -30,6 +30,7 @@ export const ProfileModel = types
       types.union(types.string, types.null, types.undefined)
     ),
     isOnlyBirthYear: types.optional(types.boolean, false),
+    isCheckDeathData: types.optional(types.boolean, false),
     idCardIssuer: types.optional(types.string, ""),
     idCardIssuedDate: types.maybeNull(types.string),
     idCardExpireDate: types.optional(
