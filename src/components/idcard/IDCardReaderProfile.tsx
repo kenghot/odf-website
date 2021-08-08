@@ -154,7 +154,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
                 <p></p>
                 <FormFieldCheckbox
                   id={`form-input-is-check-death-data-${fieldname}`}
-                  label_checkbox={"ดึงข้อมูลกรณีเสียชีวิต"}
+                  label_checkbox={"ดึงข้อมูลกรณีเสียชีวิต "}
                   fieldName="isCheckDeathData"
                   onChangeInputField={this.onChangeCheckboxDeathData}
                   checked={profile.isCheckDeathData}
