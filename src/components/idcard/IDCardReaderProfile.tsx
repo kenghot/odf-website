@@ -152,13 +152,13 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
                   error={profile.idCardNoAgentIdIncorrectFormat}
                 />
                 <p></p>
-                <FormFieldCheckbox
+                {/* <FormFieldCheckbox
                   id={`form-input-is-check-death-data-${fieldname}`}
                   label_checkbox={"ดึงข้อมูลกรณีเสียชีวิต "}
                   fieldName="isCheckDeathData"
                   onChangeInputField={this.onChangeCheckboxDeathData}
                   checked={profile.isCheckDeathData}
-                />
+                /> */}
                 <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
                 <Form.Button
                   width={1}
