@@ -128,7 +128,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
           } flowing hoverable>
             <Grid centered divided columns={2}>
               <Grid.Column textAlign='center'>
-                <Header as='h4'>ดึงข้อมูลจากกรมการปกครอง</Header>
+                <Header as='h4'>ดึงข้อมูลจากกรมการปกครองออนไลน์</Header>
                 <Form.Input required
                   id={`form-input-id-card-${fieldname}`}
                   label={t("component.idCardReader.iDCardNumberAgentId", {
