@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Form, Segment } from "semantic-ui-react";
-import { PosDonation, PosLoanPayback, PosOther, PosProject } from ".";
+import { PosDonation, PosLoanPayback, PosOther, PosProject, PosLendRefund, PosFeesRefund } from ".";
 import { IAppModel } from "../../../../AppModel";
 import { IReceiptModel } from "../../../receipt/ReceiptModel";
 
@@ -51,6 +51,12 @@ class PosPayment extends React.Component<IPosPayment> {
         {/*  */}
         {this.state.posRefType === "PR" ? (
           <PosProject receipt={this.props.receipt} />
+        ) : null}
+        {this.state.posRefType === "LR" ? (
+          <PosLendRefund receipt={this.props.receipt} />
+        ) : null}
+        {this.state.posRefType === "FR" ? (
+          <PosFeesRefund receipt={this.props.receipt} />
         ) : null}
         {this.state.posRefType === "O" ? (
           <PosOther

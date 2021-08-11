@@ -6,6 +6,8 @@ export { default as PosLoanPayback } from "./PosLoanPayback";
 export { default as PosOther } from "./PosOther";
 export { default as PosDonation } from "./PosDonation";
 export { default as PosProject } from "./PosProject";
+export { default as PosLendRefund } from "./PosLendRefund";
+export { default as PosFeesRefund } from "./PosFeesRefund";
 export { default as PosPaymentSummary } from "./PosPaymentSummary";
 export { default as PosPaymentItem } from "./PosPaymentItem";
 export { default as PosPaymentListItem } from "./PosPaymentListItem";

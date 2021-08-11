@@ -434,12 +434,23 @@ export const ReceiptModel = types
             }
             item.setField({
               fieldname: "description1",
-              value: `${self.clientTitle || ""}${self.clientFirstname || ""} ${
-                self.clientLastname || ""
-              }`,
+              value: `${self.clientTitle || ""}${self.clientFirstname || ""} ${self.clientLastname || ""
+                }`,
             });
           }
-          if(item.refType === "AR"){
+          if (item.refType === "LR" || item.refType === "FR") {
+            if (self.paymentMethod === "TRANSFER") {
+              item.setField({
+                fieldname: "description3",
+                value: self.tempTransferDate,
+              });
+              item.setField({
+                fieldname: "description4",
+                value: self.tempPaymentRefNo,
+              });
+            }
+          }
+          if (item.refType === "AR") {
             if (self.paymentMethod === "TRANSFER") {
               item.setField({
                 fieldname: "description2",

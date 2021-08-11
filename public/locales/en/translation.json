@@ -2236,6 +2236,26 @@
         "price": "Amount",
         "searchButton": "Search for projects"
       },
+      "posLendRefund": {
+        "content": "Refund from loan receivable",
+        "subheader": "Fill in the repayment information from the borrower to issue a receipt",
+        "name": "Lending contract number",
+        "placeholderName": "Loan Contract Number",
+        "ref1": "Name-surname of the refundee",
+        "ref1Placeholder": "Name-surname of the refundee",
+        "price": "amount",
+        "searchButton": "Search for information on reimbursement from loan receivables"
+      },
+      "posFeesRefund": {
+        "content": "Refund of civil fees",
+        "subheader": "Fill in the civil fee refund information to issue a receipt",
+        "name": "Black case number",
+        "placeholderName": "Black case number",
+        "ref1": "Red case number at",
+        "ref1Placeholder": "Red case number at ",
+        "price": "amount",
+        "searchButton": "Search for information on reimbursement from loan receivables"
+      },
       "posPaymentByCash": {
         "paidAmount": "Amount",
         "changeAmountLabel": "Change",

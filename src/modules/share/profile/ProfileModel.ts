@@ -204,10 +204,10 @@ export const ProfileModel = types
       } else {
         try {
           self.loading = true;
-          const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_idcard.php`;
-          const res: any = yield fetch(`${gdxApiUrl}?ServiceId=009&CitizenId=${self.idCardNo}&AgentId=${self.idCardNoAgentId}`);
+          const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_data.php`;
+          const res: any = yield fetch(`${gdxApiUrl}?ServiceID=001&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
           const response: any = yield res.json();
-          // console.log(response);
+          console.log(response);
           // self.setAllField(response.data);
           self.setField({
             fieldname: "idCardNo",
@@ -215,61 +215,61 @@ export const ProfileModel = types
           });
           self.setField({
             fieldname: "firstname",
-            value: response.nameTHlastName
+            value: response.firstName
           });
           self.setField({
             fieldname: "lastname",
-            value: response.nameTHfirstName
+            value: response.lastName
           });
           self.setField({
             fieldname: "title",
-            value: response.nameTHtitle
+            value: response.titleName
           });
-          self.idCardIssuedDate = date_YYYYMMDD_BE_TO_CE(
-            response.issueDate
-          );
-          if (response.expireDate === "99999999") {
-            self.idCardExpireDate = undefined;
-            self.idCardLifetime = true;
-          } else {
-            self.idCardLifetime = false;
-            self.idCardExpireDate = date_YYYYMMDD_BE_TO_CE(
-              response.expireDate
-            );
-          }
-          self.birthDate = date_YYYYMMDD_BE_TO_CE(response.birthDate);
-          self.idCardAddress.setField({
-            fieldname: "houseNo",
-            value: response.address.houseNo.toString()
-          });
-          self.idCardAddress.setField({
-            fieldname: "hmoo",
-            value: response.address.villageNo.toString()
-          });
-          self.idCardAddress.setField({
-            fieldname: "soi",
-            value: response.address.alleyDesc.toString()
-          });
-          self.idCardAddress.setField({
-            fieldname: "street",
-            value: response.address.roadDesc.toString()
-          });
-          self.idCardAddress.setField({
-            fieldname: "subDistrict",
-            value: response.address.subdistrictDesc.toString().replace(/ตำบล|แขวง/g, "")
-          });
-          self.idCardAddress.setField({
-            fieldname: "district",
-            value: response.address.districtDesc.toString().replace(/อำเภอ|เขต/g, "")
-          });
-          self.idCardAddress.setField({
-            fieldname: "province",
-            value: response.address.provinceDesc.toString().replace(/จังหวัด/g, "")
-          });
-          self.setField({
-            fieldname: "telephone",
-            value: response.phoneNumber.toString()
-          });
+          // self.idCardIssuedDate = date_YYYYMMDD_BE_TO_CE(
+          //   response.issueDate
+          // );
+          // if (response.expireDate === "99999999") {
+          //   self.idCardExpireDate = undefined;
+          //   self.idCardLifetime = true;
+          // } else {
+          //   self.idCardLifetime = false;
+          //   self.idCardExpireDate = date_YYYYMMDD_BE_TO_CE(
+          //     response.expireDate
+          //   );
+          // }
+          self.birthDate = date_YYYYMMDD_BE_TO_CE(response.dateOfBirth);
+          // self.idCardAddress.setField({
+          //   fieldname: "houseNo",
+          //   value: response.address.houseNo.toString()
+          // });
+          // self.idCardAddress.setField({
+          //   fieldname: "hmoo",
+          //   value: response.address.villageNo.toString()
+          // });
+          // self.idCardAddress.setField({
+          //   fieldname: "soi",
+          //   value: response.address.alleyDesc.toString()
+          // });
+          // self.idCardAddress.setField({
+          //   fieldname: "street",
+          //   value: response.address.roadDesc.toString()
+          // });
+          // self.idCardAddress.setField({
+          //   fieldname: "subDistrict",
+          //   value: response.address.subdistrictDesc.toString().replace(/ตำบล|แขวง/g, "")
+          // });
+          // self.idCardAddress.setField({
+          //   fieldname: "district",
+          //   value: response.address.districtDesc.toString().replace(/อำเภอ|เขต/g, "")
+          // });
+          // self.idCardAddress.setField({
+          //   fieldname: "province",
+          //   value: response.address.provinceDesc.toString().replace(/จังหวัด/g, "")
+          // });
+          // self.setField({
+          //   fieldname: "telephone",
+          //   value: response.phoneNumber.toString()
+          // });
           self.error.tigger = false;
         } catch (e) {
           //---Beer05082021--
