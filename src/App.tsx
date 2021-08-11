@@ -151,7 +151,7 @@ class App extends Component {
                   render={(props: any) =>
                     this.renderComponentMorePermission(
                       <RequestListPage {...props} />,
-                      ["REQUEST.ACCESS"]
+                      ["REQUEST.ACCESS", "REQUEST.ONLINE.ACCESS"]
                     )
                   }
                 />
@@ -281,7 +281,7 @@ class App extends Component {
                   render={(props: any) =>
                     this.renderComponentMorePermission(
                       <RequestListPage {...props} />,
-                      ["REQUEST.ACCESS"]
+                      ["REQUEST.ACCESS", "REQUEST.ONLINE.ACCESS"]
                     )
                   }
                 />
@@ -289,9 +289,9 @@ class App extends Component {
                   exact
                   path="/loan/request/create"
                   render={(props: any) =>
-                    this.renderComponent(
+                    this.renderComponentMorePermission(
                       <RequestFormCreatePage {...props} />,
-                      "REQUEST.CREATE"
+                      ["REQUEST.CREATE", "REQUEST.ONLINE.CREATE"]
                     )
                   }
                 />
@@ -300,7 +300,7 @@ class App extends Component {
                   render={(props: any) =>
                     this.renderComponentMorePermission(
                       <RequestDetailPage {...props} />,
-                      ["REQUEST.VIEW", "DATA.ALL.EDIT"]
+                      ["REQUEST.VIEW", "REQUEST.ONLINE.VIEW", "DATA.ALL.EDIT"]
                     )
                   }
                 />
@@ -310,7 +310,7 @@ class App extends Component {
                   render={(props: any) =>
                     this.renderComponentMorePermission(
                       <RequestFormEditPage {...props} />,
-                      ["REQUEST.EDIT", "DATA.ALL.EDIT"]
+                      ["REQUEST.EDIT", "REQUEST.ONLINE.EDIT", "DATA.ALL.EDIT"]
                     )
                   }
                 />

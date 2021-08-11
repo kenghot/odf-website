@@ -224,8 +224,8 @@ class RequestHeader extends React.Component<IRequestHeader> {
         </PermissionControl>
         <div style={styles.buttonRight}>
           {mode === "view" &&
-          (["DF", "NW"].includes(request.status) ||
-            hasPermission("DATA.ALL.EDIT")) ? (
+            (["DF", "NW"].includes(request.status) ||
+              hasPermission("DATA.ALL.EDIT")) ? (
             <PermissionControl
               somePermission
               codes={["REQUEST.EDIT", "DATA.ALL.EDIT"]}

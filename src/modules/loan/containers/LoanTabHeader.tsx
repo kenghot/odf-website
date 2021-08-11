@@ -13,7 +13,7 @@ class LoanTabHeader extends React.Component<ILoanTabHeader> {
     const { t } = this.props;
     const panes = [];
 
-    if (hasPermission("REQUEST.ACCESS")) {
+    if (hasPermission("REQUEST.ACCESS") || hasPermission("REQUEST.ONLINE.ACCESS")) {
       // เข้าถึงระบบงานคำร้องขอกู้ยืมฯ
       panes.push({
         id: "1",

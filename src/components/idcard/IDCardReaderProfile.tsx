@@ -12,6 +12,7 @@ import { TitleDDL } from "../project";
 import { FormFieldCheckbox } from "./../common/formfield";
 import { IIDCardModel } from "./IDCardModel";
 import { fetchNoService } from "../../utils/request-noservice";
+import { hasPermission } from "../../utils/render-by-permission";
 
 interface IIDCardReaderProfile extends WithTranslation {
   idCardReadingStore: IIDCardModel;
@@ -115,81 +116,83 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             error={profile.idCardIsIncorrectFormat}
           />
           {/* Beer07082021 */}
-          <Popup trigger={
-            <Form.Button
-              width={3}
-              style={styles.formButton}
-              fluid
-              color="teal"
-              type="button"
-            >
-              {t("component.idCardReader.retrieveIDCard")}
-            </Form.Button>
-          } flowing hoverable>
-            <Grid centered divided columns={2}>
-              <Grid.Column textAlign='center'>
-                <Header as='h4'>ดึงข้อมูลจากกรมการปกครองออนไลน์</Header>
-                <Form.Input required
-                  id={`form-input-id-card-${fieldname}`}
-                  label={t("component.idCardReader.iDCardNumberAgentId", {
-                    value: profile.idCardNoAgentIdIncorrectFormat
-                      ? t("component.idCardReader.invalidCardNumber")
-                      : "",
-                  })}
-                  icon="id card"
-                  iconPosition="left"
-                  placeholder="0-0000-00000-00-0"
-                  width="4"
-                  maxLength="17"
-                  value={profile.idCardNoAgentIdformated}
-                  onChange={(event, data) => {
-                    const dataFormated = data.value.replace(/\D/g, "");
-                    profile.setField({
-                      fieldname: "idCardNoAgentId",
-                      value: dataFormated,
-                    });
-                  }}
-                  error={profile.idCardNoAgentIdIncorrectFormat}
-                />
-                <p></p>
-                {/* <FormFieldCheckbox
-                  id={`form-input-is-check-death-data-${fieldname}`}
-                  label_checkbox={"ดึงข้อมูลกรณีเสียชีวิต "}
-                  fieldName="isCheckDeathData"
-                  onChangeInputField={this.onChangeCheckboxDeathData}
-                  checked={profile.isCheckDeathData}
-                /> */}
-                <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
-                <Form.Button
-                  width={1}
-                  style={styles.formButton}
-                  fluid
-                  color="teal"
-                  type="button"
-                  onClick={() => this.onClickButtonGdx()}
-                  loading={profile.loading}
-                >
-                  {"ดึงข้อมูล"}
-                </Form.Button>
-              </Grid.Column>
-              <Grid.Column textAlign='center'>
-                <Header as='h4'>ดึงข้อมูลจากอุปกรณ์อ่านบัตรประชาชน</Header>
-                <p></p><p></p>
-                <Form.Button
-                  width={1}
-                  style={styles.formButton}
-                  fluid
-                  color="teal"
-                  type="button"
-                  onClick={() => this.onClickButton()}
-                  loading={profile.loading}
-                >
-                  {"ดึงข้อมูล"}
-                </Form.Button>
-              </Grid.Column>
+          {!hasPermission("REQUEST.ONLINE.CREATE") ? (
+            <Popup trigger={
+              <Form.Button
+                width={3}
+                style={styles.formButton}
+                fluid
+                color="teal"
+                type="button"
+              >
+                {t("component.idCardReader.retrieveIDCard")}
+              </Form.Button>
+            } flowing hoverable>
+              <Grid centered divided columns={2}>
+                <Grid.Column textAlign='center'>
+                  <Header as='h4'>ดึงข้อมูลจากกรมการปกครองออนไลน์</Header>
+                  <Form.Input required
+                    id={`form-input-id-card-${fieldname}`}
+                    label={t("component.idCardReader.iDCardNumberAgentId", {
+                      value: profile.idCardNoAgentIdIncorrectFormat
+                        ? t("component.idCardReader.invalidCardNumber")
+                        : "",
+                    })}
+                    icon="id card"
+                    iconPosition="left"
+                    placeholder="0-0000-00000-00-0"
+                    width="4"
+                    maxLength="17"
+                    value={profile.idCardNoAgentIdformated}
+                    onChange={(event, data) => {
+                      const dataFormated = data.value.replace(/\D/g, "");
+                      profile.setField({
+                        fieldname: "idCardNoAgentId",
+                        value: dataFormated,
+                      });
+                    }}
+                    error={profile.idCardNoAgentIdIncorrectFormat}
+                  />
+                  <p></p>
+                  {/* <FormFieldCheckbox
+                    id={`form-input-is-check-death-data-${fieldname}`}
+                    label_checkbox={"ดึงข้อมูลกรณีเสียชีวิต "}
+                    fieldName="isCheckDeathData"
+                    onChangeInputField={this.onChangeCheckboxDeathData}
+                    checked={profile.isCheckDeathData}
+                  /> */}
+                  <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
+                  <Form.Button
+                    width={1}
+                    style={styles.formButton}
+                    fluid
+                    color="teal"
+                    type="button"
+                    onClick={() => this.onClickButtonGdx()}
+                    loading={profile.loading}
+                  >
+                    {"ดึงข้อมูล"}
+                  </Form.Button>
+                </Grid.Column>
+                <Grid.Column textAlign='center'>
+                  <Header as='h4'>ดึงข้อมูลจากอุปกรณ์อ่านบัตรประชาชน</Header>
+                  <p></p><p></p>
+                  <Form.Button
+                    width={1}
+                    style={styles.formButton}
+                    fluid
+                    color="teal"
+                    type="button"
+                    onClick={() => this.onClickButton()}
+                    loading={profile.loading}
+                  >
+                    {"ดึงข้อมูล"}
+                  </Form.Button>
+                </Grid.Column>
 
-            </Grid>
-          </Popup>
+              </Grid>
+            </Popup>
+          ) : null}
           {/* <Form.Button
             width={3}
             style={styles.formButton}

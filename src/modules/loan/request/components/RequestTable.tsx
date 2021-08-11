@@ -63,12 +63,12 @@ class RequestTable extends React.Component<IRequestTable> {
           <MenuButton>{this.renderMultiActionButtons()}</MenuButton>
         }
         linkModalLabel={
-          hasPermission("REQUEST.CREATE")
+          hasPermission("REQUEST.CREATE") || hasPermission("REQUEST.ONLINE.CREATE")
             ? t("module.loan.requestDetail.createRequest")
             : undefined
         }
         linkModalComponent={<M106RequestValidate />}
-        iconName={hasPermission("REQUEST.CREATE") ? "plus circle" : undefined}
+        iconName={hasPermission("REQUEST.CREATE") || hasPermission("REQUEST.ONLINE.CREATE") ? "plus circle" : undefined}
       >
         <AlertMessage
           messageobj={this.props.requestlistStore.alert}
@@ -157,7 +157,7 @@ class RequestTable extends React.Component<IRequestTable> {
                   <List horizontal verticalAlign="middle" style={styles.list}>
                     <PermissionControl
                       somePermission
-                      codes={["REQUEST.VIEW", "DATA.ALL.EDIT"]}
+                      codes={["REQUEST.VIEW", "REQUEST.ONLINE.VIEW", "DATA.ALL.EDIT"]}
                     >
                       <List.Item style={styles.listItem}>
                         <Icon
@@ -177,10 +177,10 @@ class RequestTable extends React.Component<IRequestTable> {
                       </List.Item>
                     </PermissionControl>
                     {["DN", "CL", "DQF"].includes(data.status) &&
-                    !hasPermission("DATA.ALL.EDIT") ? null : (
+                      !hasPermission("DATA.ALL.EDIT") ? null : (
                       <PermissionControl
                         somePermission
-                        codes={["REQUEST.EDIT", "DATA.ALL.EDIT"]}
+                        codes={["REQUEST.EDIT", "REQUEST.ONLINE.EDIT", "DATA.ALL.EDIT"]}
                       >
                         <List.Item style={styles.listItem}>
                           <Icon
@@ -337,7 +337,7 @@ class RequestTable extends React.Component<IRequestTable> {
 
         <PermissionControl codes={["REQUEST.GENERATE.AGREEMENT"]}>
           {requestlistStore.filterStatus === "AP3" &&
-          documentStatusPage === "AP3" ? (
+            documentStatusPage === "AP3" ? (
             <Modal
               open={this.state.openGenerateAgreement}
               onOpen={this.openGenerateAgreement}

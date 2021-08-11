@@ -80,15 +80,15 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
             title={t("component.sidebar.loanSystemOnline")}
             iconName="laptop"
             hasPermission={[
-              hasPermission("REQUEST.ACCESS"),
-              hasPermission("AGREEMENT.ACCESS"),
-              hasPermission("GUANRANTEE.ACCESS"),
+              hasPermission("REQUEST.ONLINE.ACCESS"),
+              hasPermission("AGREEMENT.ONLINE.ACCESS"),
+              hasPermission("GUANRANTEE.ONLINE.ACCESS"),
             ].includes(true)}
             expanded={expanded}
             groupPathname="/loan/request"
             id="btn-group_loan_request"
           >
-            {hasPermission("REQUEST.CREATE") ? (
+            {hasPermission("REQUEST.ONLINE.CREATE") ? (
               <M106RequestValidate
                 trigger={
                   <Menu.Item
@@ -125,7 +125,7 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               pathname="/loan/request"
               title={t("component.sidebar.loanRequest")}
               expanded={expanded}
-              hasPermission={[hasPermission("REQUEST.ACCESS")].includes(true)}
+              hasPermission={[hasPermission("REQUEST.ONLINE.ACCESS")].includes(true)}
             />
             <SideMenu
               id="btn-loan-agreement"
@@ -133,7 +133,7 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               pathname="/loan/agreement"
               title={t("component.sidebar.loanContractWork")}
               expanded={expanded}
-              hasPermission={[hasPermission("AGREEMENT.ACCESS")].includes(true)}
+              hasPermission={[hasPermission("AGREEMENT.ONLINE.ACCESS")].includes(true)}
             />
             <SideMenu
               id="btn-loan-guarantee"
@@ -141,7 +141,7 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               pathname="/loan/guarantee"
               title={t("component.sidebar.loanGuaranteeContractWork")}
               expanded={expanded}
-              hasPermission={[hasPermission("GUANRANTEE.ACCESS")].includes(
+              hasPermission={[hasPermission("GUANRANTEE.ONLINE.ACCESS")].includes(
                 true
               )}
             />
@@ -151,7 +151,7 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               pathname="/account_receivable"
               title={t("component.sidebar.accountsReceivableSystem")}
               expanded={expanded}
-              hasPermission={[hasPermission("AR.ACCESS")].includes(true)}
+              hasPermission={[hasPermission("AR.ONLINE.ACCESS")].includes(true)}
             />
           </GroupSideMenu>
           <GroupSideMenu
