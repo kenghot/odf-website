@@ -4,6 +4,7 @@ import { withTranslation, WithTranslation } from "react-i18next";
 import { Button, Confirm, Divider, Grid, Header, Icon, Label, List } from "semantic-ui-react";
 import { Link } from "../../../../components/common";
 import { IRequestModel } from "../RequestModel";
+import { hasPermission } from "../../../../utils/render-by-permission";
 
 interface IRequestStepIcon extends WithTranslation {
   step: number;
@@ -113,14 +114,17 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
       <List style={styles.sendButtom}>
         <List.Item>
           <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
-            {t("module.loan.requestDetail.save")}
+            {hasPermission("REQUEST.ONLINE.CREATE") ? t("module.loan.requestDetail.saveRequestOnline") : t("module.loan.requestDetail.save")}
           </Button>
         </List.Item>
         {!hideSubmitButton ? (
           <List.Item>
-            <Button fluid color="blue" disabled={isInvalid} onClick={this.open}>
-              {t("module.loan.requestDetail.createRequest")}
-            </Button>
+            {hasPermission("REQUEST.ONLINE.CREATE") ?
+              null :
+              <Button fluid color="blue" disabled={isInvalid} onClick={this.open}>
+                {t("module.loan.requestDetail.createRequest")}
+              </Button>
+            }
             <Confirm
               size="tiny"
               content={t("module.loan.requestDetail.pleaseConfirmCreationRequestForm")}

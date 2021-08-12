@@ -32,7 +32,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
           onClickStep={(index) => this.setState({ step: index })}
           onSave={this.onSave}
           onCreate={this.onCreate}
-          hideSubmitButton={request.status === "DF" || !request.id ? false : true}
+          hideSubmitButton={(request.status === "DF" || "DFO") || !request.id ? false : true}
           isInvalid={request.checkTotalBudgetAllocationItems}
         />
         {this.state.step === 1 ? <RequesFormBorrowerGuarantorList mode={mode} request={request} /> : null}
@@ -46,7 +46,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
           onClickStep={(index) => this.setState({ step: index })}
           onSave={this.onSave}
           onCreate={this.onCreate}
-          hideSubmitButton={request.status === "DF" || !request.id ? false : true}
+          hideSubmitButton={(request.status === "DF" || "DFO") || !request.id ? false : true}
           positionBottom
           isInvalid={request.checkTotalBudgetAllocationItems}
         />

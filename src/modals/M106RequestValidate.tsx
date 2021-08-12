@@ -65,7 +65,7 @@ class M106RequestValidate extends React.Component<IM106RequestValidate> {
         closeIcon
         onClose={this.close}
         size="fullscreen"
-        // {...rest}
+      // {...rest}
       >
         <Modal.Header>
           <Header textAlign="center" id="header-text-m106">

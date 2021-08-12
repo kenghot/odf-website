@@ -1336,7 +1336,8 @@
         "contractSpecifiedDate": "วันที่ระบุในสัญญา",
         "checkPreliminaryInformation": "ตรวจสอบข้อมูลเบื้องต้นของผู้ขอกู้และผู้ค้ำฯ",
         "retrieveAddress": "ดึงข้อมูลที่อยู่จาก",
-        "clearData": "ล้างข้อมูล"
+        "clearData": "ล้างข้อมูล",
+        "saveRequestOnline": "บันทึกและสร้างแบบร่างคำร้องออนไลน์"
       },
       "components": {
         "career": "ประกอบอาชีพ",

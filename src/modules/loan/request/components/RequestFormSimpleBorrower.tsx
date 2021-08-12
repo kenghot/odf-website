@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Button, Grid, Header, Segment } from "semantic-ui-react";
@@ -6,27 +6,38 @@ import { Loading } from "../../../../components/common/loading";
 import { IIDCardModel } from "../../../../components/idcard/IDCardModel";
 import IDCardReaderProfile from "../../../../components/idcard/IDCardReaderProfile";
 import { IRequestItemModel } from "../RequestModel";
+import { IAuthModel } from "../../../../modules/auth/AuthModel";
+import { hasPermission } from "../../../../utils/render-by-permission";
 
 interface IRequestFormSimpleBorrower extends WithTranslation {
   requestItem: IRequestItemModel;
   idCardBorrowerItems: IIDCardModel;
   requestType: string;
   documentDate: string;
+  authStore?: IAuthModel;
 }
 
+@inject("authStore")
 @observer
 class RequestFormSimpleBorrower extends React.Component<
-  IRequestFormSimpleBorrower
+IRequestFormSimpleBorrower
 > {
   public state = { showResult: false };
   public render() {
-    const { requestItem, idCardBorrowerItems, t, documentDate } = this.props;
+    const { requestItem, idCardBorrowerItems, t, documentDate, authStore } = this.props;
+    //Beer12082021
+    if (hasPermission("REQUEST.ONLINE.CREATE")) {
+      this.props.requestItem!.borrower.setField({
+        fieldname: "idCardNo",
+        value: authStore!.userProfile.username ? authStore!.userProfile.username : ""
+      });
+    }
     return (
       <React.Fragment>
         <Loading active={requestItem.borrower.loading} />
         {this.state.showResult ||
-        requestItem.borrower.error.message ||
-        requestItem.borrower.isVerify ? (
+          requestItem.borrower.error.message ||
+          requestItem.borrower.isVerify ? (
           this.renderResult()
         ) : (
           <Segment padded style={styles.segment}>

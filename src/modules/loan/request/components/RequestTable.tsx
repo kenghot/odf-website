@@ -60,7 +60,10 @@ class RequestTable extends React.Component<IRequestTable> {
         fluid
         basic
         titleComponent={
-          <MenuButton>{this.renderMultiActionButtons()}</MenuButton>
+          hasPermission("REQUEST.ONLINE.ACCESS") ?
+            null
+            :
+            <MenuButton>{this.renderMultiActionButtons()}</MenuButton>
         }
         linkModalLabel={
           hasPermission("REQUEST.CREATE") || hasPermission("REQUEST.ONLINE.CREATE")
@@ -90,12 +93,17 @@ class RequestTable extends React.Component<IRequestTable> {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell textAlign="center">
-            <Checkbox
-              checked={requestlistStore.selected_checkbox}
-              onChange={(event, value) =>
-                requestlistStore.selected_all(value.checked || false)
-              }
-            />
+            {
+              hasPermission("REQUEST.ONLINE.ACCESS") ?
+                null
+                :
+                <Checkbox
+                  checked={requestlistStore.selected_checkbox}
+                  onChange={(event, value) =>
+                    requestlistStore.selected_all(value.checked || false)
+                  }
+                />
+            }
           </Table.HeaderCell>
           <Table.HeaderCell textAlign="center" width={2}>
             {t("module.loan.requestDetail.requestOfNumber")}
@@ -131,15 +139,20 @@ class RequestTable extends React.Component<IRequestTable> {
             return (
               <Table.Row key={index}>
                 <Table.Cell textAlign="center">
-                  <Checkbox
-                    checked={data.isSelected}
-                    onChange={(event, value) =>
-                      data.setField({
-                        fieldname: "isSelected",
-                        value: value.checked
-                      })
-                    }
-                  />
+                  {
+                    hasPermission("REQUEST.ONLINE.ACCESS") ?
+                      null
+                      :
+                      <Checkbox
+                        checked={data.isSelected}
+                        onChange={(event, value) =>
+                          data.setField({
+                            fieldname: "isSelected",
+                            value: value.checked
+                          })
+                        }
+                      />
+                  }
                 </Table.Cell>
                 <Table.Cell>{data.documentNumber}</Table.Cell>
                 <Table.Cell>{data.organization.orgName}</Table.Cell>
@@ -201,7 +214,7 @@ class RequestTable extends React.Component<IRequestTable> {
                       </PermissionControl>
                     )}
 
-                    {["DF"].includes(data.status) ? (
+                    {["DF"].includes(data.status) || ["DFO"].includes(data.status) ? (
                       <PermissionControl codes={["REQUEST.DEL"]}>
                         <DeleteModal
                           trigger={

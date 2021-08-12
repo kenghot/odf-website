@@ -21,7 +21,7 @@ class RequestTab extends React.Component<IRequestTab> {
       menuItem: t("module.loan.requestDetail.requestForm"),
       render: () => <Tab.Pane>{<RequestDetail request={request} />}</Tab.Pane>
     });
-    if (request.status !== "DF" || hasPermission("DATA.ALL.EDIT")) {
+    if ((request.status !== "DF" || "DFO") || hasPermission("DATA.ALL.EDIT")) {
       if (hasPermission("REQUEST.VALIDATE") || hasPermission("DATA.ALL.EDIT")) {
         panes.push({
           menuItem: t("module.loan.requestDetail.checkQualifications"),

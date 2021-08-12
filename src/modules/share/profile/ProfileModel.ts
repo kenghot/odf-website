@@ -207,7 +207,7 @@ export const ProfileModel = types
           const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_data.php`;
           const res: any = yield fetch(`${gdxApiUrl}?ServiceID=001&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
           const response: any = yield res.json();
-          console.log(response);
+          // console.log(response);
           // self.setAllField(response.data);
           self.setField({
             fieldname: "idCardNo",
@@ -270,13 +270,25 @@ export const ProfileModel = types
           //   fieldname: "telephone",
           //   value: response.phoneNumber.toString()
           // });
-          self.error.tigger = false;
+          if (response.Code == '90001') {
+            console.log(response.firstName)
+            self.error.tigger = true;
+            self.error.title = "ไม่สามารถดึงข้อมูลได้";
+            self.error.message =
+              "ไม่สามารถดึงข้อมูลจากกรมการปกครองได้เนื่องจากไม่ได้ Login โปรแกรม Government AMI";
+          } else if (typeof (response.firstName) == "undefined") {
+            self.error.tigger = true;
+            self.error.title = "ไม่สามารถดึงข้อมูลได้";
+            self.error.message = response.Message;
+          } else {
+            self.error.tigger = false;
+          }
         } catch (e) {
           //---Beer05082021--
           self.error.tigger = true;
           self.error.title = "ไม่สามารถดึงข้อมูลได้";
           self.error.message =
-            "ไม่สามารถดึงข้อมูลจากกรมการปกครองได้หรือเนื่องจากไม่ได้ Login โปรแกรม Government AMI";
+            "เกิดเหตุขัดข้อง ไม่สามารถดึงข้อมูลจากกรมการปกครองได้";
           console.log(e);
           throw e;
         } finally {
