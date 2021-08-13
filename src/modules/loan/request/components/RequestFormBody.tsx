@@ -1,15 +1,20 @@
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { RequesAttachedFiles, RequesFormBorrowerGuarantorList, RequesLoanDetails, RequestStepIcon } from ".";
 // import { Loading } from "../../../../components/common/loading";
 import { IRequestModel } from "../RequestModel";
+import { IAuthModel } from "../../../../modules/auth/AuthModel";
+import { hasPermission } from "../../../../utils/render-by-permission";
 
 interface IRequestFormBody extends WithTranslation, RouteComponentProps {
   request: IRequestModel;
   mode: "editMode" | "createMode";
+  authStore?: IAuthModel;
 }
+
+@inject("authStore")
 @observer
 class RequestFormBody extends React.Component<IRequestFormBody> {
   public componentDidMount() {
@@ -54,7 +59,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
     );
   }
   private onSave = async () => {
-    const { request, history, location, t } = this.props;
+    const { request, history, location, t, authStore } = this.props;
     const pathname = location.pathname;
     try {
       if (request.checkTotalBudgetAllocationItems) {
@@ -79,6 +84,11 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
           }
         }
       } else {
+        if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
+          request.setField({ fieldname: "status", value: "DFO" });
+        } else {
+          request.setField({ fieldname: "status", value: "DF" });
+        }
         await request!.createRequest();
       }
     } catch (e) {
@@ -102,12 +112,17 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   };
 
   private sendFormStep2 = async () => {
-    const { request, t } = this.props;
+    const { request, t, authStore } = this.props;
     try {
       if (!request.checkTotalBudgetAllocationItems) {
         if (request.id) {
           await request.updateRequesLoanDetails();
         } else {
+          if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
+            request.setField({ fieldname: "status", value: "DFO" });
+          } else {
+            request.setField({ fieldname: "status", value: "DF" });
+          }
           await request.createRequest();
         }
         await this.setState({ step: 3 });
@@ -126,11 +141,16 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
     }
   };
   private sendFormStep1 = async () => {
-    const { request } = this.props;
+    const { request, authStore } = this.props;
     try {
       if (request.id) {
         await request!.updateRequest();
       } else {
+        if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
+          request.setField({ fieldname: "status", value: "DFO" });
+        } else {
+          request.setField({ fieldname: "status", value: "DF" });
+        }
         await request!.createRequest();
       }
       await this.setState({ step: 2 });
@@ -139,7 +159,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
     }
   };
   private onCreate = async () => {
-    const { request, history, t } = this.props;
+    const { request, history, t, authStore } = this.props;
     try {
       if (request.checkTotalBudgetAllocationItems) {
         const errorMessage = {
@@ -150,6 +170,11 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         };
         request.error.setErrorMessage(errorMessage);
         throw errorMessage;
+      }
+      if (request.status == "DFO") {
+        request.setField({ fieldname: "status", value: "NWO" });
+      } else {
+        request.setField({ fieldname: "status", value: "NW" });
       }
       if (request.id) {
         await request!.updateRequestStatusCreate();

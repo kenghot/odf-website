@@ -194,7 +194,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
                       codes={["AGREEMENT.EDIT", "DATA.ALL.EDIT"]}
                     >
                       {["NW"].includes(data.status) ||
-                      hasPermission("DATA.ALL.EDIT") ? (
+                        hasPermission("DATA.ALL.EDIT") ? (
                         <List.Item style={styles.listItem}>
                           <Icon
                             circular
@@ -247,7 +247,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
     return (
       <PermissionControl codes={["AGREEMENT.GENERATE.VOUCHER"]}>
         {agreementListStore.filterStatus === "NW" &&
-        documentStatusPage === "NW" ? (
+          documentStatusPage === "NW" ? (
           <Modal
             open={this.state.open}
             onOpen={this.open}

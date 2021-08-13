@@ -189,7 +189,7 @@ class RequestHeader extends React.Component<IRequestHeader> {
           </React.Fragment>
         ) : null}
 
-        {["DF", ""].includes(request.status) ? null : (
+        {["DF", ""].includes(request.status) || ["DFO"].includes(request.status) ? null : (
           <Button
             width={7}
             floated="right"
@@ -224,7 +224,7 @@ class RequestHeader extends React.Component<IRequestHeader> {
         </PermissionControl>
         <div style={styles.buttonRight}>
           {mode === "view" &&
-            (["DF", "DFO", "NW"].includes(request.status) ||
+            (["DF", "DFO", "NW", "NWO"].includes(request.status) ||
               hasPermission("DATA.ALL.EDIT")) ? (
             <PermissionControl
               somePermission

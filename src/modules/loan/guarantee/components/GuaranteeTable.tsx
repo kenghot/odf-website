@@ -206,8 +206,8 @@ class GuaranteeTable extends React.Component<IGuaranteeTable> {
                       somePermission
                       codes={["GUANRANTEE.EDIT", "DATA.ALL.EDIT"]}
                     >
-                      {["NW"].includes(data.status) ||
-                      hasPermission("DATA.ALL.EDIT") ? (
+                      {["NW" || "NWO"].includes(data.status) ||
+                        hasPermission("DATA.ALL.EDIT") ? (
                         <List.Item style={styles.listItem}>
                           <Icon
                             circular
@@ -226,7 +226,7 @@ class GuaranteeTable extends React.Component<IGuaranteeTable> {
                       ) : null}
                     </PermissionControl>
                     <PermissionControl codes={["GUANRANTEE.DEL"]}>
-                      {data.status === "NW" ? (
+                      {data.status === "NW" || "NWO" ? (
                         <DeleteModal
                           trigger={
                             <List.Item style={styles.listLastItem}>

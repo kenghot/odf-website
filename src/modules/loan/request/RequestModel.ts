@@ -587,15 +587,17 @@ export const RequestModel = types
             });
           }
         }
+        self.setField({ fieldname: "loading", value: true });
         const body = {
           organization: {
             id: self.organizationId
           },
-          status: "DFO",
+          // status: "DF",
+          status: self.status,
           requestType: self.requestType,
           documentDate: self.documentDate,
           requestItems: self.requestItems,
-          name: self.requestType === "G" ? self.name : self.full_name
+          name: self.requestType === "G" ? self.name : self.full_name + "test"
         };
         const result: any = yield Request.create(body);
         self.setAllField(result.data);
@@ -678,7 +680,6 @@ export const RequestModel = types
           name: self.requestType === "G" ? self.name : self.full_name
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -707,7 +708,7 @@ export const RequestModel = types
     }),
     updateRequesLoanDetails: flow(function* () {
       try {
-        self.setField({ fieldname: "loading", value: true });
+        self.setField({ fieldname: "status", value: "DF9" });
         const body = {
           status: self.status,
           requestBudget: self.requestBudget,
@@ -792,10 +793,11 @@ export const RequestModel = types
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
-          status: "NW"
+          // status: "NW"
+          status: self.status
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
+        // console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -833,7 +835,8 @@ export const RequestModel = types
           requestOccupation: self.requestOccupation,
           budgetAllocationItems: self.checkEmptyBudgetAllocationItems,
           requestOccupationAddress: self.requestOccupationAddress,
-          status: "NW",
+          // status: "NW",
+          status: self.status,
           name: self.requestType === "G" ? self.name : self.full_name,
           requestType: self.requestType,
           documentDate: self.documentDate,

@@ -44,6 +44,19 @@ class ManageDocumentForm extends React.Component<IManageDocumentForm> {
             SequenceType="request"
           />
           <Form.Field
+            id="org-request-sequence-ddl"
+            label={t("module.admin.manageDocumentForm.petitionOnlineDocument")}
+            placeholder={t(
+              "module.admin.manageDocumentForm.specifyRequestOnlineDocument"
+            )}
+            control={SequenceDDL}
+            sequenceId={org.requestOnlineSequence ? org.requestOnlineSequence.id : ""}
+            sequence={org.requestOnlineSequence ? org.requestOnlineSequence : undefined}
+            value={org.requestOnlineSequence ? org.requestOnlineSequence.id : ""}
+            onChange={this.onChangeRequestOnlineSequenceDDL}
+            SequenceType="requestOnline"
+          />
+          <Form.Field
             id="org-agreement-sequence-ddl"
             label={t("module.admin.manageDocumentForm.contractDocuments")}
             placeholder={t(
@@ -99,6 +112,10 @@ class ManageDocumentForm extends React.Component<IManageDocumentForm> {
   private onChangeRequestSequenceDDL = async (value: any) => {
     const { org } = this.props;
     org.setField({ fieldname: "requestSequence", value: clone(value) });
+  };
+  private onChangeRequestOnlineSequenceDDL = async (value: any) => {
+    const { org } = this.props;
+    org.setField({ fieldname: "requestOnlineSequence", value: clone(value) });
   };
   private onChangeAgreementSequenceDDL = async (value: any) => {
     const { org } = this.props;

@@ -198,8 +198,8 @@ class AgreementHeader extends React.Component<IAgreementHeader> {
           ) : null}
         </div>
         {!disableEditBtn &&
-        (["NW"].includes(agreement.status) ||
-          hasPermission("DATA.ALL.EDIT")) ? (
+          (["NW"].includes(agreement.status) ||
+            hasPermission("DATA.ALL.EDIT")) ? (
           <PermissionControl
             somePermission
             codes={["AGREEMENT.EDIT", "DATA.ALL.EDIT"]}
