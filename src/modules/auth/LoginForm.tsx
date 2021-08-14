@@ -92,6 +92,16 @@ class LoginForm extends React.Component<ILoginForm> {
             {t("page.loginPage.forgetPassword")}
           </Link>
         </Container>
+        <Container textAlign="center" style={styles.forgetPasswordStyle}>
+          <Link
+            id={"link-register-borrower"}
+            size="medium"
+            shade={5}
+            onClick={() => onChangeStep("Register")}
+          >
+            {t("page.loginPage.registerBorrower")}
+          </Link>
+        </Container>
       </Segment>
     );
   }

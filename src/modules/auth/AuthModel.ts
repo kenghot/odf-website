@@ -9,6 +9,13 @@ import {
   SignIn,
   SignOut,
 } from "./AuthService";
+import {
+  date_YYYYMMDD_BE_TO_CE,
+  dateFormatingYYYYMMDD,
+  idcardFormatting,
+  isInValidThaiIdCard,
+  isValidDate
+} from "../../utils";
 
 export const AuthModel = types
   .model("AuthModel", {
@@ -21,6 +28,7 @@ export const AuthModel = types
     loading: types.optional(types.boolean, false),
     error: types.optional(ErrorModel, {}),
     userProfile: types.optional(UserModel, {}),
+    idCardNo: types.optional(types.string, ""),
   })
   .views((self: any) => ({
     get access_token() {
@@ -36,6 +44,12 @@ export const AuthModel = types
         self.password !== "" &&
         !self.password.match(/^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{8,}$/)
       );
+    },
+    get idCardformated() {
+      return self.idCardNo !== "" ? idcardFormatting(self.idCardNo) : "";
+    },
+    get idCardIsIncorrectFormat() {
+      return isInValidThaiIdCard(self.idCardNo);
     },
   }))
   .actions((self: any) => ({

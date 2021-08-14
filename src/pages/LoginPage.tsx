@@ -8,11 +8,13 @@ import { Link, Text } from "../components/common";
 import { COLORS, IMAGES } from "../constants";
 import {
   M001RegisterInstructionModal,
-  M002DeactivateUserInstruction
+  M002DeactivateUserInstruction,
+  M003RegisterOnline
 } from "../modals";
 import authStore, { IAuthModel } from "../modules/auth/AuthModel";
 import { ResetPassword } from "../modules/auth/components";
 import ForgetPassword from "../modules/auth/ForgetPassword";
+import Register from "../modules/auth/Register";
 import LoginForm from "../modules/auth/LoginForm";
 import VerifyPassword from "../modules/auth/VerifyPassword";
 const { login_bg } = IMAGES;
@@ -124,6 +126,9 @@ class LoginPage extends Component<ILoginPage> {
             {this.state.step === "LoginForm" ? (
               <LoginForm onChangeStep={this.onChangeStep} />
             ) : null}
+            {this.state.step === "Register" ? (
+              <Register onChangeStep={this.onChangeStep} />
+            ) : null}
             {this.state.step === "ForgetPasswordForm" ? (
               <ForgetPassword onChangeStep={this.onChangeStep} />
             ) : null}
@@ -229,6 +234,15 @@ class LoginPage extends Component<ILoginPage> {
     const { t } = this.props;
     return (
       <List floated="right">
+        {/* <List.Item style={styles.textAlignRight}>
+          <M003RegisterOnline
+            trigger={
+              <Text id={"link-label-m001"} shade={5} underline size="medium" style={styles.link}>
+                {t("page.loginPage.registerBorrower")}
+              </Text>
+            }
+          />
+        </List.Item> */}
         <List.Item style={styles.textAlignRight}>
           <M001RegisterInstructionModal
             trigger={
