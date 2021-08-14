@@ -31,6 +31,18 @@ IRequestFormSimpleBorrower
         fieldname: "idCardNo",
         value: authStore!.userProfile.username ? authStore!.userProfile.username : ""
       });
+      this.props.requestItem!.borrower.setField({
+        fieldname: "title",
+        value: authStore!.userProfile.title ? authStore!.userProfile.title : ""
+      });
+      this.props.requestItem!.borrower.setField({
+        fieldname: "firstname",
+        value: authStore!.userProfile.firstname ? authStore!.userProfile.firstname : ""
+      });
+      this.props.requestItem!.borrower.setField({
+        fieldname: "lastname",
+        value: authStore!.userProfile.lastname ? authStore!.userProfile.lastname : ""
+      });
     }
     return (
       <React.Fragment>
