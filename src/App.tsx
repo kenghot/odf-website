@@ -399,18 +399,18 @@ class App extends Component {
                   exact
                   path="/account_receivable"
                   render={(props: any) =>
-                    this.renderComponent(
+                    this.renderComponentMorePermission(
                       <AccountReceivableListPage {...props} />,
-                      "AR.ACCESS"
+                      ["AR.ACCESS", "REQUEST.ONLINE.ACCESS"]
                     )
                   }
                 />
                 <Route
                   path="/account_receivable/view/:id/:name"
                   render={(props: any) =>
-                    this.renderComponent(
+                    this.renderComponentMorePermission(
                       <AccountReceivableDetailPage {...props} />,
-                      "AR.VIEW"
+                      ["AR.VIEW", "REQUEST.ONLINE.ACCESS"]
                     )
                   }
                 />

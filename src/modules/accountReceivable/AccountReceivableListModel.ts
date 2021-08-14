@@ -35,7 +35,8 @@ export const AccountReceivableListModel = types
     currentPage: types.optional(types.number, 1),
     perPage: types.optional(types.number, 10),
     totalPages: types.optional(types.number, 1),
-    loading: types.optional(types.boolean, false)
+    loading: types.optional(types.boolean, false),
+    idcardRequestOnline: types.optional(types.string, "")
   })
   .views((self: any) => ({
     get statusMenu() {
@@ -60,7 +61,7 @@ export const AccountReceivableListModel = types
     setField: ({ fieldname, value }: IInput) => {
       self[fieldname] = value;
     },
-    load_data: flow(function*() {
+    load_data: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
 
@@ -70,7 +71,7 @@ export const AccountReceivableListModel = types
           agreementType: self.filterARType,
           firstname: self.filterFirstname,
           lastname: self.filterLastname,
-          idCardNo: self.filterIdCardNo,
+          idCardNo: self.idcardRequestOnline ? self.idcardRequestOnline : self.filterIdCardNo,
           name: self.filterName,
           guarantorFirstname: self.filterGuarantorFirstname,
           guarantorLastname: self.filterGuarantorLastname,
@@ -108,7 +109,7 @@ export const AccountReceivableListModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    update_data_selected: flow(function*(value: string) {
+    update_data_selected: flow(function* (value: string) {
       try {
         let isActive = false;
         switch (value) {
@@ -123,7 +124,7 @@ export const AccountReceivableListModel = types
         }
         if (value) {
           yield self.list.forEach(
-            flow(function*(item: IAccountReceivableModel) {
+            flow(function* (item: IAccountReceivableModel) {
               if (item.isSelected) {
                 const result: any = yield AccountReceivable.update(
                   { active: isActive },
@@ -167,7 +168,7 @@ export const AccountReceivableListModel = types
       self.filterLastname = "";
       self.filterIdCardNo = "";
     },
-    resetFilter: flow(function*() {
+    resetFilter: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         self.filterDocumentNumber = "";

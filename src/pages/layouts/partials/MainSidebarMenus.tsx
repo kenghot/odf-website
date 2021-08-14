@@ -127,7 +127,7 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               expanded={expanded}
               hasPermission={[hasPermission("REQUEST.ONLINE.ACCESS")].includes(true)}
             />
-            <SideMenu
+            {/* <SideMenu
               id="btn-loan-agreement"
               name={"loan"}
               pathname="/loan/agreement"
@@ -144,7 +144,7 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               hasPermission={[hasPermission("GUANRANTEE.ONLINE.ACCESS")].includes(
                 true
               )}
-            />
+            /> */}
             <SideMenu
               id="btn-account-receivable"
               name={"loan"}
