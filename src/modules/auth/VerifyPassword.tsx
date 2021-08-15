@@ -30,11 +30,20 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
         <Logo />
         <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
           {t("page.loginPage.changePassword")}
-          <Header.Subheader>
-            {t("page.loginPage.specifyPin", {
-              email: authStore!.userProfile.email
-            })}
-          </Header.Subheader>
+          {
+            authStore!.userProfile.username == authStore!.userProfile.email ?
+              <Header.Subheader>
+                {t("page.loginPage.specifyPinMobile", {
+                  telephone: authStore!.userProfile.telephone
+                })}
+              </Header.Subheader>
+              :
+              <Header.Subheader>
+                {t("page.loginPage.specifyPin", {
+                  email: authStore!.userProfile.email
+                })}
+              </Header.Subheader>
+          }
         </Header>
         <Form loading={authStore!.loading} onSubmit={this.requestNewPassword}>
           <Form.Group widths="equal">
@@ -158,13 +167,24 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
           <Grid style={styles.buttonMarginStyle}>
             <Grid.Row columns="equal" verticalAlign="middle">
               <Grid.Column>
-                <Link
-                  size="medium"
-                  hideUnderline
-                  onClick={() => onChangeStep("ForgetPasswordForm")}
-                >
-                  {t("canceled")}
-                </Link>
+                {
+                  authStore!.userProfile.username == authStore!.userProfile.email ?
+                    <Link
+                      size="medium"
+                      hideUnderline
+                      onClick={() => onChangeStep("Register")}
+                    >
+                      {t("canceled")}
+                    </Link>
+                    :
+                    <Link
+                      size="medium"
+                      hideUnderline
+                      onClick={() => onChangeStep("ForgetPasswordForm")}
+                    >
+                      {t("canceled")}
+                    </Link>
+                }
               </Grid.Column>
               <Grid.Column>
                 <Form.Button id={"btn-submit-pin-code"} primary floated="right" type="submit">

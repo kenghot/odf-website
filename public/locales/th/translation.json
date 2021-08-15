@@ -155,13 +155,17 @@
       "specifyUsername": "กรุณาระบุรหัสผู้ใช้งานเพื่อขอรหัสผ่านใหม่",
       "changePassword": "ดำเนินการเปลี่ยนรหัสผ่านใหม่",
       "specifyPin": "โปรดระบุรหัส 6 หลักที่ระบบได้ส่งไปยังอีเมลล์ {{email}} เพื่อยืนยันรหัสผ่าน",
+      "specifyPinMobile": "โปรดระบุรหัส 6 หลักที่ระบบได้ส่งไปยังเบอร์โทรศัพท์ {{telephone}} เพื่อยืนยันรหัสผ่าน",
       "specifyNewPassword": "ระบุรหัสผ่านใหม่",
       "pleaseUseCharacters": "โปรดใช้ตัวเลขและตัวอักษรอย่างน้อย 1 ตัว และยาวอย่างน้อย 8 ตัวขึ้นไป",
       "newPassword": "รหัสผ่านใหม่",
       "confirmPassword": "ยืนยันรหัสผ่าน",
       "cancelAccount": "ต้องการยกเลิกบัญชีผู้ใช้งาน?",
       "logIn": "เข้าสู่ระบบ",
-      "pleaseSpecifyDigitAt": "โปรดระบุหลักที่ {{value}}"
+      "pleaseSpecifyDigitAt": "โปรดระบุหลักที่ {{value}}",
+      "confirmOtpSms": "กรอกหมายเลข ยืนยัน OTP",
+      "usernameBorrower": "รหัสผู้ใช้งานในการเข้าสู่ระบบ",
+      "setPassword": "กำหนดรหัสผ่าน"
     },
     "orgFormPage": {
       "findOrg": "ค้นหาหน่วยงาน",

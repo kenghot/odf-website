@@ -28,15 +28,16 @@ import { IUserModel } from "../modules/admin/user/UserModel";
 import { OrganizationDDL } from "../modules/admin/organization/components";
 import { OrgListModel } from "../modules/admin/organization/OrgListModel";
 import { UserModel } from "../modules/admin/user";
+import { IAuthModel } from "../modules/auth/AuthModel";
 
 interface IM003RegisterOnline extends WithTranslation, RouteComponentProps {
   trigger?: any;
   appStore?: IAppModel;
   requestCreate?: IRequestModel;
-  user: IUserModel;
+  authStore?: IAuthModel;
 }
 
-@inject("appStore", "requestCreate")
+@inject("appStore", "requestCreate", "authStore")
 @observer
 class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
   private user = UserModel.create({});
@@ -64,7 +65,7 @@ class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
     }
   };
   public render() {
-    const { t, trigger, appStore, requestCreate, user } = this.props;
+    const { t, trigger, appStore, requestCreate, authStore } = this.props;
     const { open } = this.state;
     return (
       <Modal
@@ -82,7 +83,7 @@ class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
           </Header>
         </Modal.Header>
         <Modal.Content scrolling>
-          <Form>
+          <Form onSubmit={this.createUserForm}>
             <Form.Select
               search
               fluid
@@ -99,7 +100,7 @@ class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
               }
               value={requestCreate!.requestType}
             />
-            <Form.Input
+            {/* <Form.Input
               id="form-input-username"
               required
               label={t("page.loginPage.username")}
@@ -109,13 +110,13 @@ class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
               style={styles.textInputStyle}
               width="16"
               onChange={(event: any, data: any) =>
-                user.setField({
+                authStore!.userProfile.setField({
                   fieldname: "username",
                   value: data.value
                 })
               }
-              value={user.username || ""}
-            />
+              value={authStore!.userProfile.username || ""}
+            /> */}
             <Form.Button
               id={"btn-submit-forget-password"}
               primary
@@ -266,6 +267,9 @@ class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
     );
   }
 
+
+
+
   private onRemoveBorrowerItem = async (
     index: number,
     requesItem: IRequestItemModel,
@@ -280,13 +284,62 @@ class M003RegisterOnline extends React.Component<IM003RegisterOnline> {
     await this.setState({ activeIndex: index - 1 });
   };
   private createUserForm = async () => {
-    const { user } = this.props;
+    const { authStore } = this.props;
     try {
-      user.setField({
-        fieldname: "email",
-        value: "registonline"
+      authStore!.userProfile.setField({
+        fieldname: "username",
+        value: "beer00004"
       })
-      await user.createUser();
+      authStore!.userProfile.setField({
+        fieldname: "active",
+        value: true
+      })
+      authStore!.userProfile.setField({
+        fieldname: "createdBy",
+        value: 1
+      })
+      authStore!.userProfile.setField({
+        fieldname: "createdDate",
+        value: "2021-08-15T14:33:34.360Z"
+      })
+      authStore!.userProfile.setField({
+        fieldname: "id",
+        value: ""
+      })
+      authStore!.userProfile.setField({
+        fieldname: "organizationId",
+        value: null
+      })
+      authStore!.userProfile.setField({
+        fieldname: "signinCount",
+        value: 0
+      })
+      authStore!.userProfile.setField({
+        fieldname: "resetPasswordToken",
+        value: ""
+      })
+      authStore!.userProfile.setField({
+        fieldname: "resetPasswordTokenExpiration",
+        value: "-1"
+      })
+      authStore!.userProfile.setField({
+        fieldname: "createdByName",
+        value: "registonline1"
+      })
+      authStore!.userProfile.setField({
+        fieldname: "updatedByName",
+        value: ""
+      })
+      authStore!.userProfile.setField({
+        fieldname: "email",
+        value: "registonline@gmail.com"
+      })
+      authStore!.userProfile.setField({
+        fieldname: "2021-08-15T14:33:34.360Z",
+        value: "registonline@gmail.com"
+      })
+      console.log(authStore!.userProfile)
+      await authStore!.userProfile.createUser();
       // authStore.push(`/admin/user_managment/edit/${user.id}/${user.username}`);
 
     } catch (e) {
@@ -300,5 +353,4 @@ const styles: any = {
     marginRight: 0
   }
 };
-
 export default withRouter(withTranslation()(M003RegisterOnline));

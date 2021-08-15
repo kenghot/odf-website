@@ -63,7 +63,7 @@ export const VoucherListModel = types
     }
   }))
   .actions((self: any) => ({
-    onSeachVoucherList: flow(function*() {
+    onSeachVoucherList: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body: IVoucherFilterBody = {
@@ -102,7 +102,7 @@ export const VoucherListModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    createKTBFile: flow(function*() {
+    createKTBFile: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body: IKTBCreate = {
@@ -126,7 +126,7 @@ export const VoucherListModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateVoucherByKTBFile: flow(function*() {
+    updateVoucherByKTBFile: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         console.log("updateVoucherByKTBFile", {
@@ -135,7 +135,8 @@ export const VoucherListModel = types
         const body: IKTBUpdate = {
           ktb: self.ktbFile
         };
-        yield vouchersAPI.formUpdateNoId(body, { name: "ktb" });
+        const result: any = yield vouchersAPI.formUpdateNoId(body, { name: "ktb" });
+        // console.log(result.data)
         self.resetFilter();
         self.onSeachVoucherList();
         self.selected_all(false);
@@ -148,6 +149,23 @@ export const VoucherListModel = types
           fieldname: "message",
           value: "อัพโหลดใบแทนใบรับเงินจากระบบ KTB Online เรียบร้อยแล้ว"
         });
+        //Beer14082021 post api odoo
+        // console.log(result.data)
+        // console.log(result.data.successAgreement)
+        if (result.success) {
+          for (const item of result.data.successAgreement) {
+            const odooApiUrl = `${process.env.REACT_APP_API_ODOO_ENDPOINT}/rest_sync_contract.php`;
+            const requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ contract_no: item.documentNumber })
+            };
+            const res: any = yield fetch(odooApiUrl, requestOptions);
+            const response: any = yield res.json();
+            console.log(response);
+            console.log(response.result.success);
+          }
+        }
         self.setField({ fieldname: "ktbFile", value: undefined });
         self.error.setField({ fieldname: "tigger", value: false });
       } catch (e) {
