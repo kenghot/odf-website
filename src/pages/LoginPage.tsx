@@ -17,6 +17,7 @@ import ForgetPassword from "../modules/auth/ForgetPassword";
 import Register from "../modules/auth/Register";
 import LoginForm from "../modules/auth/LoginForm";
 import VerifyPassword from "../modules/auth/VerifyPassword";
+import VerifyIdentity from "../modules/auth/VerifyIdentity";
 const { login_bg } = IMAGES;
 
 interface ILoginPage extends WithTranslation, RouteComponentProps {
@@ -134,6 +135,9 @@ class LoginPage extends Component<ILoginPage> {
             ) : null}
             {this.state.step === "VerifyForm" ? (
               <VerifyPassword onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "VerifyIdentityForm" ? (
+              <VerifyIdentity onChangeStep={this.onChangeStep} />
             ) : null}
             {this.state.step === "ResetPasswordForm" ? (
               <ResetPassword

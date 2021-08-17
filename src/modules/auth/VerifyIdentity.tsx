@@ -29,10 +29,10 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
       <Segment padded="very">
         <Logo />
         <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
-          {t("page.loginPage.changePassword")}
+          {t("page.loginPage.verifyIdentity")}
           <Header.Subheader>
-            {t("page.loginPage.specifyPin", {
-              email: authStore!.userProfile.email
+            {t("page.loginPage.specifyPinMobile", {
+              email: authStore!.userProfile.telephone
             })}
           </Header.Subheader>
         </Header>

@@ -1,10 +1,12 @@
 import { applySnapshot, flow, types } from "mobx-state-tree";
 import { ErrorModel } from "../../components/common/error";
+import { MessageModel } from "../../components/common/message";
 import { IInput } from "../../utils/common-interface";
 import { UserModel } from "../admin/user/UserModel";
 import {
   ConfirmPasswordToken,
   NewPasswordRequest,
+  RegisterUser,
   ResetPassword,
   SignIn,
   SignOut,
@@ -29,6 +31,7 @@ export const AuthModel = types
     error: types.optional(ErrorModel, {}),
     userProfile: types.optional(UserModel, {}),
     idCardNo: types.optional(types.string, ""),
+    alert: types.optional(MessageModel, {}),
   })
   .views((self: any) => ({
     get access_token() {
@@ -59,6 +62,51 @@ export const AuthModel = types
     resetAll: () => {
       applySnapshot(self, {});
     },
+    createUser: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const body = {
+          active: true,
+          username: self.idCardNo,
+          password: self.userProfile.password,
+          title: self.userProfile.title,
+          firstname: self.userProfile.firstname,
+          lastname: self.userProfile.lastname,
+          position: self.userProfile.position,
+          organizationId: self.userProfile.organization.id ? self.userProfile.organization.id : null,
+          email: self.userProfile.email ? self.userProfile.email : "registeronline",
+          telephone: self.userProfile.telephone,
+          attachedFiles: self.userProfile.attachedFiles,
+        };
+        const result: any = yield RegisterUser.create_user(body);
+        // self.userProfile.setAllField(result.data);
+        console.log(result.data);
+        console.log(result.id);
+        console.log(result.data.id);
+
+        self.uid = result.data.id;
+        self.userProfile.email = self.idCardNo;
+        self.password = "";
+        self.setLocalStorage("uid", +result.data.id);
+        self.error.tigger = false;
+        self.alert.tigger = true;
+        self.alert.setField({
+          fieldname: "title",
+          value: "ลงทะเบียนผู้ใช้งานสำเร็จ",
+        });
+      } catch (e) {
+        self.error.tigger = true;
+        self.error.code = e.code;
+        self.error.title = e.name;
+        self.error.message = e.message;
+        self.error.technical_stack = e.technical_stack;
+        console.log("เกิดเหตุขัดข้อง ไม่สามารถลงทะเบียนผู้ใช้งานได้", self.error);
+        throw e;
+      } finally {
+        // self.resetAll();
+        self.loading = false;
+      }
+    }),
     sign_in: flow(function* () {
       self.loading = true;
       try {

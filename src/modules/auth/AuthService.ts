@@ -2,17 +2,26 @@ import { request } from "../../utils";
 import { ApiHelper, IApiResponse } from "../../utils/api-helper";
 
 const signinUrl = `${process.env.REACT_APP_API_ENDPOINT}/auth/v1/signin`;
-const newPasswordRequestUrl = `${
-  process.env.REACT_APP_API_ENDPOINT
-}/auth/v1/new_password_request`;
-const confirmPasswordTokenUrl = `${
-  process.env.REACT_APP_API_ENDPOINT
-}/auth/v1/confirm_password_token`;
-const resetPasswordUrl = `${
-  process.env.REACT_APP_API_ENDPOINT
-}/auth/v1/reset_password`;
+const registerUserUrl = `${process.env.REACT_APP_API_ENDPOINT
+  }/auth/v1/register_user`;
+const newPasswordRequestUrl = `${process.env.REACT_APP_API_ENDPOINT
+  }/auth/v1/new_password_request`;
+const confirmPasswordTokenUrl = `${process.env.REACT_APP_API_ENDPOINT
+  }/auth/v1/confirm_password_token`;
+const resetPasswordUrl = `${process.env.REACT_APP_API_ENDPOINT
+  }/auth/v1/reset_password`;
 const signOutUrl = `${process.env.REACT_APP_API_ENDPOINT}/auth/v1/signout`;
 
+interface IUserCreate {
+  active: boolean;
+  username: string;
+  title: string;
+  firstname: string;
+  lastname: string;
+  organizationId: string;
+  email: string;
+  telephone: string;
+}
 interface IAuthSignin {
   username: string;
   password: string;
@@ -29,6 +38,14 @@ interface IAuthResetPassword {
 }
 
 class AuthService extends ApiHelper {
+  public async create_user(body: IUserCreate): Promise<IApiResponse | void> {
+    try {
+      const result = await this.create(body);
+      return result;
+    } catch (e) {
+      throw e;
+    }
+  }
   public async sign_in(body: IAuthSignin): Promise<IApiResponse | void> {
     try {
       const result = await request.post(this.url, { body });
@@ -76,7 +93,7 @@ class AuthService extends ApiHelper {
     }
   }
 }
-
+export const RegisterUser = new AuthService(registerUserUrl);
 export const SignIn = new AuthService(signinUrl);
 export const NewPasswordRequest = new AuthService(newPasswordRequestUrl);
 export const ConfirmPasswordToken = new AuthService(confirmPasswordTokenUrl);

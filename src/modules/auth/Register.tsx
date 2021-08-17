@@ -24,23 +24,25 @@ export interface IRegister extends WithTranslation {
 class Register extends React.Component<IRegister> {
   private orgList = OrgListModel.create({});
   public _isMounted = false;
-  public componentDidMount() {
-    this._isMounted = true;
-    setTimeout(() => {
-      if (this._isMounted) {
-        this.orgList.setField({
-          fieldname: "filterName",
-          value: this.props.authStore!.userProfile.organization.orgName
-        });
-        this.orgList.load_data();
-      }
-    }, 1000);
-  }
+  // public componentDidMount() {
+  //   this._isMounted = true;
+  //   setTimeout(() => {
+  //     if (this._isMounted) {
+  //       this.orgList.setField({
+  //         fieldname: "filterName",
+  //         value: this.props.authStore!.userProfile.organization.orgName
+  //       });
+  //       this.orgList.load_data();
+  //     }
+  //   }, 1000);
+  // }
   public componentWillUnmount() {
     this._isMounted = false;
   }
   public render() {
     const { t, onChangeStep, authStore, fieldname } = this.props;
+    // { this.onSignIn() }
+    // window.localStorage.setItem("access_token","")
     const subjectsTitle = [
       { text: 'นาย', value: 'นาย' },
       { text: 'นางสาว', value: 'นางสาว' },
@@ -163,7 +165,7 @@ class Register extends React.Component<IRegister> {
               value={authStore!.userProfile.lastname}
             />
           </Form.Group>
-          <Form.Field
+          {/* <Form.Field
             required
             id="form-input-ddl-organization"
             label={t("module.admin.userInfoForm.underDepartment")}
@@ -171,7 +173,7 @@ class Register extends React.Component<IRegister> {
             value={authStore!.userProfile.organization.id}
             orgList={this.orgList}
             onChange={this.onChangeOrganizationDDL}
-          />
+          /> */}
           {/* <Form.Field
             label={t("module.report.public.organization")}
             control={OrganizationDDL}
@@ -265,25 +267,18 @@ class Register extends React.Component<IRegister> {
   private createUserForm = async () => {
     const { authStore, onChangeStep } = this.props;
     try {
-      authStore!.userProfile.setField({
-        fieldname: "username",
-        value: authStore!.idCardNo
-      })
-      authStore!.userProfile.setField({
-        fieldname: "email",
-        value: authStore!.idCardNo
-      })
-      console.log(authStore!.userProfile)
+      await authStore!.createUser();
+      await authStore!.new_password_request();
+      onChangeStep("VerifyIdentityForm");
       // await authStore!.userProfile.createUser();
-      console.log(authStore!.userProfile.id)
-      authStore!.setField({
-        fieldname: "uid",
-        value: authStore!.userProfile.id
-      })
-      onChangeStep("VerifyForm");
-      authStore!.setLocalStorage("uid", authStore!.userProfile.id);
+      // console.log(authStore!.userProfile.id)
+      // authStore!.setField({
+      //   fieldname: "uid",
+      //   value: authStore!.userProfile.id
+      // })
+      // authStore!.setLocalStorage("uid", authStore!.userProfile.id);
       // localStorage.setItem("uid", authStore!.userProfile.id);
-      console.log("uid=" + authStore!.uid)
+      // console.log("uid=" + authStore!.uid)
 
       // onChangeStep("ResetPasswordForm");
 
