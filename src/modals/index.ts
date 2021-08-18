@@ -1,6 +1,6 @@
 export { default as M001RegisterInstructionModal } from "./M001RegisterInstructionModal";
 export { default as M002DeactivateUserInstruction } from "./M002DeactivateUserInstruction";
-export { default as M003RegisterOnline } from "./M003RegisterOnline";
+export { default as ClickLinkModal } from "./ClickLinkModal";
 export { default as ResetPasswordModal } from "./ResetPasswordModal";
 export { default as DeleteModal } from "./DeleteModal";
 export { default as M113AgreeementCancelation } from "./M113AgreeementCancelation";

@@ -13,6 +13,7 @@ import { ResetPasswordModal } from "../../modals";
 import { reduceRight } from "lodash";
 
 
+
 export interface IRegister extends WithTranslation {
   onChangeStep: (stepName: string) => void;
   authStore?: IAuthModel;
@@ -22,27 +23,11 @@ export interface IRegister extends WithTranslation {
 @inject("authStore")
 @observer
 class Register extends React.Component<IRegister> {
+  public state = { openheader: false };
   private orgList = OrgListModel.create({});
-  public _isMounted = false;
-  // public componentDidMount() {
-  //   this._isMounted = true;
-  //   setTimeout(() => {
-  //     if (this._isMounted) {
-  //       this.orgList.setField({
-  //         fieldname: "filterName",
-  //         value: this.props.authStore!.userProfile.organization.orgName
-  //       });
-  //       this.orgList.load_data();
-  //     }
-  //   }, 1000);
-  // }
-  public componentWillUnmount() {
-    this._isMounted = false;
-  }
+
   public render() {
     const { t, onChangeStep, authStore, fieldname } = this.props;
-    // { this.onSignIn() }
-    // window.localStorage.setItem("access_token","")
     const subjectsTitle = [
       { text: 'นาย', value: 'นาย' },
       { text: 'นางสาว', value: 'นางสาว' },
@@ -84,24 +69,6 @@ class Register extends React.Component<IRegister> {
           />
 
           <Form.Group widths="equal">
-            {/* <TitleDDL
-              id="form-input-ddl-title1"
-              search
-              fluid
-              placeholder={t("module.admin.userInfoForm.prefix")}
-              label={t("module.admin.userInfoForm.title")}
-              onChange={(
-                event: React.SyntheticEvent<HTMLElement, Event>,
-                data: DropdownProps
-              ) =>
-                authStore!.userProfile.setField({
-                  fieldname: "title",
-                  value: data.val
-                })
-              }
-              options={subjectsTitle}
-              value={authStore!.userProfile.title}
-            /> */}
             <Form.Select
               id="form-input-ddl-title1"
               search
@@ -117,25 +84,6 @@ class Register extends React.Component<IRegister> {
               options={subjectsTitle}
               value={authStore!.userProfile.title}
             />
-            {/*             
-            <Dropdown
-              id="form-input-ddl-title1"
-              fluid
-              placeholder={t("module.admin.userInfoForm.prefix")}
-              label={t("module.admin.userInfoForm.title")}
-              onChange={(
-                event: React.SyntheticEvent<HTMLElement, Event>,
-                data: DropdownProps
-              ) =>
-                authStore!.userProfile.setField({
-                  fieldname: "title",
-                  value: data.value
-                })
-              }
-              selection
-              options={subjectsTitle}
-              value={authStore!.userProfile.title}
-            /> */}
             <Form.Input
               required
               id="form-input-firstname"
@@ -167,19 +115,13 @@ class Register extends React.Component<IRegister> {
           </Form.Group>
           {/* <Form.Field
             required
-            id="form-input-ddl-organization"
             label={t("module.admin.userInfoForm.underDepartment")}
+            placeholder={t(
+              "module.admin.userInfoForm.underDepartment"
+            )}
             control={OrganizationDDL}
-            value={authStore!.userProfile.organization.id}
             orgList={this.orgList}
             onChange={this.onChangeOrganizationDDL}
-          /> */}
-          {/* <Form.Field
-            label={t("module.report.public.organization")}
-            control={OrganizationDDL}
-            orgList={this.orgList}
-            value={authStore!.userProfile.organization.id}
-            onChange={this.onSelectedOrganizeDDL}
           /> */}
           <Form.Input
             required
@@ -267,26 +209,14 @@ class Register extends React.Component<IRegister> {
   private createUserForm = async () => {
     const { authStore, onChangeStep } = this.props;
     try {
-      await authStore!.createUser();
-      await authStore!.new_password_request();
+      await authStore!.checkUser();
+      authStore!.setField({
+        fieldname: "otpSms",
+        value: authStore!.isRandomOtpNumber
+      })
+      console.log(authStore!.otpSms)
+      // await authStore!.generatorOtpSmsSend();
       onChangeStep("VerifyIdentityForm");
-      // await authStore!.userProfile.createUser();
-      // console.log(authStore!.userProfile.id)
-      // authStore!.setField({
-      //   fieldname: "uid",
-      //   value: authStore!.userProfile.id
-      // })
-      // authStore!.setLocalStorage("uid", authStore!.userProfile.id);
-      // localStorage.setItem("uid", authStore!.userProfile.id);
-      // console.log("uid=" + authStore!.uid)
-
-      // onChangeStep("ResetPasswordForm");
-
-
-
-
-      // authStore.push(`/admin/user_managment/edit/${user.id}/${user.username}`);
-
     } catch (e) {
       console.log(e);
     }

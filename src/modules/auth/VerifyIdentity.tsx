@@ -6,14 +6,14 @@ import { ErrorMessage, Link } from "../../components/common";
 import { Logo } from "../../components/project";
 import { IAuthModel } from "./AuthModel";
 
-export interface IVerifyPassword extends WithTranslation {
+export interface IVerifyIdentity extends WithTranslation {
   onChangeStep: (stepName: string) => void;
   authStore?: IAuthModel;
 }
 
 @inject("authStore")
 @observer
-class VerifyPassword extends React.Component<IVerifyPassword> {
+class VerifyIdentity extends React.Component<IVerifyIdentity> {
   public state = {
     pin1: "",
     pin2: "",
@@ -35,6 +35,15 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
               email: authStore!.userProfile.telephone
             })}
           </Header.Subheader>
+          <Header.Subheader>
+            <Link
+              size="medium"
+              onClick={this.reSendOtpSms}
+            >
+              {t("page.loginPage.reSendOtp")}
+            </Link>
+          </Header.Subheader>
+
         </Header>
         <Form loading={authStore!.loading} onSubmit={this.requestNewPassword}>
           <Form.Group widths="equal">
@@ -161,7 +170,7 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
                 <Link
                   size="medium"
                   hideUnderline
-                  onClick={() => onChangeStep("ForgetPasswordForm")}
+                  onClick={() => onChangeStep("LoginForm")}
                 >
                   {t("canceled")}
                 </Link>
@@ -186,12 +195,35 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
           fieldname: "resetPasswordToken",
           value: pin1 + pin2 + pin3 + pin4 + pin5 + pin6
         });
-        await authStore!.confirm_password_token();
-        onChangeStep("ResetPasswordForm");
+        if (authStore!.resetPasswordToken == authStore!.otpSms) {
+          await authStore!.createUser();
+          onChangeStep("RegisterPasswordForm");
+        } else {
+          await authStore!.error.setField({
+            fieldname: "tigger",
+            value: true
+          });
+          await authStore!.error.setField({
+            fieldname: "title",
+            value: "รหัส OTP ไม่ถูกต้อง"
+          });
+          await authStore!.error.setField({
+            fieldname: "message",
+            value: "กรุณาลองใหม่อีกครั้ง"
+          });
+        }
       } catch (e) {
         console.log(e);
       }
     }
+  };
+  public reSendOtpSms = async () => {
+    const { authStore, onChangeStep } = this.props;
+    authStore!.setField({
+      fieldname: "otpSms",
+      value: authStore!.isRandomOtpNumber
+    })
+    await authStore!.generatorOtpSmsSend();
   };
 
   private onChangeFieldName = (value: any, fieldName: string) => {
@@ -242,4 +274,4 @@ const styles: any = {
   }
 };
 
-export default withTranslation()(VerifyPassword);
+export default withTranslation()(VerifyIdentity);

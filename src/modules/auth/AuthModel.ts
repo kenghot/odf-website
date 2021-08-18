@@ -6,7 +6,9 @@ import { UserModel } from "../admin/user/UserModel";
 import {
   ConfirmPasswordToken,
   NewPasswordRequest,
+  CheckUser,
   RegisterUser,
+  RegisterPassword,
   ResetPassword,
   SignIn,
   SignOut,
@@ -31,6 +33,8 @@ export const AuthModel = types
     error: types.optional(ErrorModel, {}),
     userProfile: types.optional(UserModel, {}),
     idCardNo: types.optional(types.string, ""),
+    otpSms: types.optional(types.string, ""),
+    registerId: types.maybe(types.string),
     alert: types.optional(MessageModel, {}),
   })
   .views((self: any) => ({
@@ -54,6 +58,9 @@ export const AuthModel = types
     get idCardIsIncorrectFormat() {
       return isInValidThaiIdCard(self.idCardNo);
     },
+    get isRandomOtpNumber() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    },
   }))
   .actions((self: any) => ({
     setField: ({ fieldname, value }: IInput) => {
@@ -62,6 +69,50 @@ export const AuthModel = types
     resetAll: () => {
       applySnapshot(self, {});
     },
+    checkUser: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const body = {
+          username: self.idCardNo
+        };
+        const result: any = yield CheckUser.check_user(body);
+        self.error.tigger = false;
+      } catch (e) {
+        self.error.tigger = true;
+        self.error.code = e.code;
+        self.error.title = e.name;
+        self.error.message = e.message;
+        self.error.technical_stack = e.technical_stack;
+        throw e;
+      } finally {
+        // self.resetAll();
+        self.loading = false;
+      }
+    }),
+    generatorOtpSmsSend: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
+        const result: any = yield fetch(`${smsApiUrl}?msisdn=${self.userProfile.telephone}&message=OTP:${self.otpSms} ใช้สำหรับลงทะเบียนผู้ใช้งานระบบกองทุนผู้สูงอายุ`);
+        const response: any = yield result.json();
+        if (response.QUEUE.Status == "0") {
+          self.error.tigger = true;
+          self.error.title = "ส่ง SMS OTP ไม่สำเร็จ";
+          self.error.message = "โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail;
+        } else {
+          self.error.tigger = false;
+        }
+      } catch (e) {
+        self.error.tigger = true;
+        self.error.code = e.code;
+        self.error.title = e.name;
+        self.error.message = e.message;
+        self.error.technical_stack = e.technical_stack;
+        throw e;
+      } finally {
+        self.loading = false;
+      }
+    }),
     createUser: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
@@ -74,19 +125,16 @@ export const AuthModel = types
           lastname: self.userProfile.lastname,
           position: self.userProfile.position,
           organizationId: self.userProfile.organization.id ? self.userProfile.organization.id : null,
-          email: self.userProfile.email ? self.userProfile.email : "registeronline",
+          email: self.userProfile.email ? self.userProfile.email : "registeronline@odf.dop.go.th",
           telephone: self.userProfile.telephone,
           attachedFiles: self.userProfile.attachedFiles,
         };
         const result: any = yield RegisterUser.create_user(body);
         // self.userProfile.setAllField(result.data);
-        console.log(result.data);
-        console.log(result.id);
-        console.log(result.data.id);
-
+        console.log(result.data)
         self.uid = result.data.id;
-        self.userProfile.email = self.idCardNo;
-        self.password = "";
+        self.username = result.data.username;
+        self.userProfile.id = result.data.id;
         self.setLocalStorage("uid", +result.data.id);
         self.error.tigger = false;
         self.alert.tigger = true;
@@ -100,10 +148,30 @@ export const AuthModel = types
         self.error.title = e.name;
         self.error.message = e.message;
         self.error.technical_stack = e.technical_stack;
-        console.log("เกิดเหตุขัดข้อง ไม่สามารถลงทะเบียนผู้ใช้งานได้", self.error);
         throw e;
       } finally {
         // self.resetAll();
+        self.loading = false;
+      }
+    }),
+    register_password: flow(function* () {
+      self.loading = true;
+      try {
+        const result: any = yield RegisterPassword.register_password({
+          uid: self.uid,
+          password: self.password,
+          confirmPassword: self.confirmPassword,
+        });
+        self.error.tigger = false;
+      } catch (e) {
+        self.error.tigger = true;
+        self.error.code = e.code;
+        self.error.title = e.name;
+        self.error.message = e.message;
+        self.error.technical_stack = e.technical_stack;
+        console.log("=============== register password ========", self.error);
+        throw e;
+      } finally {
         self.loading = false;
       }
     }),
@@ -140,6 +208,8 @@ export const AuthModel = types
           username: self.userProfile.email,
         });
         self.userProfile.email = result.email;
+        self.userProfile.telephone = result.telephone;
+        self.otpSms = result.otp;
         self.password = "";
         self.error.tigger = false;
       } catch (e) {

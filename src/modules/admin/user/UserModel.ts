@@ -72,9 +72,8 @@ export const UserModel = types
     },
     get fullname() {
       const space = self.firstname && self.lastname ? " " : "";
-      return `${self.title}${self.firstname || ""}${space}${
-        self.lastname || ""
-      }`;
+      return `${self.title}${self.firstname || ""}${space}${self.lastname || ""
+        }`;
     },
     get last_signin_date_formated() {
       return date_display_CE_TO_BE(self.lastSigninDate, true);
@@ -305,6 +304,40 @@ export const UserModel = types
         self.setField({ fieldname: "roleLoading", value: true });
         const body = {
           roles: self.rolesIdList,
+        };
+        yield User.user_roles_update(body, parseInt(id));
+        self.error.setField({ fieldname: "tigger", value: false });
+        self.alert.setField({ fieldname: "tigger", value: true });
+        self.alert.setField({
+          fieldname: "title",
+          value: "บันทึกสำเร็จค่ะ",
+        });
+        self.alert.setField({
+          fieldname: "message",
+          value: "ข้อมูลถูกปรับปรุงเรียบร้อยแล้ว",
+        });
+      } catch (e) {
+        self.error.setField({ fieldname: "tigger", value: true });
+        self.error.setField({ fieldname: "code", value: e.code });
+        self.error.setField({ fieldname: "title", value: e.name });
+        self.error.setField({
+          fieldname: "message",
+          value: e.message,
+        });
+        self.error.setField({
+          fieldname: "technical_stack",
+          value: e.technical_stack,
+        });
+        console.log(e);
+      } finally {
+        self.setField({ fieldname: "roleLoading", value: false });
+      }
+    }),
+    updateRoleBorrowerOnly: flow(function* (id: string) {
+      try {
+        self.setField({ fieldname: "roleLoading", value: true });
+        const body = {
+          roles: [{ id: 13 }],
         };
         yield User.user_roles_update(body, parseInt(id));
         self.error.setField({ fieldname: "tigger", value: false });

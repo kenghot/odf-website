@@ -8,8 +8,7 @@ import { Link, Text } from "../components/common";
 import { COLORS, IMAGES } from "../constants";
 import {
   M001RegisterInstructionModal,
-  M002DeactivateUserInstruction,
-  M003RegisterOnline
+  M002DeactivateUserInstruction
 } from "../modals";
 import authStore, { IAuthModel } from "../modules/auth/AuthModel";
 import { ResetPassword } from "../modules/auth/components";
@@ -18,6 +17,7 @@ import Register from "../modules/auth/Register";
 import LoginForm from "../modules/auth/LoginForm";
 import VerifyPassword from "../modules/auth/VerifyPassword";
 import VerifyIdentity from "../modules/auth/VerifyIdentity";
+import SetOrganization from "../modules/auth/SetOrganization";
 const { login_bg } = IMAGES;
 
 interface ILoginPage extends WithTranslation, RouteComponentProps {
@@ -128,7 +128,9 @@ class LoginPage extends Component<ILoginPage> {
               <LoginForm onChangeStep={this.onChangeStep} />
             ) : null}
             {this.state.step === "Register" ? (
-              <Register onChangeStep={this.onChangeStep} />
+              <Register
+                onChangeStep={this.onChangeStep}
+              />
             ) : null}
             {this.state.step === "ForgetPasswordForm" ? (
               <ForgetPassword onChangeStep={this.onChangeStep} />
@@ -138,6 +140,20 @@ class LoginPage extends Component<ILoginPage> {
             ) : null}
             {this.state.step === "VerifyIdentityForm" ? (
               <VerifyIdentity onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "SetOrganizationForm" ? (
+              <SetOrganization onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "RegisterPasswordForm" ? (
+              <ResetPassword
+                onChangeStep={this.onChangeStep}
+                onChangeInputField={this.onChangeInputField}
+                resetPassword={this.registerPassword}
+                loading={authStore!.loading}
+                error={authStore!.error}
+                isPasswordMissMatch={authStore!.isPasswordMissMatch}
+                isPasswordInCorrectFormat={authStore!.isPasswordInCorrectFormat}
+              />
             ) : null}
             {this.state.step === "ResetPasswordForm" ? (
               <ResetPassword
@@ -238,15 +254,6 @@ class LoginPage extends Component<ILoginPage> {
     const { t } = this.props;
     return (
       <List floated="right">
-        {/* <List.Item style={styles.textAlignRight}>
-          <M003RegisterOnline
-            trigger={
-              <Text id={"link-label-m001"} shade={5} underline size="medium" style={styles.link}>
-                {t("page.loginPage.registerBorrower")}
-              </Text>
-            }
-          />
-        </List.Item> */}
         <List.Item style={styles.textAlignRight}>
           <M001RegisterInstructionModal
             trigger={
@@ -291,6 +298,36 @@ class LoginPage extends Component<ILoginPage> {
     const { authStore } = this.props;
     try {
       await authStore!.reset_password();
+      this.onChangeStep("LoginForm");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  private registerPassword = async () => {
+    const { authStore } = this.props;
+    try {
+      const userId = authStore!.userProfile.id;
+      await authStore!.setField({
+        fieldname: "registerId",
+        value: authStore!.userProfile.id
+      });
+      await authStore!.register_password();
+      // await authStore!.setField({
+      //   fieldname: "username",
+      //   value: "odf_api_user"
+      // });
+      // await authStore!.setField({
+      //   fieldname: "password",
+      //   value: "odfapi1234"
+      // });
+      await authStore!.sign_in();
+      await authStore!.userProfile.updateRoleBorrowerOnly(userId);
+      // this.onChangeStep("SetOrganizationForm");
+      // window.localStorage.removeItem("access_token");
+      window.localStorage.removeItem("uid");
+      window.localStorage.removeItem("permissions");
+      // authStore!.resetAll();
+      await authStore!.sign_out();
       this.onChangeStep("LoginForm");
     } catch (e) {
       console.log(e);

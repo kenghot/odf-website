@@ -5,6 +5,9 @@ import { Button, Confirm, Divider, Grid, Header, Icon, Label, List } from "seman
 import { Link } from "../../../../components/common";
 import { IRequestModel } from "../RequestModel";
 import { hasPermission } from "../../../../utils/render-by-permission";
+import {
+  ClickLinkModal
+} from "../../../../modals";
 
 interface IRequestStepIcon extends WithTranslation {
   step: number;
@@ -113,9 +116,21 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
     return (
       <List style={styles.sendButtom}>
         <List.Item>
-          <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
-            {hasPermission("REQUEST.ONLINE.CREATE") ? t("module.loan.requestDetail.saveRequestOnline") : t("module.loan.requestDetail.save")}
-          </Button>
+          {
+            hasPermission("REQUEST.ONLINE.CREATE") ?
+              <ClickLinkModal
+                trigger={
+                  <Button fluid color="brown" onClick={this.onSave} disabled={isInvalid}>
+                    {t("module.loan.requestDetail.saveRequestOnline")}
+                  </Button>
+                }
+              />
+              :
+              <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
+                {t("module.loan.requestDetail.save")}
+              </Button>
+          }
+
         </List.Item>
         {!hideSubmitButton ? (
           <List.Item>
@@ -143,7 +158,7 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
     if (this.props.step === 3) {
       return this.props.viewMode ? null : this.renderLastStepButton();
     } else {
-      return this.renderNextStepButton();
+      return hasPermission("REQUEST.ONLINE.CREATE") ? null : this.renderNextStepButton();
     }
   }
 
