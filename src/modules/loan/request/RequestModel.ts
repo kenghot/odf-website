@@ -129,7 +129,7 @@ export const RequestItemModel = types
         }
       });
     },
-    getAttachedFiles: flow(function*(requestId: string) {
+    getAttachedFiles: flow(function* (requestId: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const result: any = yield Request.getById(requestId, {
@@ -161,7 +161,7 @@ export const RequestItemModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateAttachedFiles: flow(function*(
+    updateAttachedFiles: flow(function* (
       requestId: string,
       resource: "borrower" | "spouse" | "guarantorSpouse" | "guarantor",
       profile: IProfileModel
@@ -387,6 +387,14 @@ export const RequestModel = types
         return "";
       }
     },
+    get id_card() {
+      if (self.requestType === "P" && self.requestItems.length > 0) {
+        const borrower = self.requestItems[0].borrower;
+        return borrower.idCardNo || "";
+      } else {
+        return "";
+      }
+    },
     get full_name() {
       if (self.requestType === "P" && self.requestItems.length > 0) {
         const borrower = self.requestItems[0].borrower;
@@ -455,7 +463,7 @@ export const RequestModel = types
   }))
   .actions((self: any) => ({
     setField: ({ fieldname, value }: IInput) => {
-      // if (typeof self[fieldname] === "number") {
+      // if (typeof self[fieldname] === "number") {createRequest
       //   value = value !== "" ? +value : undefined;
       // }
       self[fieldname] = value;
@@ -535,7 +543,7 @@ export const RequestModel = types
     onRemoveItem: (item: IRequestItemModel) => {
       detach(item);
     },
-    createRequest: flow(function*() {
+    createRequest: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         for (const item of self.requestItems) {
@@ -578,11 +586,13 @@ export const RequestModel = types
             });
           }
         }
+        self.setField({ fieldname: "loading", value: true });
         const body = {
           organization: {
             id: self.organizationId
           },
-          status: "DF",
+          // status: "DF",
+          status: self.status,
           requestType: self.requestType,
           documentDate: self.documentDate,
           requestItems: self.requestItems,
@@ -615,7 +625,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateRequest: flow(function*() {
+    updateRequest: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         for (const item of self.requestItems) {
@@ -669,7 +679,6 @@ export const RequestModel = types
           name: self.requestType === "G" ? self.name : self.full_name
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -696,7 +705,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateRequesLoanDetails: flow(function*() {
+    updateRequesLoanDetails: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -734,7 +743,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateRequestAll: flow(function*() {
+    updateRequestAll: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -752,7 +761,7 @@ export const RequestModel = types
           requestItems: self.requestItems
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
+        // console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -779,14 +788,15 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateRequestStatusCreate: flow(function*() {
+    updateRequestStatusCreate: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
-          status: "NW"
+          // status: "NW"
+          status: self.status
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
+        // console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -813,7 +823,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    createRequestAllStatusCreate: flow(function*() {
+    createRequestAllStatusCreate: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -824,7 +834,8 @@ export const RequestModel = types
           requestOccupation: self.requestOccupation,
           budgetAllocationItems: self.checkEmptyBudgetAllocationItems,
           requestOccupationAddress: self.requestOccupationAddress,
-          status: "NW",
+          // status: "NW",
+          status: self.status,
           name: self.requestType === "G" ? self.name : self.full_name,
           requestType: self.requestType,
           documentDate: self.documentDate,
@@ -858,7 +869,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    getRequestDetail: flow(function*() {
+    getRequestDetail: flow(function* () {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -961,7 +972,7 @@ export const RequestModel = types
         }
       }
     }),
-    sendRequestAgreement: flow(function*() {
+    sendRequestAgreement: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1036,7 +1047,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateResultItem: flow(function*(resultItemNumber: number) {
+    updateResultItem: flow(function* (resultItemNumber: number) {
       try {
         let body = {};
         switch (resultItemNumber) {
@@ -1136,7 +1147,7 @@ export const RequestModel = types
         }
       }
     }),
-    deleteRequest: flow(function*() {
+    deleteRequest: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1170,7 +1181,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateRequestConsideration: flow(function*() {
+    updateRequestConsideration: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         let body = {
@@ -1225,7 +1236,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateFactSheet: flow(function*(updateStatus?: boolean) {
+    updateFactSheet: flow(function* (updateStatus?: boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const borrowerScore =
@@ -1309,7 +1320,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateFactSheetAttachedFiles: flow(function*() {
+    updateFactSheetAttachedFiles: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1349,7 +1360,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    delete_data: flow(function*() {
+    delete_data: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         yield Request.delete(parseInt(self.id));
@@ -1377,7 +1388,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    printForm: flow(function*(name?: string) {
+    printForm: flow(function* (name?: string) {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -1400,7 +1411,7 @@ export const RequestModel = types
         }
       }
     }),
-    getValidationChecklist: flow(function*(name?: string) {
+    getValidationChecklist: flow(function* (name?: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         // const result = yield RequestValidationAPI.get();
@@ -1425,7 +1436,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    onConfirmValidation: flow(function*() {
+    onConfirmValidation: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {

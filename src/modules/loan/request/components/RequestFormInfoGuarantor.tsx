@@ -179,6 +179,7 @@ class RequestFormInfoGuarantor extends React.Component<IRequestFormInfoGuarantor
           value={requestItems.guarantorCompanyTelephone}
         />
         <Form.Input
+          required
           fluid
           label={t("module.loan.agreementFormCreate.telephoneNumber")}
           placeholder={t("module.loan.agreementFormCreate.specifyPhoneNumber")}

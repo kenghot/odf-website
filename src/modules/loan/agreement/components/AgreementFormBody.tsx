@@ -210,8 +210,8 @@ class AgreementFormBody extends React.Component<IAgreementFormBody> {
         />
 
         {["NW"].includes(agreement.status) ||
-        hasPermission("DATA.ALL.EDIT") ||
-        !agreement.id
+          hasPermission("DATA.ALL.EDIT") ||
+          !agreement.id
           ? this.renderSaveButton()
           : null}
       </React.Fragment>

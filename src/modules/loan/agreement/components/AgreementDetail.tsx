@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Form, Segment, Tab } from "semantic-ui-react";
+import { Form, Segment, Tab, Button, Header } from "semantic-ui-react";
 import { AgreementGuarantorInfo, AgreementHeader } from ".";
 import { AddressBody } from "../../../../components/address";
 import {
@@ -22,6 +22,7 @@ import { hasPermission } from "../../../../utils/render-by-permission";
 import SignerView from "../../components/SignerView";
 import WitnessView from "../../components/WitnessView";
 import { IAgreementItemModel, IAgreementModel } from "../AgreementModel";
+import { fetchNoService } from "../../../../utils/request-noservice";
 
 interface IAgreementDetail extends WithTranslation {
   agreement: IAgreementModel;
@@ -193,6 +194,29 @@ class AgreementDetail extends React.Component<IAgreementDetail> {
           installmentLastAmount={agreement.installmentLastAmount}
           editMode={false}
         />
+        <Form.Input
+          floated="right"
+          id={`form-input-id-card`}
+          label={t("component.idCardReader.iDCardNumberAgentId")}
+          icon="id card"
+          iconPosition="left"
+          placeholder="0000000000000"
+          width="4"
+          maxLength="13"
+          value={agreement.idCardNoAgentId}
+          onChange={(event, data) => {
+            agreement.setField({
+              fieldname: "idCardNoAgentId",
+              value: data.value,
+            });
+          }}
+        />
+        <Button
+          width={7}
+          onClick={this.getReportDeathData}
+        >
+          {"ดึงข้อมูลผู้กู้กรณีเสียชีวิต"}
+        </Button><br />กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล
       </Form>
     );
   }
@@ -329,6 +353,26 @@ class AgreementDetail extends React.Component<IAgreementDetail> {
         );
     }
   }
+  private getReportDeathData = async () => {
+    const { agreement } = this.props;
+    try {
+      // console.log(agreement.idCardNoAgentId)
+      // console.log(agreement.idcard)
+      const result: any = await fetchNoService(
+        `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_deathcertificate.php`,
+        {
+          CitizenID: agreement.idcard,
+          AgentID: agreement.idCardNoAgentId,
+          report_format: "excel",
+        },
+        "report_death"
+      );
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
 }
 
 const styles: any = {

@@ -13,6 +13,7 @@ import {
 import { COLORS } from "../../../constants";
 import { IAuthModel } from "../../../modules/auth/AuthModel";
 import { Text } from "../../common";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 interface IPageHeader extends WithTranslation {
   authStore?: IAuthModel;
@@ -39,16 +40,14 @@ class PageHeader extends React.Component<IPageHeader> {
               <List.Item>
                 <Header size="small" textAlign="right">
                   <Header.Content>
-                    <Text>{`${authStore!.userProfile.title}${
-                      authStore!.userProfile.firstname
-                    } ${authStore!.userProfile.lastname}`}</Text>
+                    <Text>{`${authStore!.userProfile.title}${authStore!.userProfile.firstname
+                      } ${authStore!.userProfile.lastname}`}</Text>
                     <Header.Subheader>
                       <Text>
-                        {`${authStore!.userProfile.position}, ${
-                          authStore!.userProfile.organization.orgName
-                        }`}
+                        {`${authStore!.userProfile.position}, ${authStore!.userProfile.organization.orgName}`}
                       </Text>
                     </Header.Subheader>
+
                   </Header.Content>
                 </Header>
               </List.Item>

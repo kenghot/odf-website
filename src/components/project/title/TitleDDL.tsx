@@ -54,7 +54,8 @@ class TitleDDL extends React.Component<ITitleDDL> {
       fluid,
       placeholder,
       width,
-      label
+      label,
+      required
     } = this.props;
     if (!this.options.length) {
       this.options = this.props.appStore!.enumItems("titleType").slice();
@@ -71,6 +72,7 @@ class TitleDDL extends React.Component<ITitleDDL> {
     }
     return (
       <Form.Select
+        required={required}
         id={id}
         fluid={fluid}
         search={search}

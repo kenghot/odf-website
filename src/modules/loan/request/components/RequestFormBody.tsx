@@ -1,15 +1,23 @@
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { RequesAttachedFiles, RequesFormBorrowerGuarantorList, RequesLoanDetails, RequestStepIcon } from ".";
 // import { Loading } from "../../../../components/common/loading";
 import { IRequestModel } from "../RequestModel";
+import { IAuthModel } from "../../../../modules/auth/AuthModel";
+import { hasPermission } from "../../../../utils/render-by-permission";
+import { Form } from "semantic-ui-react";
+import { fetchNoService } from "../../../../utils/request-noservice";
+import { PermissionControl, NoPermissionMessage } from "../../../../components/permission";
 
 interface IRequestFormBody extends WithTranslation, RouteComponentProps {
   request: IRequestModel;
   mode: "editMode" | "createMode";
+  authStore?: IAuthModel;
 }
+
+@inject("authStore")
 @observer
 class RequestFormBody extends React.Component<IRequestFormBody> {
   public componentDidMount() {
@@ -22,39 +30,46 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   public state = { step: 1 };
   public render() {
     const { request, mode } = this.props;
-    return (
-      <React.Fragment>
-        {/* <Loading active={request!.loading} /> */}
-        <RequestStepIcon
-          step={this.state.step}
-          onNextStep={this.onNextStep}
-          onPreviousStep={this.onPreviousStep}
-          onClickStep={(index) => this.setState({ step: index })}
-          onSave={this.onSave}
-          onCreate={this.onCreate}
-          hideSubmitButton={request.status === "DF" || !request.id ? false : true}
-          isInvalid={request.checkTotalBudgetAllocationItems}
-        />
-        {this.state.step === 1 ? <RequesFormBorrowerGuarantorList mode={mode} request={request} /> : null}
-        {this.state.step === 2 ? <RequesLoanDetails request={request} mode={mode} /> : null}
-        {this.state.step === 3 ? <RequesAttachedFiles request={request} mode={mode} /> : null}
+    if (hasPermission("REQUEST.ONLINE.CREATE") && (request.status === "NWO" || request.status === "NW" || request.status === "QF"
+      || request.status === "AP1" || request.status === "AP2" || request.status === "AP3" || request.status === "DN")) {
+      return (<NoPermissionMessage />);
+    } else {
+      return (
+        <Form onSubmit={this.onNextStep}>
+          <React.Fragment>
+            {/* <Loading active={request!.loading} /> */}
+            <RequestStepIcon
+              step={this.state.step}
+              onNextStep={this.onNextStep}
+              onPreviousStep={this.onPreviousStep}
+              onClickStep={(index) => this.setState({ step: index })}
+              onSave={this.onSave}
+              onCreate={this.onCreate}
+              hideSubmitButton={(request.status === "DF" || "DFO") || !request.id ? false : true}
+              isInvalid={request.checkTotalBudgetAllocationItems}
+            />
+            {this.state.step === 1 ? <RequesFormBorrowerGuarantorList mode={mode} request={request} /> : null}
+            {this.state.step === 2 ? <RequesLoanDetails request={request} mode={mode} /> : null}
+            {this.state.step === 3 ? <RequesAttachedFiles request={request} mode={mode} /> : null}
 
-        <RequestStepIcon
-          step={this.state.step}
-          onNextStep={this.onNextStep}
-          onPreviousStep={this.onPreviousStep}
-          onClickStep={(index) => this.setState({ step: index })}
-          onSave={this.onSave}
-          onCreate={this.onCreate}
-          hideSubmitButton={request.status === "DF" || !request.id ? false : true}
-          positionBottom
-          isInvalid={request.checkTotalBudgetAllocationItems}
-        />
-      </React.Fragment>
-    );
+            <RequestStepIcon
+              step={this.state.step}
+              onNextStep={this.onNextStep}
+              onPreviousStep={this.onPreviousStep}
+              onClickStep={(index) => this.setState({ step: index })}
+              onSave={this.onSave}
+              onCreate={this.onCreate}
+              hideSubmitButton={(request.status === "DF" || "DFO") || !request.id ? false : true}
+              positionBottom
+              isInvalid={request.checkTotalBudgetAllocationItems}
+            />
+          </React.Fragment>
+        </Form>
+      );
+    }
   }
   private onSave = async () => {
-    const { request, history, location, t } = this.props;
+    const { request, history, location, t, authStore } = this.props;
     const pathname = location.pathname;
     try {
       if (request.checkTotalBudgetAllocationItems) {
@@ -68,9 +83,26 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         throw errorMessage;
       }
       if (request.id) {
+        // console.log(request.borrower.attachedFiles)
         if (pathname === "/loan/request/create") {
           history.push(`/loan/request/edit/${request.id}/${request.requestType}`);
+          if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username && request.status == "DFO") {
+            try {
+              const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
+              const result: any = await fetch(`${smsApiUrl}?msisdn=${authStore!.userProfile.telephone}&message=เอกสารแบบร่างคำร้องออนไลน์ ได้บันทึกและส่งไปยังระบบกองทุนผู้สูงอายุเรียบร้อยแล้ว`);
+              const response: any = await result.json();
+              if (response.QUEUE.Status == "0") {
+                console.log("ส่ง SMS ไม่สำเร็จ โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail);
+              } else {
+                console.log("ส่ง SMS สำเร็จ");
+              }
+            } catch (e) {
+              console.log(e);
+              throw e;
+            }
+          }
         } else {
+          request.setField({ fieldname: "status", value: request.status });
           await request!.updateRequestAll();
           await request!.getRequestDetail();
           await request!.setRequestItemsAttachedFiles();
@@ -79,7 +111,14 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
           }
         }
       } else {
-        await request!.createRequest();
+        if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
+          request.setField({ fieldname: "status", value: "DFO" });
+          await request!.createRequest();
+        } else {
+          request.setField({ fieldname: "status", value: "DF" });
+          await request!.createRequest();
+        }
+
       }
     } catch (e) {
       console.log(e);
@@ -102,12 +141,18 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   };
 
   private sendFormStep2 = async () => {
-    const { request, t } = this.props;
+    const { request, t, authStore } = this.props;
     try {
       if (!request.checkTotalBudgetAllocationItems) {
         if (request.id) {
+          request.setField({ fieldname: "status", value: request.status });
           await request.updateRequesLoanDetails();
         } else {
+          if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
+            request.setField({ fieldname: "status", value: "DFO" });
+          } else {
+            request.setField({ fieldname: "status", value: "DF" });
+          }
           await request.createRequest();
         }
         await this.setState({ step: 3 });
@@ -126,11 +171,17 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
     }
   };
   private sendFormStep1 = async () => {
-    const { request } = this.props;
+    const { request, authStore } = this.props;
     try {
       if (request.id) {
+        request.setField({ fieldname: "status", value: request.status });
         await request!.updateRequest();
       } else {
+        if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
+          request.setField({ fieldname: "status", value: "DFO" });
+        } else {
+          request.setField({ fieldname: "status", value: "DF" });
+        }
         await request!.createRequest();
       }
       await this.setState({ step: 2 });
@@ -138,8 +189,9 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
       console.log(e);
     }
   };
+
   private onCreate = async () => {
-    const { request, history, t } = this.props;
+    const { request, history, t, authStore } = this.props;
     try {
       if (request.checkTotalBudgetAllocationItems) {
         const errorMessage = {
@@ -150,6 +202,11 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         };
         request.error.setErrorMessage(errorMessage);
         throw errorMessage;
+      }
+      if (request.status == "DFO") {
+        request.setField({ fieldname: "status", value: "NWO" });
+      } else {
+        request.setField({ fieldname: "status", value: "NW" });
       }
       if (request.id) {
         await request!.updateRequestStatusCreate();

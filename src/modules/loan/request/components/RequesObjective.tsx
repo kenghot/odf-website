@@ -21,6 +21,7 @@ class RequesObjective extends React.Component<IRequesObjective> {
     return (
       <Segment padded>
         <Form.Field
+          required
           id={"input-request-request-budget"}
           label={t("module.loan.requestDetail.balance")}
           control={CurrencyInput}
@@ -38,6 +39,7 @@ class RequesObjective extends React.Component<IRequesObjective> {
             />
           ) : (
             <Form.Field
+              required
               disabled={readOnly}
               label={t("module.loan.requestDetail.toUsedCareer")}
               placeholder={t("module.loan.requestDetail.pleaseChooseCareer")}
@@ -55,6 +57,7 @@ class RequesObjective extends React.Component<IRequesObjective> {
             />
           ) : (
             <Form.Input
+              required
               fluid
               label={t("module.loan.requestDetail.description")}
               placeholder={t("module.loan.requestDetail.specifyCareerDetails")}

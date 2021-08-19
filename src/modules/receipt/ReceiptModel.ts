@@ -434,12 +434,23 @@ export const ReceiptModel = types
             }
             item.setField({
               fieldname: "description1",
-              value: `${self.clientTitle || ""}${self.clientFirstname || ""} ${
-                self.clientLastname || ""
-              }`,
+              value: `${self.clientTitle || ""}${self.clientFirstname || ""} ${self.clientLastname || ""
+                }`,
             });
           }
-          if(item.refType === "AR"){
+          if (item.refType === "LR" || item.refType === "FR") {
+            if (self.paymentMethod === "TRANSFER") {
+              item.setField({
+                fieldname: "description3",
+                value: self.tempTransferDate,
+              });
+              item.setField({
+                fieldname: "description4",
+                value: self.tempPaymentRefNo,
+              });
+            }
+          }
+          if (item.refType === "AR") {
             if (self.paymentMethod === "TRANSFER") {
               item.setField({
                 fieldname: "description2",
@@ -492,6 +503,26 @@ export const ReceiptModel = types
           "บันทึกรายการรับชำระสำเร็จค่ะ",
           `ระบบกำลังจัดพิมพ์ใบเสร็จเลขที่: ${self.documentNumber}`
         );
+        // Beer14082021 post api odoo
+        if (result.success) {
+          for (const item of self.receiptItems) {
+            if (item.refType === "AR") {
+              const odooApiUrl = `${process.env.REACT_APP_API_ODOO_ENDPOINT}/rest_sync_payment.php`;
+              const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contract_no: item.ref3,
+                  citizen_id: "",
+                  last_max_payment_id: 0
+                })
+              };
+              const res: any = yield fetch(odooApiUrl, requestOptions);
+              const response: any = yield res.json();
+              console.log(response);
+            }
+          }
+        }
       } catch (e) {
         self.error.setErrorMessage(e);
         console.log(e);

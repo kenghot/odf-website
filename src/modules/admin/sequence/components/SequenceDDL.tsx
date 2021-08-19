@@ -13,7 +13,7 @@ interface ISequenceDDL extends WithTranslation {
   value?: string;
   clearable?: boolean;
   onChange: (value: any) => void;
-  SequenceType?: "request" | "agreement" | "guarantee" | "voucher" | "receipt";
+  SequenceType?: "request" | "requestOnline" | "agreement" | "guarantee" | "voucher" | "receipt";
   placeholder?: string;
   SequencePerpage?: "10" | "10000";
 }

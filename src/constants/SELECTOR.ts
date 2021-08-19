@@ -5,9 +5,10 @@ export const STATUS_USER = [
 
 export const SEQUENCE_TYPE = [
   { key: "0", text: "เอกสารคำร้อง", value: "request" },
-  { key: "1", text: "เอกสารสัญญาเงินกู้", value: "agreement" },
-  { key: "2", text: "เอกสารใบสำคัญรับ/จ่าย", value: "voucher" },
-  { key: "3", text: "ใบเสร็จรับเงิน", value: "receipt" }
+  { key: "1", text: "เอกสารคำร้องออนไลน์", value: "requestOnline" },
+  { key: "2", text: "เอกสารสัญญาเงินกู้", value: "agreement" },
+  { key: "3", text: "เอกสารใบสำคัญรับ/จ่าย", value: "voucher" },
+  { key: "4", text: "ใบเสร็จรับเงิน", value: "receipt" }
 ];
 
 export const STEP_STATUS = [

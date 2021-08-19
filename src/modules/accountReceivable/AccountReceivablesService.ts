@@ -1,7 +1,6 @@
 import { ApiHelper } from "../../utils/api-helper";
-const AccountReceivablesUrl = `${
-    process.env.REACT_APP_API_ENDPOINT
-}/api/v2/account_receivables`;
+const AccountReceivablesUrl = `${process.env.REACT_APP_API_ENDPOINT
+    }/api/v2/account_receivables`;
 
 export interface IAccountReceivableGet {
     documentNumber?: string;
@@ -22,7 +21,7 @@ export interface IAccountReceivableGet {
     fiscalYear?: string;
 }
 
-class AccountReceivablesService extends ApiHelper {}
+class AccountReceivablesService extends ApiHelper { }
 
 export const AccountReceivable = new AccountReceivablesService(
     AccountReceivablesUrl,

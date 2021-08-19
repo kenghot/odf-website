@@ -41,6 +41,7 @@ class OccupationInfoForm extends React.Component<IOccupationInfoForm> {
             />
           ) : (
             <Form.Field
+              required
               label={t("module.loan.components.occupation")}
               placeholder={t("module.loan.components.pleaseChooseOccupation")}
               control={OcupationDDL}
@@ -57,6 +58,7 @@ class OccupationInfoForm extends React.Component<IOccupationInfoForm> {
             />
           ) : (
             <Form.Input
+              required
               fluid
               label={t("module.loan.components.description")}
               placeholder={t("module.loan.components.specifyOccupationDetails")}
@@ -77,6 +79,7 @@ class OccupationInfoForm extends React.Component<IOccupationInfoForm> {
           />
         ) : (
           <Form.Input
+            required
             fluid
             label={t("module.loan.components.companyOfficeName")}
             placeholder={t("module.loan.components.specifyCompanyOfficeName")}
@@ -93,6 +96,7 @@ class OccupationInfoForm extends React.Component<IOccupationInfoForm> {
           />
         ) : (
           <Form.Input
+            required
             fluid
             label={t("module.loan.components.position")}
             placeholder={t("module.loan.components.specifyPosition")}
@@ -103,6 +107,7 @@ class OccupationInfoForm extends React.Component<IOccupationInfoForm> {
           />
         )}
         <Form.Field
+          required
           id={"input-occupationInfoForm-salary"}
           label={t("module.loan.components.income")}
           control={CurrencyInput}

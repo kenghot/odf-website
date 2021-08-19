@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Form, Segment } from "semantic-ui-react";
+import { Form, Segment, Header, Popup, Grid } from "semantic-ui-react";
 import { IProfileModel } from "../../modules/share/profile/ProfileModel";
 import { AddressFormBody, IAddressModel } from "../address";
 import { LocationModel } from "../address/LocationModel";
@@ -11,6 +11,8 @@ import { DateInput } from "../common/input";
 import { TitleDDL } from "../project";
 import { FormFieldCheckbox } from "./../common/formfield";
 import { IIDCardModel } from "./IDCardModel";
+import { fetchNoService } from "../../utils/request-noservice";
+import { hasPermission } from "../../utils/render-by-permission";
 
 interface IIDCardReaderProfile extends WithTranslation {
   idCardReadingStore: IIDCardModel;
@@ -92,6 +94,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
         <ErrorMessage errorobj={profile.error} />
         <Form.Group widths="equal">
           <Form.Input
+            required
             id={`form-input-id-card-${fieldname}`}
             label={t("component.idCardReader.iDCardNumber", {
               value: profile.idCardIsIncorrectFormat
@@ -113,8 +116,77 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             }}
             error={profile.idCardIsIncorrectFormat}
           />
-          <Form.Button
-            width={7}
+          {/* Beer07082021 */}
+          <Popup trigger={
+            <Form.Button
+              width={3}
+              style={styles.formButton}
+              fluid
+              color="teal"
+              type="button"
+            >
+              {t("component.idCardReader.retrieveIDCard")}
+            </Form.Button>
+          } flowing hoverable>
+            <Grid centered divided columns={2}>
+              <Grid.Column textAlign='center'>
+                <Header as='h4'>ดึงข้อมูลจากกรมการปกครองออนไลน์</Header>
+                <Form.Input required
+                  id={`form-input-id-card-${fieldname}`}
+                  label={t("component.idCardReader.iDCardNumberAgentId", {
+                    value: profile.idCardNoAgentIdIncorrectFormat
+                      ? t("component.idCardReader.invalidCardNumber")
+                      : "",
+                  })}
+                  icon="id card"
+                  iconPosition="left"
+                  placeholder="0-0000-00000-00-0"
+                  width="4"
+                  maxLength="17"
+                  value={profile.idCardNoAgentIdformated}
+                  onChange={(event, data) => {
+                    const dataFormated = data.value.replace(/\D/g, "");
+                    profile.setField({
+                      fieldname: "idCardNoAgentId",
+                      value: dataFormated,
+                    });
+                  }}
+                  error={profile.idCardNoAgentIdIncorrectFormat}
+                />
+                <p></p>
+                <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
+                <Form.Button
+                  width={1}
+                  style={styles.formButton}
+                  fluid
+                  color="teal"
+                  type="button"
+                  onClick={() => this.onClickButtonGdx()}
+                  loading={profile.loading}
+                >
+                  {"ดึงข้อมูล"}
+                </Form.Button>
+              </Grid.Column>
+              <Grid.Column textAlign='center'>
+                <Header as='h4'>ดึงข้อมูลจากอุปกรณ์อ่านบัตรประชาชน</Header>
+                <p></p><p></p>
+                <Form.Button
+                  width={1}
+                  style={styles.formButton}
+                  fluid
+                  color="teal"
+                  type="button"
+                  onClick={() => this.onClickButton()}
+                  loading={profile.loading}
+                >
+                  {"ดึงข้อมูล"}
+                </Form.Button>
+              </Grid.Column>
+
+            </Grid>
+          </Popup>
+          {/* <Form.Button
+            width={3}
             style={styles.formButton}
             fluid
             color="teal"
@@ -123,7 +195,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             loading={profile.loading}
           >
             {t("component.idCardReader.retrieveIDCard")}
-          </Form.Button>
+          </Form.Button> */}
         </Form.Group>
         {this.props.displayMode === "mini" ? null : this.renderCardInfo()}
         {this.renderPersonInfo()}
@@ -136,6 +208,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
     return (
       <Form.Group widths="equal">
         <Form.Input
+          required
           id={`form-input-id-card-issuer-${fieldname}`}
           label={t("component.idCardReader.out")}
           fluid
@@ -149,6 +222,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
           }}
         />
         <Form.Field
+          required
           label={t("component.idCardReader.cardIssuanceDate")}
           control={DateInput}
           value={profile.idCardIssuedDate}
@@ -158,6 +232,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
         />
         {!profile.idCardLifetime ? (
           <Form.Field
+            required
             label={t("component.idCardReader.expiredDate")}
             control={DateInput}
             value={profile.idCardExpireDate || undefined}
@@ -185,6 +260,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
       <React.Fragment>
         <Form.Group widths="equal">
           <TitleDDL
+            required
             id={`form-input-ddl-title-${fieldname}`}
             placeholder={t("component.idCardReader.prefix")}
             label={t("component.idCardReader.title")}
@@ -199,6 +275,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             }}
           />
           <Form.Input
+            required
             id={`form-input-firstname-${fieldname}`}
             label={t("component.idCardReader.firstNames")}
             placeholder={t("component.idCardReader.firstNames")}
@@ -212,6 +289,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             }}
           />
           <Form.Input
+            required
             id={`form-input-lastname-${fieldname}`}
             label={t("component.idCardReader.lastNames")}
             placeholder={t("component.idCardReader.lastNames")}
@@ -384,6 +462,90 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
       });
     }
   }
+  private async onClickButtonGdx() {
+    const { address, profile } = this.props;
+    try {
+      await profile.getCardDataGdx();
+      // await this.idCard.getCardData();
+      await address.setAllField(profile.idCardAddress);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await this.locationStore.loadSubdistrict(address.subDistrict);
+      await this.locationStore.loadDistrict(address.district);
+      await this.locationStore.loadProvince(address.province);
+      await address.setField({
+        fieldname: "provinceCode",
+        value: this.locationStore.provinces[0]
+          ? this.locationStore.provinces[0].refCode
+          : "",
+      });
+      const subDistrict = this.locationStore.subdistricts.find((item: any) => {
+        if (item.province) {
+          return (
+            item.province.refCode === address.provinceCode &&
+            item.thName === address.subDistrict
+          );
+        } else {
+          return "";
+        }
+      });
+      const districtCode = this.locationStore.districts.find((item: any) => {
+        if (item.province) {
+          return item.province.refCode === address.provinceCode;
+        } else {
+          return "";
+        }
+      });
+      await address.setField({
+        fieldname: "subDistrictCode",
+        value: subDistrict ? subDistrict.refCode : "",
+      });
+      await address.setField({
+        fieldname: "zipcode",
+        value: subDistrict ? subDistrict.zipcode : "",
+      });
+      await address.setField({
+        fieldname: "districtCode",
+        value: districtCode ? districtCode.refCode : "",
+      });
+      await this.setState({
+        subDistrict: subDistrict ? subDistrict.thName : "",
+      });
+      await this.setState({
+        district: districtCode ? districtCode.thName : "",
+      });
+      await this.setState({
+        province: this.locationStore.provinces[0]
+          ? this.locationStore.provinces[0].thName
+          : "",
+      });
+    }
+  }
+  private async getReportDeathData() {
+    const { address, profile } = this.props;
+    try {
+      const result: any = await fetchNoService(
+        `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_deathcertificate.php`,
+        {
+          CitizenId: profile.idCardNo,
+          AgentId: profile.idCardNoAgentId,
+          report_format: "excel",
+        },
+        "report_"
+      );
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+  private onChangeCheckboxDeathData = (fieldname: string, value: any) => {
+    const { profile } = this.props;
+    profile.setField({ fieldname, value });
+    if (value) {
+      profile.setField({ fieldname: "isCheckDeathData", value: true });
+    }
+  };
 }
 const styles: any = {
   formButton: {

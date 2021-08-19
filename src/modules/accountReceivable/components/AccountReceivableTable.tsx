@@ -16,6 +16,7 @@ import { date_display_CE_TO_BE } from "../../../utils";
 import { currency } from "../../../utils/format-helper";
 import { IAccountReceivableListModel } from "../AccountReceivableListModel";
 import { IAccountReceivableModel } from "../AccountReceivableModel";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 interface IAccountReceivableTable extends WithTranslation, RouteComponentProps {
   accountReceivableListStore: IAccountReceivableListModel;
@@ -207,7 +208,7 @@ class AccountReceivableTable extends React.Component<IAccountReceivableTable> {
                 </Table.Cell>
                 <Table.Cell>
                   <List horizontal verticalAlign="middle" style={styles.list}>
-                    <PermissionControl codes={["AR.VIEW"]}>
+                    <PermissionControl somePermission codes={["AR.VIEW", "REQUEST.ONLINE.ACCESS"]}>
                       <List.Item style={styles.listItem}>
                         <Icon
                           circular

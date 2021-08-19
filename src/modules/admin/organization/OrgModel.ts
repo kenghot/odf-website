@@ -42,6 +42,7 @@ export const OrgModel = types
     address: types.optional(AddressModel, {}),
     parent: types.maybeNull(types.late((): IAnyModelType => OrgModel)),
     requestSequence: customtypes.optional(SequenceModel, {}),
+    requestOnlineSequence: customtypes.optional(SequenceModel, {}),
     agreementSequence: customtypes.optional(SequenceModel, {}),
     guaranteeSequence: customtypes.optional(SequenceModel, {}),
     voucherSequence: customtypes.optional(SequenceModel, {}),
@@ -319,23 +320,28 @@ export const OrgModel = types
         const body = {
           requestSequence: self.requestSequence.id
             ? {
-                id: self.requestSequence.id,
-              }
+              id: self.requestSequence.id,
+            }
+            : undefined,
+          requestOnlineSequence: self.requestOnlineSequence.id
+            ? {
+              id: self.requestOnlineSequence.id,
+            }
             : undefined,
           agreementSequence: self.agreementSequence.id
             ? {
-                id: self.agreementSequence.id,
-              }
+              id: self.agreementSequence.id,
+            }
             : undefined,
           guaranteeSequence: self.guaranteeSequence.id
             ? {
-                id: self.guaranteeSequence.id,
-              }
+              id: self.guaranteeSequence.id,
+            }
             : undefined,
           voucherSequence: self.voucherSequence.id
             ? {
-                id: self.voucherSequence.id,
-              }
+              id: self.voucherSequence.id,
+            }
             : undefined,
         };
 
