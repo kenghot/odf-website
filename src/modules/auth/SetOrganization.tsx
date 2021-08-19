@@ -5,44 +5,43 @@ import { Form, Grid, Header, Segment } from "semantic-ui-react";
 import { ErrorMessage, Link } from "../../components/common";
 import { Logo } from "../../components/project";
 import { IAuthModel } from "./AuthModel";
+import { OrganizationDDL } from "../admin/organization/components";
+import { OrgListModel } from "../admin/organization/OrgListModel";
+import { LocationModel } from "../../components/address";
 
-export interface IForgetPassword extends WithTranslation {
+export interface ISetOrganization extends WithTranslation {
   onChangeStep: (stepName: string) => void;
   authStore?: IAuthModel;
 }
 
 @inject("authStore")
 @observer
-class ForgetPassword extends React.Component<IForgetPassword> {
+class SetOrganization extends React.Component<ISetOrganization> {
+  public state = { openheader: false };
+  private orgList = OrgListModel.create({});
   public render() {
     const { t, onChangeStep, authStore } = this.props;
     return (
       <Segment padded="very">
         <Logo />
         <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
-          {t("page.loginPage.forgetPassword") + "?"}
+          {"เลือก" + t("module.admin.userInfoForm.underDepartment")}
           <Header.Subheader>
-            {t("page.loginPage.specifyUsername")}
+            {"โปรดเลือกหน่วยงานที่สังกัด"}
           </Header.Subheader>
         </Header>
-        <Form loading={authStore!.loading} onSubmit={this.requestNewPassword}>
-          <Form.Input
-            id="form-input-username"
+        <Form loading={authStore!.loading} onSubmit={this.setOrg}>
+          <Form.Field
             required
-            label={t("page.loginPage.username")}
-            icon="user"
-            iconPosition="left"
-            placeholder={t("page.loginPage.username")}
-            style={styles.textInputStyle}
-            width="16"
-            onChange={(event: any, data: any) =>
-              authStore!.userProfile.setField({
-                fieldname: "email",
-                value: data.value
-              })
-            }
-            value={authStore!.userProfile.email || ""}
+            label={t("module.admin.userInfoForm.underDepartment")}
+            placeholder={t(
+              "module.admin.userInfoForm.underDepartment"
+            )}
+            control={OrganizationDDL}
+            orgList={this.orgList}
+            onChange={this.onChangeOrganizationDDL}
           />
+
 
           <ErrorMessage errorobj={authStore!.error} />
           <Grid style={styles.buttonMarginStyle}>
@@ -72,17 +71,21 @@ class ForgetPassword extends React.Component<IForgetPassword> {
       </Segment>
     );
   }
-  private requestNewPassword = async () => {
+  private setOrg = async () => {
     const { authStore, onChangeStep } = this.props;
     try {
-      await authStore!.new_password_request();
-      if (authStore!.userProfile.email == "registeronline@odf.dop.go.th") {
-        authStore!.generatorOtpSmsSend();
-      }
-      onChangeStep("VerifyForm");
+      await authStore!.userProfile.updateUser(authStore!.userProfile.id);
+      window.localStorage.removeItem("uid");
+      window.localStorage.removeItem("permissions");
+      await authStore!.sign_out();
+      onChangeStep("LoginForm");
     } catch (e) {
       console.log(e);
     }
+  };
+  private onChangeOrganizationDDL = (value: string) => {
+    const { authStore } = this.props;
+    authStore!.userProfile.organization.setField({ fieldname: "id", value });
   };
 }
 
@@ -102,4 +105,4 @@ const styles: any = {
   }
 };
 
-export default withTranslation()(ForgetPassword);
+export default withTranslation()(SetOrganization);

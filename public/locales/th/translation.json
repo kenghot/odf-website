@@ -37,6 +37,7 @@
     },
     "sidebar": {
       "home": "หน้าหลัก",
+      "loanSystemOnline": "ระบบการกู้ยืมออนไลน์",
       "loanSystem": "ระบบการกู้ยืมเงิน",
       "loanRequest": "งานคำร้องขอกู้ยืม",
       "loanContractWork": "งานสัญญากู้ยืมฯ",
@@ -106,6 +107,7 @@
     },
     "idCardReader": {
       "iDCardNumber": "หมายเลขบัตรประชาชน {{value}}",
+      "iDCardNumberAgentId": "หมายเลขบัตรประชาชนผู้ดึงข้อมูล {{value}}",
       "invalidCardNumber": "(หมายเลขบัตรไม่ถูกต้อง)",
       "retrieveIDCard": "ดึงข้อมูลจากบัตรประชาชน",
       "out": "ออกโดย",
@@ -146,18 +148,26 @@
       "username": "รหัสผู้ใช้งาน",
       "password": "รหัสผ่าน",
       "confirm": "เข้าสู่ระบบ",
-      "notRegisterYet": "ยังไม่มีบัญชีผู้ใช้?",
+      "registerBorrower": "ลงทะเบียนผู้ใช้งาน(สำหรับผู้สูงอายุ)",
+      "registerRequestData": "กรุณาระบุข้อมูลลงทะเบียนผู้ใช้งาน",
+      "notRegisterYet": "ยังไม่มีบัญชีผู้ใช้?(สำหรับเจ้าหน้าที่)",
       "register": "สมัครบริการ",
       "specifyUsername": "กรุณาระบุรหัสผู้ใช้งานเพื่อขอรหัสผ่านใหม่",
       "changePassword": "ดำเนินการเปลี่ยนรหัสผ่านใหม่",
+      "verifyIdentity": "ดำเนินการยืนยันตัวตน OTP",
       "specifyPin": "โปรดระบุรหัส 6 หลักที่ระบบได้ส่งไปยังอีเมลล์ {{email}} เพื่อยืนยันรหัสผ่าน",
+      "specifyPinMobile": "โปรดระบุรหัส 6 หลักที่ระบบได้ส่งไปยังเบอร์โทรศัพท์ {{telephone}} เพื่อยืนยันรหัสผ่าน",
       "specifyNewPassword": "ระบุรหัสผ่านใหม่",
       "pleaseUseCharacters": "โปรดใช้ตัวเลขและตัวอักษรอย่างน้อย 1 ตัว และยาวอย่างน้อย 8 ตัวขึ้นไป",
       "newPassword": "รหัสผ่านใหม่",
       "confirmPassword": "ยืนยันรหัสผ่าน",
       "cancelAccount": "ต้องการยกเลิกบัญชีผู้ใช้งาน?",
       "logIn": "เข้าสู่ระบบ",
-      "pleaseSpecifyDigitAt": "โปรดระบุหลักที่ {{value}}"
+      "pleaseSpecifyDigitAt": "โปรดระบุหลักที่ {{value}}",
+      "confirmOtpSms": "กรอกหมายเลข ยืนยัน OTP",
+      "usernameBorrower": "รหัสผู้ใช้งานในการเข้าสู่ระบบ",
+      "setPassword": "กำหนดรหัสผ่าน",
+      "reSendOtp": "ส่งรหัสยืนยันใหม่อีกครั้ง"
     },
     "orgFormPage": {
       "findOrg": "ค้นหาหน่วยงาน",
@@ -281,6 +291,10 @@
       "line4Address4": "\nโทรศัพท์ : 02-354-6100",
       "line4Address5": "\nโทรศัพท์: 02-354-6107",
       "line5": "5. เมื่อเจ้าหน้าที่ได้ยกเลิกรายชื่อผู้ใช้งานเรียบร้อยแล้ว จะแจ้งไปยังอีเมลล์ผู้ยื่นเรื่องที่ระบไว้ในแบบฟอร์มลงทะเบียนเพื่อเป็นการยืนยันการยกเลิกบัญชีผู้ใช้งานอย่างสมบูรณ์"
+    },
+    "googleFromsModal": {
+      "header": "แบบประเมินความพึงพอใจ",
+      "instruction": "แบบประเมินความพึงพอใจของผู้รับบริการกองทุนผู้สูงอายุในรูปแบบอิเล็กทรอนิกส์"
     },
     "resetPasswordModal": {
       "save": "บันทึก"
@@ -704,7 +718,9 @@
         "currentDocumentNumberManager": "ตัวจัดการเลขที่เอกสารปัจจุบัน",
         "pleaseSpecifyNumberManager": "โปรดระบุตัวจัดการเลขที่ต้องการใช้",
         "petitionDocument": "เอกสารคำร้อง",
+        "petitionOnlineDocument": "เอกสารคำร้องออนไลน์",
         "specifyRequestDocument": "ระบุเอกสารคำร้อง",
+        "specifyRequestOnlineDocument": "ระบุเอกสารคำร้องออนไลน์",
         "contractDocuments": "เอกสารสัญญา",
         "specifyContractDocument": "ระบุเอกสารสัญญา",
         "guaranteeContractDocuments": "เอกสารสัญญาค้ำประกัน",
@@ -1332,7 +1348,8 @@
         "contractSpecifiedDate": "วันที่ระบุในสัญญา",
         "checkPreliminaryInformation": "ตรวจสอบข้อมูลเบื้องต้นของผู้ขอกู้และผู้ค้ำฯ",
         "retrieveAddress": "ดึงข้อมูลที่อยู่จาก",
-        "clearData": "ล้างข้อมูล"
+        "clearData": "ล้างข้อมูล",
+        "saveRequestOnline": "บันทึกและสร้างแบบร่างคำร้องออนไลน์"
       },
       "components": {
         "career": "ประกอบอาชีพ",
@@ -2243,6 +2260,26 @@
         "ref1Placeholder": "รหัสโครงการ",
         "price": "จำนวนเงิน",
         "searchButton": "ค้นหาโครงการ"
+      },
+      "posLendRefund": {
+        "content": "รับคืนเงินจากลูกหนี้เงินยืม",
+        "subheader": "กรอกข้อมูลรับคืนเงินจากลูกหนี้เงินยืมเพื่อออกใบเสร็จ",
+        "name": "เลขที่สัญญายืม",
+        "placeholderName": "เลขที่สัญญายืม",
+        "ref1": "ชื่อ-นามสกุล ผู้คืนเงิน",
+        "ref1Placeholder": "ชื่อ-นามสกุล ผู้คืนเงิน",
+        "price": "จำนวนเงิน",
+        "searchButton": "ค้นหาข้อมูลรับคืนเงินจากลูกหนี้เงินยืม"
+      },
+      "posFeesRefund": {
+        "content": "รับคืนค่าธรรมเนียมความแพ่ง",
+        "subheader": "กรอกข้อมูลรับคืนค่าธรรมเนียมความแพ่งเพื่อออกใบเสร็จ",
+        "name": "หมายเลขคดีดำที่",
+        "placeholderName": "หมายเลขคดีดำที่",
+        "ref1": "หมายเลขคดีแดงที่",
+        "ref1Placeholder": "หมายเลขคดีแดงที่ ",
+        "price": "จำนวนเงิน",
+        "searchButton": "ค้นหาข้อมูลรับคืนเงินจากลูกหนี้เงินยืม"
       },
       "posPaymentByCash": {
         "paidAmount": "จำนวนเงิน",

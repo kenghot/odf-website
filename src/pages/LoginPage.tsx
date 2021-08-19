@@ -13,8 +13,11 @@ import {
 import authStore, { IAuthModel } from "../modules/auth/AuthModel";
 import { ResetPassword } from "../modules/auth/components";
 import ForgetPassword from "../modules/auth/ForgetPassword";
+import Register from "../modules/auth/Register";
 import LoginForm from "../modules/auth/LoginForm";
 import VerifyPassword from "../modules/auth/VerifyPassword";
+import VerifyIdentity from "../modules/auth/VerifyIdentity";
+import SetOrganization from "../modules/auth/SetOrganization";
 const { login_bg } = IMAGES;
 
 interface ILoginPage extends WithTranslation, RouteComponentProps {
@@ -124,11 +127,33 @@ class LoginPage extends Component<ILoginPage> {
             {this.state.step === "LoginForm" ? (
               <LoginForm onChangeStep={this.onChangeStep} />
             ) : null}
+            {this.state.step === "Register" ? (
+              <Register
+                onChangeStep={this.onChangeStep}
+              />
+            ) : null}
             {this.state.step === "ForgetPasswordForm" ? (
               <ForgetPassword onChangeStep={this.onChangeStep} />
             ) : null}
             {this.state.step === "VerifyForm" ? (
               <VerifyPassword onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "VerifyIdentityForm" ? (
+              <VerifyIdentity onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "SetOrganizationForm" ? (
+              <SetOrganization onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "RegisterPasswordForm" ? (
+              <ResetPassword
+                onChangeStep={this.onChangeStep}
+                onChangeInputField={this.onChangeInputField}
+                resetPassword={this.registerPassword}
+                loading={authStore!.loading}
+                error={authStore!.error}
+                isPasswordMissMatch={authStore!.isPasswordMissMatch}
+                isPasswordInCorrectFormat={authStore!.isPasswordInCorrectFormat}
+              />
             ) : null}
             {this.state.step === "ResetPasswordForm" ? (
               <ResetPassword
@@ -274,6 +299,21 @@ class LoginPage extends Component<ILoginPage> {
     try {
       await authStore!.reset_password();
       this.onChangeStep("LoginForm");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  private registerPassword = async () => {
+    const { authStore } = this.props;
+    try {
+      const userId = authStore!.userProfile.id;
+      await authStore!.register_password();
+      await authStore!.sign_in();
+      await authStore!.userProfile.updateRoleBorrowerOnly(userId);
+      await authStore!.sign_in_api();
+      this.onChangeStep("SetOrganizationForm");
+      window.localStorage.removeItem("uid");
+      window.localStorage.removeItem("permissions");
     } catch (e) {
       console.log(e);
     }

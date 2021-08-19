@@ -120,6 +120,7 @@ class RequestFormInfoBorrower extends React.Component<IRequestFormInfoBorrower> 
         ) : null}
 
         <Form.Input
+          required
           fluid
           label={t("module.loan.agreementFormCreate.telephoneNumber")}
           placeholder={t("module.loan.agreementFormCreate.specifyPhoneNumber")}

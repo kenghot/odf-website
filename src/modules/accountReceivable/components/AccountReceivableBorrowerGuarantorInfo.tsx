@@ -20,7 +20,7 @@ interface IAccountReceivableBorrowerGuarantorInfo extends WithTranslation {
 
 @observer
 class AccountReceivableBorrowerGuarantorInfo extends React.Component<
-  IAccountReceivableBorrowerGuarantorInfo
+IAccountReceivableBorrowerGuarantorInfo
 > {
   public state = {
     activeIndex: 0
@@ -113,14 +113,14 @@ class AccountReceivableBorrowerGuarantorInfo extends React.Component<
       ),
       render: () => (
         <Tab.Pane>
-          <AccountReceivableGuarantorInfo
+          {/* <AccountReceivableGuarantorInfo
             accountReceivable={accountReceivable}
             id={accountReceivable.id}
             subDistrict={accountReceivable.guarantorContactAddress.subDistrict}
             district={accountReceivable.guarantorContactAddress.district}
             province={accountReceivable.guarantorContactAddress.province}
             editMode={editMode}
-          />
+          /> */}
         </Tab.Pane>
       )
     });

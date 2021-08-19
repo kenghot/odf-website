@@ -22,6 +22,7 @@ import {
 export const ProfileModel = types
   .model("ProfileModel", {
     idCardNo: types.optional(types.string, ""),
+    idCardNoAgentId: types.optional(types.string, ""),
     title: types.optional(types.string, ""),
     firstname: types.optional(types.string, ""),
     lastname: types.optional(types.string, ""),
@@ -29,6 +30,7 @@ export const ProfileModel = types
       types.union(types.string, types.null, types.undefined)
     ),
     isOnlyBirthYear: types.optional(types.boolean, false),
+    isCheckDeathData: types.optional(types.boolean, false),
     idCardIssuer: types.optional(types.string, ""),
     idCardIssuedDate: types.maybeNull(types.string),
     idCardExpireDate: types.optional(
@@ -69,6 +71,12 @@ export const ProfileModel = types
     get idCardIsIncorrectFormat() {
       return isInValidThaiIdCard(self.idCardNo);
     },
+    get idCardNoAgentIdformated() {
+      return self.idCardNoAgentId !== "" ? idcardFormatting(self.idCardNoAgentId) : "";
+    },
+    get idCardNoAgentIdIncorrectFormat() {
+      return isInValidThaiIdCard(self.idCardNoAgentId);
+    },
     get idCardIssuedDateFormated() {
       return dateFormatingYYYYMMDD(self.idCardIssuedDate);
     },
@@ -107,12 +115,12 @@ export const ProfileModel = types
     resetAll: () => {
       applySnapshot(self, {});
     },
-    getCardData: flow(function*() {
+    getCardData: flow(function* () {
       try {
         self.loading = true;
         const res: any = yield fetch(`http://localhost:9999`);
         const response: any = yield res.json();
-        // self.setAllField(response.data);
+        //self.setAllField(response.data);
         self.setField({
           fieldname: "idCardNo",
           value: response.data.id
@@ -182,7 +190,127 @@ export const ProfileModel = types
         self.loading = false;
       }
     }),
-    requestsVerifyBorrower: flow(function*(requestType: string) {
+    getCardDataGdx: flow(function* () {
+      if (self.idCardNo == '' || self.idCardNo.length != 13) {
+        self.error.tigger = true;
+        self.error.title = "ไม่สามารถดึงข้อมูลได้";
+        self.error.message =
+          "โปรดกรอกหมายเลขบัตรประชาชน ให้ถูกต้อง";
+      } else if (self.idCardNoAgentId == '' || self.idCardNoAgentId.length != 13) {
+        self.error.tigger = true;
+        self.error.title = "ไม่สามารถดึงข้อมูลได้";
+        self.error.message =
+          "โปรดกรอกหมายเลขบัตรประชาชนผู้ดึงข้อมูล ให้ถูกต้อง";
+      } else {
+        try {
+          self.loading = true;
+          const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_data.php`;
+          const res001: any = yield fetch(`${gdxApiUrl}?ServiceID=001&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
+          const response001: any = yield res001.json();
+          // console.log(response);
+          // self.setAllField(response.data);
+          self.setField({
+            fieldname: "idCardNo",
+            value: self.idCardNo
+          });
+          self.setField({
+            fieldname: "firstname",
+            value: response001.firstName
+          });
+          self.setField({
+            fieldname: "lastname",
+            value: response001.lastName
+          });
+          self.setField({
+            fieldname: "title",
+            value: response001.titleName
+          });
+          self.birthDate = date_YYYYMMDD_BE_TO_CE(response001.dateOfBirth);
+          if (response001.Code == '90001') {
+            console.log(response001.firstName)
+            self.error.tigger = true;
+            self.error.title = "ไม่สามารถดึงข้อมูลได้";
+            self.error.message =
+              "ไม่สามารถดึงข้อมูลจากกรมการปกครองได้เนื่องจากไม่ได้ Login โปรแกรม Government AMI";
+          } else if (typeof (response001.firstName) == "undefined") {
+            self.error.tigger = true;
+            self.error.title = "ไม่สามารถดึงข้อมูลได้";
+            self.error.message = response001.Message;
+          } else {
+            self.error.tigger = false;
+          }
+          // self.idCardIssuedDate = date_YYYYMMDD_BE_TO_CE(
+          //   response.issueDate
+          // );
+          // if (response.expireDate === "99999999") {
+          //   self.idCardExpireDate = undefined;
+          //   self.idCardLifetime = true;
+          // } else {
+          //   self.idCardLifetime = false;
+          //   self.idCardExpireDate = date_YYYYMMDD_BE_TO_CE(
+          //     response.expireDate
+          //   );
+          // }
+          const res027: any = yield fetch(`${gdxApiUrl}?ServiceID=027&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
+          const response027: any = yield res027.json();
+          console.log(response027)
+          self.idCardAddress.setField({
+            fieldname: "houseNo",
+            value: response027.houseNo ? response027.houseNo.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "hmoo",
+            value: response027.villageNo ? response027.villageNo.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "soi",
+            value: response027.alleyDesc ? response027.alleyDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "street",
+            value: response027.roadDesc ? response027.roadDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "province",
+            value: response027.provinceDesc ? response027.provinceDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "district",
+            value: response027.districtDesc ? response027.districtDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "subDistrict",
+            value: response027.subdistrictDesc ? response027.subdistrictDesc.toString() : ""
+          });
+          // self.setField({
+          //   fieldname: "telephone",
+          //   value: response027.phoneNumber.toString()
+          // });
+          self.error.setField({ fieldname: "tigger", value: false });
+          self.alert.setField({ fieldname: "tigger", value: true });
+          self.alert.setField({
+            fieldname: "title",
+            value: "ดึงข้อมูลสำเร็จ"
+          });
+          self.alert.setField({
+            fieldname: "message",
+            value: "ดึงข้อมูลจากกรมการปกครองสำเร็จ"
+          });
+        } catch (e) {
+          //---Beer05082021--
+          self.error.tigger = true;
+          self.error.title = "ไม่สามารถดึงข้อมูลได้";
+          self.error.message =
+            "เกิดเหตุขัดข้อง ไม่สามารถดึงข้อมูลจากกรมการปกครองได้";
+          console.log(e);
+          throw e;
+        } finally {
+          self.loading = false;
+        }
+      }
+
+    }),
+    requestsVerifyBorrower: flow(function* (requestType: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -229,7 +357,7 @@ export const ProfileModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    requestsVerifyGuarantor: flow(function*(requestType: string) {
+    requestsVerifyGuarantor: flow(function* (requestType: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {

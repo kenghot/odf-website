@@ -10,13 +10,16 @@ import { RequestTable } from "../modules/loan/request/components";
 import RequestTableMessage from "../modules/loan/request/components/RequestTableMessage";
 import SearchForm from "../modules/loan/request/components/SearchForm";
 import { IRequestListModel } from "../modules/loan/request/RequestListModel";
+import { hasPermission } from "../utils/render-by-permission";
+import { IAuthModel } from "../modules/auth/AuthModel";
 
 interface IRequestListPage extends WithTranslation, RouteComponentProps {
   appStore?: IAppModel;
   searchRequestListStore?: IRequestListModel;
+  authStore?: IAuthModel;
 }
 
-@inject("appStore", "searchRequestListStore")
+@inject("appStore", "searchRequestListStore", "authStore")
 @observer
 class RequestListPage extends React.Component<IRequestListPage> {
   public state = { documentStatusPage: "" };
@@ -56,14 +59,23 @@ class RequestListPage extends React.Component<IRequestListPage> {
     this.props.searchRequestListStore!.resetRequestsListMessage();
   }
   public render() {
-    const { searchRequestListStore, history } = this.props;
+    const { searchRequestListStore, history, authStore } = this.props;
+    //Beer12082021
+    if (hasPermission("REQUEST.ONLINE.ACCESS")) {
+      this.props.searchRequestListStore!.setField({
+        fieldname: "idcardRequestOnline",
+        value: authStore!.userProfile.username ? authStore!.userProfile.username : 'null'
+      });
+    }
     this.props.appStore!.setHeaderHeight();
     return (
       <Container>
-        <SearchForm
-          requestlistStore={this.props.searchRequestListStore!}
-          onSearchPage={this.onSearchPage}
-        />
+        {hasPermission("REQUEST.ONLINE.ACCESS") ? null :
+          <SearchForm
+            requestlistStore={this.props.searchRequestListStore!}
+            onSearchPage={this.onSearchPage}
+          />
+        }
         <Loading active={this.props.searchRequestListStore!.loading} />
         <ErrorMessage
           errorobj={this.props.searchRequestListStore!.error}

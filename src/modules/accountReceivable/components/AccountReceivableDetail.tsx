@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Segment } from "semantic-ui-react";
@@ -10,45 +10,58 @@ import {
   AccountReceivableTransactionTable
 } from ".";
 import { ListBlock } from "../../../components/common/block";
-import { PermissionControl } from "../../../components/permission";
+import { PermissionControl, NoPermissionMessage } from "../../../components/permission";
 import { date_display_CE_TO_BE } from "../../../utils";
 import { IAccountReceivableModel } from "../AccountReceivableModel";
 import ARSummaryInfo from "./ARSummaryInfo";
+import { hasPermission } from "../../../utils/render-by-permission";
+import { IAuthModel } from "../../../modules/auth/AuthModel";
+import { IAgreementItemModel } from "../../loan/agreement/AgreementModel";
 
 interface IAccountReceivableDetail extends WithTranslation {
   accountReceivable: IAccountReceivableModel;
   editMode?: boolean;
+  authStore?: IAuthModel;
 }
+@inject("authStore")
 @observer
 class AccountReceivableDetail extends React.Component<
-  IAccountReceivableDetail
+IAccountReceivableDetail
 > {
   public render() {
-    const { accountReceivable, editMode } = this.props;
-    return (
-      <Segment padded="very">
-        <AccountReceivableHeader
-          accountReceivableStatus={accountReceivable.status}
-          accountReceivable={accountReceivable}
-          disableEditBtn={editMode}
-        />
-        <ARSummaryInfo accountReceivable={accountReceivable} />
-        {this.renderDocumentTrackDate()}
-        <AccountReceivableReferenceDocument
-          accountReceivable={accountReceivable}
-        />
-        <AccountReceivableBorrowerGuarantorInfo
-          accountReceivable={accountReceivable}
-          editMode={editMode}
-        />
-        <PermissionControl codes={["AR.TRANSACTION.VIEW"]}>
-          <AccountReceivableTransactionTable
+    const { accountReceivable, editMode, authStore } = this.props;
+    const idCardNoAR = accountReceivable.agreement.agreementItems.length > 0
+      ? accountReceivable.agreement.agreementItems[0].borrower.idCardNo
+      : "-";
+    if (hasPermission("REQUEST.ONLINE.VIEW") && authStore!.userProfile.username != idCardNoAR) {
+      return (<NoPermissionMessage />);
+    } else {
+      return (
+        <Segment padded="very">
+          <AccountReceivableHeader
+            accountReceivableStatus={accountReceivable.status}
+            accountReceivable={accountReceivable}
+            disableEditBtn={editMode}
+          />
+          <ARSummaryInfo accountReceivable={accountReceivable} />
+          {this.renderDocumentTrackDate()}
+          <AccountReceivableReferenceDocument
             accountReceivable={accountReceivable}
           />
-        </PermissionControl>
-        <AccountReceivableControlTable accountReceivable={accountReceivable} />
-      </Segment>
-    );
+          <AccountReceivableBorrowerGuarantorInfo
+            accountReceivable={accountReceivable}
+            editMode={editMode}
+          />
+          <PermissionControl codes={["AR.TRANSACTION.VIEW"]}>
+            <AccountReceivableTransactionTable
+              accountReceivable={accountReceivable}
+            />
+          </PermissionControl>
+          <AccountReceivableControlTable accountReceivable={accountReceivable} />
+        </Segment>
+      );
+    }
+
   }
   private renderDocumentTrackDate() {
     const { accountReceivable, t } = this.props;

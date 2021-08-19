@@ -25,6 +25,7 @@ class AddressFormBody extends React.Component<IAddressForm> {
       <Segment padded>
         <Form.Group widths="equal">
           <Form.Input
+            required
             id={`house-no-${id}`}
             label={t("component.addressFormBody.houseNumber")}
             placeholder={t("component.addressFormBody.houseNumber")}
@@ -79,6 +80,7 @@ class AddressFormBody extends React.Component<IAddressForm> {
             }}
           />
           <Form.Input
+            required
             id={`hmoo-${id}`}
             label={t("component.addressFormBody.villageNo")}
             placeholder={t("component.addressFormBody.villageNo")}
@@ -119,6 +121,7 @@ class AddressFormBody extends React.Component<IAddressForm> {
           }}
         />
         <Form.Field
+          required
           id={`subdistrict-${id}`}
           label={t("component.addressFormBody.subdistrict")}
           control={SubDistrictDDL}
@@ -128,6 +131,7 @@ class AddressFormBody extends React.Component<IAddressForm> {
           locationStore={this.props.locationStore}
         />
         <Form.Input
+          required
           id={`district-${id}`}
           label={t("component.addressFormBody.district")}
           placeholder={t("component.addressFormBody.district")}
@@ -138,6 +142,7 @@ class AddressFormBody extends React.Component<IAddressForm> {
           locationStore={this.props.locationStore}
         />
         <Form.Input
+          required
           id={`province-${id}`}
           label={t("component.addressFormBody.province")}
           placeholder={t("component.addressFormBody.province")}
@@ -148,6 +153,7 @@ class AddressFormBody extends React.Component<IAddressForm> {
           locationStore={this.props.locationStore}
         />
         <Form.Input
+          required
           id={`zipcode-${id}`}
           label={t("component.addressFormBody.zipcode")}
           placeholder={t("component.addressFormBody.zipcode")}

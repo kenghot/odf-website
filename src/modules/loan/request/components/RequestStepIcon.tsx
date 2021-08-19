@@ -1,9 +1,13 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Button, Confirm, Divider, Grid, Header, Icon, Label, List } from "semantic-ui-react";
+import { Button, Confirm, Divider, Grid, Header, Icon, Label, List, Form } from "semantic-ui-react";
 import { Link } from "../../../../components/common";
 import { IRequestModel } from "../RequestModel";
+import { hasPermission } from "../../../../utils/render-by-permission";
+import {
+  ClickLinkModal
+} from "../../../../modals";
 
 interface IRequestStepIcon extends WithTranslation {
   step: number;
@@ -107,20 +111,51 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
       </React.Fragment>
     );
   }
+  private renderNextStepSubmitButton() {
+    const { t } = this.props;
+    return (
+      <React.Fragment>
+        <Form.Button
+          id={"btn-submit-forget-password"}
+          primary
+          floated="right"
+          type="submit"
+        // onClick={this.nextFormOnlineStep}
+        >
+          {"บันทึกและดำเนินการต่อ"}
+        </Form.Button>
+      </React.Fragment>
+    );
+  }
   private renderLastStepButton() {
     const { hideSubmitButton, t, isInvalid } = this.props;
     return (
       <List style={styles.sendButtom}>
         <List.Item>
-          <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
-            {t("module.loan.requestDetail.save")}
-          </Button>
+          {
+            hasPermission("REQUEST.ONLINE.CREATE") ?
+              <ClickLinkModal
+                trigger={
+                  <Button fluid color="brown" onClick={this.onSave} disabled={isInvalid}>
+                    {t("module.loan.requestDetail.saveRequestOnline")}
+                  </Button>
+                }
+              />
+              :
+              <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
+                {t("module.loan.requestDetail.save")}
+              </Button>
+          }
+
         </List.Item>
         {!hideSubmitButton ? (
           <List.Item>
-            <Button fluid color="blue" disabled={isInvalid} onClick={this.open}>
-              {t("module.loan.requestDetail.createRequest")}
-            </Button>
+            {hasPermission("REQUEST.ONLINE.CREATE") ?
+              null :
+              <Button fluid color="blue" disabled={isInvalid} onClick={this.open}>
+                {t("module.loan.requestDetail.createRequest")}
+              </Button>
+            }
             <Confirm
               size="tiny"
               content={t("module.loan.requestDetail.pleaseConfirmCreationRequestForm")}
@@ -139,7 +174,7 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
     if (this.props.step === 3) {
       return this.props.viewMode ? null : this.renderLastStepButton();
     } else {
-      return this.renderNextStepButton();
+      return hasPermission("REQUEST.ONLINE.CREATE") ? this.renderNextStepSubmitButton() : this.renderNextStepButton();
     }
   }
 
@@ -163,10 +198,14 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
   };
   private onClickStep = (index: number) => {
     const { onClickStep, positionBottom } = this.props;
-    if (typeof onClickStep !== "undefined") {
-      onClickStep(index);
-      if (positionBottom) {
-        this.onScrollToTop();
+    if (hasPermission("REQUEST.ONLINE.CREATE") && this.props.viewMode == undefined) {
+      // console.log("requestonline")
+    } else {
+      if (typeof onClickStep !== "undefined") {
+        onClickStep(index);
+        if (positionBottom) {
+          this.onScrollToTop();
+        }
       }
     }
   };

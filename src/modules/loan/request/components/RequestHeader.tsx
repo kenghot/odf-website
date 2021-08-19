@@ -54,7 +54,7 @@ class RequestHeader extends React.Component<IRequestHeader> {
     const { request, appStore, t } = this.props;
     return (
       <React.Fragment>
-        {request.status && request.status !== "DF" ? (
+        {request.status && (request.status !== "DF" || "DFO") ? (
           <Grid.Column>
             <Header
               size="medium"
@@ -189,7 +189,7 @@ class RequestHeader extends React.Component<IRequestHeader> {
           </React.Fragment>
         ) : null}
 
-        {["DF", ""].includes(request.status) ? null : (
+        {["DF", ""].includes(request.status) || ["DFO"].includes(request.status) ? null : (
           <Button
             width={7}
             floated="right"
@@ -224,8 +224,8 @@ class RequestHeader extends React.Component<IRequestHeader> {
         </PermissionControl>
         <div style={styles.buttonRight}>
           {mode === "view" &&
-          (["DF", "NW"].includes(request.status) ||
-            hasPermission("DATA.ALL.EDIT")) ? (
+            (["DF", "DFO", "NW", "NWO"].includes(request.status) ||
+              hasPermission("DATA.ALL.EDIT")) ? (
             <PermissionControl
               somePermission
               codes={["REQUEST.EDIT", "DATA.ALL.EDIT"]}

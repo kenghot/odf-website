@@ -8,16 +8,19 @@ import { Loading } from "../components/common/loading";
 import { IAccountReceivableListModel } from "../modules/accountReceivable/AccountReceivableListModel";
 import AccountReceivableTable from "../modules/accountReceivable/components/AccountReceivableTable";
 import SearchForm from "../modules/accountReceivable/components/SearchForm";
+import { hasPermission } from "../utils/render-by-permission";
+import { IAuthModel } from "../modules/auth/AuthModel";
 
 interface IAccountReceivableListPage extends WithTranslation {
   appStore?: IAppModel;
   searchAccountReceivableListStore?: IAccountReceivableListModel;
+  authStore?: IAuthModel;
 }
 
-@inject("appStore", "searchAccountReceivableListStore")
+@inject("appStore", "searchAccountReceivableListStore", "authStore")
 @observer
 class AccountReceivableListPage extends React.Component<
-  IAccountReceivableListPage
+IAccountReceivableListPage
 > {
   public componentDidMount() {
     this.props.appStore!.setField({
@@ -31,13 +34,21 @@ class AccountReceivableListPage extends React.Component<
   }
   public render() {
     this.props.appStore!.setHeaderHeight();
+    if (hasPermission("REQUEST.ONLINE.ACCESS")) {
+      this.props.searchAccountReceivableListStore!.setField({
+        fieldname: "idcardRequestOnline",
+        value: this.props.authStore!.userProfile.username ? this.props.authStore!.userProfile.username : 'null'
+      });
+    }
     return (
       <Container>
-        <SearchForm
-          accountReceivableListStore={
-            this.props.searchAccountReceivableListStore!
-          }
-        />
+        {hasPermission("REQUEST.ONLINE.ACCESS") ? null :
+          <SearchForm
+            accountReceivableListStore={
+              this.props.searchAccountReceivableListStore!
+            }
+          />
+        }
         <Loading
           active={this.props.searchAccountReceivableListStore!.loading}
         />

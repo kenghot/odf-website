@@ -40,7 +40,7 @@ class RequestFormTab extends React.Component<IRequestFormTab> {
           </Tab.Pane>
         )
       });
-      if (request.status !== "DF" || hasPermission("DATA.ALL.EDIT")) {
+      if ((request.status !== "DF" || "DFO") || hasPermission("DATA.ALL.EDIT")) {
         if (
           hasPermission("REQUEST.VALIDATE") ||
           hasPermission("DATA.ALL.EDIT")

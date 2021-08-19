@@ -11,14 +11,14 @@ import { AccountReceivableDetail } from "../modules/accountReceivable/components
 
 interface IAccountReceivableDetailPage
   extends WithTranslation,
-    RouteComponentProps<any> {
+  RouteComponentProps<any> {
   appStore?: IAppModel;
 }
 
 @inject("appStore")
 @observer
 class AccountReceivableDetailPage extends React.Component<
-  IAccountReceivableDetailPage
+IAccountReceivableDetailPage
 > {
   private accountReceivable = AccountReceivableModel.create({});
   public async componentDidMount() {

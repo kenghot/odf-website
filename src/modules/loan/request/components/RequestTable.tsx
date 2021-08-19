@@ -60,15 +60,18 @@ class RequestTable extends React.Component<IRequestTable> {
         fluid
         basic
         titleComponent={
-          <MenuButton>{this.renderMultiActionButtons()}</MenuButton>
+          hasPermission("REQUEST.ONLINE.ACCESS") ?
+            null
+            :
+            <MenuButton>{this.renderMultiActionButtons()}</MenuButton>
         }
         linkModalLabel={
-          hasPermission("REQUEST.CREATE")
+          hasPermission("REQUEST.CREATE") || hasPermission("REQUEST.ONLINE.CREATE")
             ? t("module.loan.requestDetail.createRequest")
             : undefined
         }
         linkModalComponent={<M106RequestValidate />}
-        iconName={hasPermission("REQUEST.CREATE") ? "plus circle" : undefined}
+        iconName={hasPermission("REQUEST.CREATE") || hasPermission("REQUEST.ONLINE.CREATE") ? "plus circle" : undefined}
       >
         <AlertMessage
           messageobj={this.props.requestlistStore.alert}
@@ -90,12 +93,17 @@ class RequestTable extends React.Component<IRequestTable> {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell textAlign="center">
-            <Checkbox
-              checked={requestlistStore.selected_checkbox}
-              onChange={(event, value) =>
-                requestlistStore.selected_all(value.checked || false)
-              }
-            />
+            {
+              hasPermission("REQUEST.ONLINE.ACCESS") ?
+                null
+                :
+                <Checkbox
+                  checked={requestlistStore.selected_checkbox}
+                  onChange={(event, value) =>
+                    requestlistStore.selected_all(value.checked || false)
+                  }
+                />
+            }
           </Table.HeaderCell>
           <Table.HeaderCell textAlign="center" width={2}>
             {t("module.loan.requestDetail.requestOfNumber")}
@@ -131,15 +139,20 @@ class RequestTable extends React.Component<IRequestTable> {
             return (
               <Table.Row key={index}>
                 <Table.Cell textAlign="center">
-                  <Checkbox
-                    checked={data.isSelected}
-                    onChange={(event, value) =>
-                      data.setField({
-                        fieldname: "isSelected",
-                        value: value.checked
-                      })
-                    }
-                  />
+                  {
+                    hasPermission("REQUEST.ONLINE.ACCESS") ?
+                      null
+                      :
+                      <Checkbox
+                        checked={data.isSelected}
+                        onChange={(event, value) =>
+                          data.setField({
+                            fieldname: "isSelected",
+                            value: value.checked
+                          })
+                        }
+                      />
+                  }
                 </Table.Cell>
                 <Table.Cell>{data.documentNumber}</Table.Cell>
                 <Table.Cell>{data.organization.orgName}</Table.Cell>
@@ -157,7 +170,7 @@ class RequestTable extends React.Component<IRequestTable> {
                   <List horizontal verticalAlign="middle" style={styles.list}>
                     <PermissionControl
                       somePermission
-                      codes={["REQUEST.VIEW", "DATA.ALL.EDIT"]}
+                      codes={["REQUEST.VIEW", "REQUEST.ONLINE.VIEW", "DATA.ALL.EDIT"]}
                     >
                       <List.Item style={styles.listItem}>
                         <Icon
@@ -177,10 +190,10 @@ class RequestTable extends React.Component<IRequestTable> {
                       </List.Item>
                     </PermissionControl>
                     {["DN", "CL", "DQF"].includes(data.status) &&
-                    !hasPermission("DATA.ALL.EDIT") ? null : (
+                      !hasPermission("DATA.ALL.EDIT") ? null : (
                       <PermissionControl
                         somePermission
-                        codes={["REQUEST.EDIT", "DATA.ALL.EDIT"]}
+                        codes={["REQUEST.EDIT", "REQUEST.ONLINE.EDIT", "DATA.ALL.EDIT"]}
                       >
                         <List.Item style={styles.listItem}>
                           <Icon
@@ -201,7 +214,7 @@ class RequestTable extends React.Component<IRequestTable> {
                       </PermissionControl>
                     )}
 
-                    {["DF"].includes(data.status) ? (
+                    {["DF"].includes(data.status) || ["DFO"].includes(data.status) ? (
                       <PermissionControl codes={["REQUEST.DEL"]}>
                         <DeleteModal
                           trigger={
@@ -337,7 +350,7 @@ class RequestTable extends React.Component<IRequestTable> {
 
         <PermissionControl codes={["REQUEST.GENERATE.AGREEMENT"]}>
           {requestlistStore.filterStatus === "AP3" &&
-          documentStatusPage === "AP3" ? (
+            documentStatusPage === "AP3" ? (
             <Modal
               open={this.state.openGenerateAgreement}
               onOpen={this.openGenerateAgreement}

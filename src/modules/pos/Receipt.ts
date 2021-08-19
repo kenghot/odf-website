@@ -96,7 +96,7 @@ const printHeader = (pos: IPosModel, receipt: IReceiptModel, printedDatetime: st
     epos.printThai4PassNo(`${mainCharLabel(`02`, 33, true)}`);
   } else if (receipt.receiptItems.length && receipt.receiptItems[0].refType === "AR") {
     epos.printThai4PassNo(`${mainCharLabel(`01`, 33, true)}`);
-  } else if (receipt.receiptItems.length && receipt.receiptItems[0].refType === "PR") {
+  } else if (receipt.receiptItems.length && (receipt.receiptItems[0].refType === "PR" || receipt.receiptItems[0].refType === "LR" || receipt.receiptItems[0].refType === "FR")) {
     epos.printThai4PassNo(`${mainCharLabel(`03`, 33, true)}`);
   } else {
     // epos.printThai4PassNo(`${mainCharLabel(`00`, 33, true)}`);
@@ -168,6 +168,35 @@ const printBody = (receipt: IReceiptModel) => {
         printItem(
           `${item.name}`,
           `${mainCharLabel(`รหัสโครงการ ${item.ref1}`, 30)}`,
+          //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
+          `${item.description2} ` + `${item.ref2}`,
+          receipt.paymentMethod === "TRANSFER"
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+            : undefined
+        );
+        // epos.printThai4Pass(
+        //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+        // );
+        break;
+      case "LR":
+        printItem(
+          `${item.name}`,
+          `${mainCharLabel(`${item.ref1}`, 30)}`,
+          //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
+          `${item.description2} ` + `${item.ref2}`,
+          receipt.paymentMethod === "TRANSFER"
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+            : undefined
+        );
+        // epos.printThai4Pass(
+        //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+        // );
+        break;
+      case "FR":
+        printItem(
+          `${item.name}`,
+          `${mainCharLabel(`สำนักงานอัยการสูงสุด`, 30)}`,
+          `${mainCharLabel(`${item.description1} ` + `${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
           receipt.paymentMethod === "TRANSFER"

@@ -8,6 +8,7 @@ import customtypes from "../../../utils/mobx-types-helper";
 import { AgreementRequests } from "../agreement/AgreementService";
 import { IRequestModel, RequestModel } from "./RequestModel";
 import { IRequestGet, Request } from "./RequestsService";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 export const RequestListModel = types
   .model("RequestListModel", {
@@ -28,6 +29,7 @@ export const RequestListModel = types
     filterFiscalYear: types.optional(types.string, ""),
     documentDate: types.optional(types.string, ""),
     committeeName: types.optional(types.string, ""),
+    idcardRequestOnline: types.optional(types.string, ""),
     meetingDate: customtypes.optional(
       types.string,
       moment().format("YYYY-MM-DD")
@@ -73,7 +75,7 @@ export const RequestListModel = types
     setField: ({ fieldname, value }: IInput) => {
       self[fieldname] = value;
     },
-    load_data: flow(function*() {
+    load_data: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body: IRequestGet = {
@@ -82,7 +84,7 @@ export const RequestListModel = types
           requestType: self.filterRequestType,
           firstname: self.filterFirstname,
           lastname: self.filterLastname,
-          idCardNo: self.filterIdCardNo.replace(/-/g, ""),
+          idCardNo: self.idcardRequestOnline ? self.idcardRequestOnline : self.filterIdCardNo.replace(/-/g, ""),
           name: self.filterName,
           startDate: self.filterStartDate,
           endDate: self.filterEndDate,
@@ -117,7 +119,7 @@ export const RequestListModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    getRequestCommitteeReport: flow(function*() {
+    getRequestCommitteeReport: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         yield Request.create(
@@ -153,7 +155,7 @@ export const RequestListModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    createContract: flow(function*() {
+    createContract: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         self.setField({ fieldname: "isShowMessageRequestsList", value: true });
@@ -222,7 +224,7 @@ export const RequestListModel = types
       self.filterLastname = "";
       self.filterIdCardNo = "";
     },
-    resetFilter: flow(function*() {
+    resetFilter: flow(function* () {
       try {
         self.filterDocumentNumber = "";
         self.filterOrganizationId = "";

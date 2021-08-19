@@ -7,6 +7,9 @@ import { hasPermission } from "../../../utils/render-by-permission";
 import GroupSideMenu from "./GroupSideMenu";
 import LoanShortCutMenu from "./LoanShortCutMenu";
 import SideMenu from "./SideMenu";
+import { M106RequestValidate } from "../../../modals";
+import { COLORS } from "../../../constants";
+import { Text } from "../../../components/common";
 
 const { odf_logo } = IMAGES;
 const { garuda_logo } = IMAGES;
@@ -72,6 +75,85 @@ class MainSidebarMenus extends React.Component<IMainSidebarMenus, any> {
               </Grid.Row>
             </Grid>
           </Menu.Item>
+          <GroupSideMenu
+            groupName={"loan"}
+            title={t("component.sidebar.loanSystemOnline")}
+            iconName="laptop"
+            hasPermission={[
+              hasPermission("REQUEST.ONLINE.ACCESS"),
+              hasPermission("AGREEMENT.ONLINE.ACCESS"),
+              hasPermission("GUANRANTEE.ONLINE.ACCESS"),
+            ].includes(true)}
+            expanded={expanded}
+            groupPathname="/loan/request"
+            id="btn-group_loan_request"
+          >
+            {hasPermission("REQUEST.ONLINE.CREATE") ? (
+              <M106RequestValidate
+                trigger={
+                  <Menu.Item
+                    active={false}
+                    name="loanShortcut"
+                    link
+                    as="div"
+                    style={styles.menuItem}
+                  >
+                    <Grid columns={"equal"}>
+                      <Grid.Column
+                        verticalAlign={"middle"}
+                        textAlign={expanded ? "left" : "center"}
+                      >
+                        <Header size="tiny" style={styles.headerStyle} inverted>
+                          <Icon name={undefined} size="mini" inverted={false} />
+                          {expanded ? (
+                            <Header.Content>
+                              <Text style={styles.textColor}>
+                                {t("component.sidebar.createReq")}
+                              </Text>
+                            </Header.Content>
+                          ) : null}
+                        </Header>
+                      </Grid.Column>
+                    </Grid>
+                  </Menu.Item>
+                }
+              />
+            ) : null}
+            <SideMenu
+              id="btn-loan-request"
+              name={"loan"}
+              pathname="/loan/request"
+              title={t("component.sidebar.loanRequest")}
+              expanded={expanded}
+              hasPermission={[hasPermission("REQUEST.ONLINE.ACCESS")].includes(true)}
+            />
+            {/* <SideMenu
+              id="btn-loan-agreement"
+              name={"loan"}
+              pathname="/loan/agreement"
+              title={t("component.sidebar.loanContractWork")}
+              expanded={expanded}
+              hasPermission={[hasPermission("AGREEMENT.ONLINE.ACCESS")].includes(true)}
+            />
+            <SideMenu
+              id="btn-loan-guarantee"
+              name={"loan"}
+              pathname="/loan/guarantee"
+              title={t("component.sidebar.loanGuaranteeContractWork")}
+              expanded={expanded}
+              hasPermission={[hasPermission("GUANRANTEE.ONLINE.ACCESS")].includes(
+                true
+              )}
+            /> */}
+            <SideMenu
+              id="btn-account-receivable"
+              name={"loan"}
+              pathname="/account_receivable"
+              title={t("component.sidebar.accountsReceivableSystem")}
+              expanded={expanded}
+              hasPermission={[hasPermission("AR.ONLINE.ACCESS")].includes(true)}
+            />
+          </GroupSideMenu>
           <GroupSideMenu
             groupName={"loan"}
             title={t("component.sidebar.loanSystem")}
@@ -350,6 +432,9 @@ const styles: any = {
   },
   iconToggleStyle: {
     verticalAlign: "middle",
+  },
+  textColor: {
+    color: COLORS.greyOnBlack,
   },
 };
 export default withRouter(withTranslation()(MainSidebarMenus));
