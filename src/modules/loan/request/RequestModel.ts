@@ -30,7 +30,6 @@ import {
 } from "./FactSheetModel";
 import { Request } from "./RequestsService";
 import { ValidationModel } from "./ValidationModel";
-import { hasPermission } from "../../../utils/render-by-permission";
 
 export const BudgetAllocationItemsModel = types
   .model("BudgetAllocationItemsModel", {
@@ -464,7 +463,7 @@ export const RequestModel = types
   }))
   .actions((self: any) => ({
     setField: ({ fieldname, value }: IInput) => {
-      // if (typeof self[fieldname] === "number") {
+      // if (typeof self[fieldname] === "number") {createRequest
       //   value = value !== "" ? +value : undefined;
       // }
       self[fieldname] = value;
@@ -597,7 +596,7 @@ export const RequestModel = types
           requestType: self.requestType,
           documentDate: self.documentDate,
           requestItems: self.requestItems,
-          name: self.requestType === "G" ? self.name : self.full_name + "test"
+          name: self.requestType === "G" ? self.name : self.full_name
         };
         const result: any = yield Request.create(body);
         self.setAllField(result.data);
@@ -762,7 +761,7 @@ export const RequestModel = types
           requestItems: self.requestItems
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
+        // console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });

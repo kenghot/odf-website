@@ -39,6 +39,9 @@ export const AgreementItemModel = types
         ? ` (${idcardFormatting(self.borrower.idCardNo)})`
         : "";
       return `${name}  ${id}`;
+    },
+    get idcard() {
+      return self.borrower.idCardNo ? self.borrower.idCardNo : '';
     }
   }))
   .actions((self: any) => ({
@@ -130,7 +133,8 @@ export const AgreementModel = types
     voucher: types.optional(VoucherModel, {}),
     error: types.optional(ErrorModel, {}),
     alert: types.optional(MessageModel, {}),
-    loading: types.optional(types.boolean, false)
+    loading: types.optional(types.boolean, false),
+    idCardNoAgentId: types.optional(types.string, ""),
   })
   .views((self: any) => ({
     get listitem() {
@@ -147,6 +151,9 @@ export const AgreementModel = types
         : self.agreementItems.length > 0
           ? self.agreementItems[0].fullname
           : "";
+    },
+    get idcard() {
+      return self.agreementItems[0].idcard ? self.agreementItems[0].idcard : "";
     },
     get last_signin_date_formated() {
       return self.lastSigninDate;

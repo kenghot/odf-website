@@ -205,8 +205,8 @@ export const ProfileModel = types
         try {
           self.loading = true;
           const gdxApiUrl = `${process.env.REACT_APP_GDX_ENDPOINT}/gdx_request_data.php`;
-          const res: any = yield fetch(`${gdxApiUrl}?ServiceID=001&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
-          const response: any = yield res.json();
+          const res001: any = yield fetch(`${gdxApiUrl}?ServiceID=001&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
+          const response001: any = yield res001.json();
           // console.log(response);
           // self.setAllField(response.data);
           self.setField({
@@ -215,16 +215,30 @@ export const ProfileModel = types
           });
           self.setField({
             fieldname: "firstname",
-            value: response.firstName
+            value: response001.firstName
           });
           self.setField({
             fieldname: "lastname",
-            value: response.lastName
+            value: response001.lastName
           });
           self.setField({
             fieldname: "title",
-            value: response.titleName
+            value: response001.titleName
           });
+          self.birthDate = date_YYYYMMDD_BE_TO_CE(response001.dateOfBirth);
+          if (response001.Code == '90001') {
+            console.log(response001.firstName)
+            self.error.tigger = true;
+            self.error.title = "ไม่สามารถดึงข้อมูลได้";
+            self.error.message =
+              "ไม่สามารถดึงข้อมูลจากกรมการปกครองได้เนื่องจากไม่ได้ Login โปรแกรม Government AMI";
+          } else if (typeof (response001.firstName) == "undefined") {
+            self.error.tigger = true;
+            self.error.title = "ไม่สามารถดึงข้อมูลได้";
+            self.error.message = response001.Message;
+          } else {
+            self.error.tigger = false;
+          }
           // self.idCardIssuedDate = date_YYYYMMDD_BE_TO_CE(
           //   response.issueDate
           // );
@@ -237,52 +251,51 @@ export const ProfileModel = types
           //     response.expireDate
           //   );
           // }
-          self.birthDate = date_YYYYMMDD_BE_TO_CE(response.dateOfBirth);
-          // self.idCardAddress.setField({
-          //   fieldname: "houseNo",
-          //   value: response.address.houseNo.toString()
-          // });
-          // self.idCardAddress.setField({
-          //   fieldname: "hmoo",
-          //   value: response.address.villageNo.toString()
-          // });
-          // self.idCardAddress.setField({
-          //   fieldname: "soi",
-          //   value: response.address.alleyDesc.toString()
-          // });
-          // self.idCardAddress.setField({
-          //   fieldname: "street",
-          //   value: response.address.roadDesc.toString()
-          // });
-          // self.idCardAddress.setField({
-          //   fieldname: "subDistrict",
-          //   value: response.address.subdistrictDesc.toString().replace(/ตำบล|แขวง/g, "")
-          // });
-          // self.idCardAddress.setField({
-          //   fieldname: "district",
-          //   value: response.address.districtDesc.toString().replace(/อำเภอ|เขต/g, "")
-          // });
-          // self.idCardAddress.setField({
-          //   fieldname: "province",
-          //   value: response.address.provinceDesc.toString().replace(/จังหวัด/g, "")
-          // });
+          const res027: any = yield fetch(`${gdxApiUrl}?ServiceID=027&CitizenID=${self.idCardNo}&AgentID=${self.idCardNoAgentId}`);
+          const response027: any = yield res027.json();
+          console.log(response027)
+          self.idCardAddress.setField({
+            fieldname: "houseNo",
+            value: response027.houseNo ? response027.houseNo.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "hmoo",
+            value: response027.villageNo ? response027.villageNo.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "soi",
+            value: response027.alleyDesc ? response027.alleyDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "street",
+            value: response027.roadDesc ? response027.roadDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "province",
+            value: response027.provinceDesc ? response027.provinceDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "district",
+            value: response027.districtDesc ? response027.districtDesc.toString() : ""
+          });
+          self.idCardAddress.setField({
+            fieldname: "subDistrict",
+            value: response027.subdistrictDesc ? response027.subdistrictDesc.toString() : ""
+          });
           // self.setField({
           //   fieldname: "telephone",
-          //   value: response.phoneNumber.toString()
+          //   value: response027.phoneNumber.toString()
           // });
-          if (response.Code == '90001') {
-            console.log(response.firstName)
-            self.error.tigger = true;
-            self.error.title = "ไม่สามารถดึงข้อมูลได้";
-            self.error.message =
-              "ไม่สามารถดึงข้อมูลจากกรมการปกครองได้เนื่องจากไม่ได้ Login โปรแกรม Government AMI";
-          } else if (typeof (response.firstName) == "undefined") {
-            self.error.tigger = true;
-            self.error.title = "ไม่สามารถดึงข้อมูลได้";
-            self.error.message = response.Message;
-          } else {
-            self.error.tigger = false;
-          }
+          self.error.setField({ fieldname: "tigger", value: false });
+          self.alert.setField({ fieldname: "tigger", value: true });
+          self.alert.setField({
+            fieldname: "title",
+            value: "ดึงข้อมูลสำเร็จ"
+          });
+          self.alert.setField({
+            fieldname: "message",
+            value: "ดึงข้อมูลจากกรมการปกครองสำเร็จ"
+          });
         } catch (e) {
           //---Beer05082021--
           self.error.tigger = true;

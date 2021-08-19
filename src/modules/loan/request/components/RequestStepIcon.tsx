@@ -182,10 +182,14 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
   };
   private onClickStep = (index: number) => {
     const { onClickStep, positionBottom } = this.props;
-    if (typeof onClickStep !== "undefined") {
-      onClickStep(index);
-      if (positionBottom) {
-        this.onScrollToTop();
+    if (hasPermission("REQUEST.ONLINE.CREATE") && this.props.viewMode == undefined) {
+      // console.log("requestonline")
+    } else {
+      if (typeof onClickStep !== "undefined") {
+        onClickStep(index);
+        if (positionBottom) {
+          this.onScrollToTop();
+        }
       }
     }
   };

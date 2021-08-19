@@ -94,6 +94,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
         <ErrorMessage errorobj={profile.error} />
         <Form.Group widths="equal">
           <Form.Input
+            required
             id={`form-input-id-card-${fieldname}`}
             label={t("component.idCardReader.iDCardNumber", {
               value: profile.idCardIsIncorrectFormat
@@ -153,13 +154,6 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
                   error={profile.idCardNoAgentIdIncorrectFormat}
                 />
                 <p></p>
-                {/* <FormFieldCheckbox
-                    id={`form-input-is-check-death-data-${fieldname}`}
-                    label_checkbox={"ดึงข้อมูลกรณีเสียชีวิต "}
-                    fieldName="isCheckDeathData"
-                    onChangeInputField={this.onChangeCheckboxDeathData}
-                    checked={profile.isCheckDeathData}
-                  /> */}
                 <Header as='h5' color="red">กรุณา Login เชื่อมต่อระบบ GovAMI ก่อนดึงข้อมูล</Header>
                 <Form.Button
                   width={1}
@@ -214,6 +208,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
     return (
       <Form.Group widths="equal">
         <Form.Input
+          required
           id={`form-input-id-card-issuer-${fieldname}`}
           label={t("component.idCardReader.out")}
           fluid
@@ -227,6 +222,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
           }}
         />
         <Form.Field
+          required
           label={t("component.idCardReader.cardIssuanceDate")}
           control={DateInput}
           value={profile.idCardIssuedDate}
@@ -236,6 +232,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
         />
         {!profile.idCardLifetime ? (
           <Form.Field
+            required
             label={t("component.idCardReader.expiredDate")}
             control={DateInput}
             value={profile.idCardExpireDate || undefined}
@@ -263,6 +260,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
       <React.Fragment>
         <Form.Group widths="equal">
           <TitleDDL
+            required
             id={`form-input-ddl-title-${fieldname}`}
             placeholder={t("component.idCardReader.prefix")}
             label={t("component.idCardReader.title")}
@@ -277,6 +275,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             }}
           />
           <Form.Input
+            required
             id={`form-input-firstname-${fieldname}`}
             label={t("component.idCardReader.firstNames")}
             placeholder={t("component.idCardReader.firstNames")}
@@ -290,6 +289,7 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
             }}
           />
           <Form.Input
+            required
             id={`form-input-lastname-${fieldname}`}
             label={t("component.idCardReader.lastNames")}
             placeholder={t("component.idCardReader.lastNames")}
@@ -468,10 +468,6 @@ class IDCardReaderProfile extends React.Component<IIDCardReaderProfile> {
       await profile.getCardDataGdx();
       // await this.idCard.getCardData();
       await address.setAllField(profile.idCardAddress);
-      //ฺbeer08082021 ดึงข้อมูลผู้เสียชีวิต
-      if (profile.isCheckDeathData) {
-        this.getReportDeathData();
-      }
     } catch (e) {
       console.log(e);
     } finally {

@@ -42,15 +42,12 @@ class PageHeader extends React.Component<IPageHeader> {
                   <Header.Content>
                     <Text>{`${authStore!.userProfile.title}${authStore!.userProfile.firstname
                       } ${authStore!.userProfile.lastname}`}</Text>
-                    {
-                      hasPermission("REQUEST.ONLINE.ACCESS") ? null :
-                        <Header.Subheader>
-                          <Text>
-                            {`${authStore!.userProfile.position}, ${authStore!.userProfile.organization.orgName
-                              }`}
-                          </Text>
-                        </Header.Subheader>
-                    }
+                    <Header.Subheader>
+                      <Text>
+                        {`${authStore!.userProfile.position}, ${authStore!.userProfile.organization.orgName}`}
+                      </Text>
+                    </Header.Subheader>
+
                   </Header.Content>
                 </Header>
               </List.Item>

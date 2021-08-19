@@ -214,8 +214,8 @@ class Register extends React.Component<IRegister> {
         fieldname: "otpSms",
         value: authStore!.isRandomOtpNumber
       })
-      console.log(authStore!.otpSms)
-      // await authStore!.generatorOtpSmsSend();
+      // console.log(authStore!.otpSms)
+      await authStore!.generatorOtpSmsSend();
       onChangeStep("VerifyIdentityForm");
     } catch (e) {
       console.log(e);
