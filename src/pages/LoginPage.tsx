@@ -307,28 +307,13 @@ class LoginPage extends Component<ILoginPage> {
     const { authStore } = this.props;
     try {
       const userId = authStore!.userProfile.id;
-      await authStore!.setField({
-        fieldname: "registerId",
-        value: authStore!.userProfile.id
-      });
       await authStore!.register_password();
-      // await authStore!.setField({
-      //   fieldname: "username",
-      //   value: "odf_api_user"
-      // });
-      // await authStore!.setField({
-      //   fieldname: "password",
-      //   value: "odfapi1234"
-      // });
       await authStore!.sign_in();
       await authStore!.userProfile.updateRoleBorrowerOnly(userId);
-      // this.onChangeStep("SetOrganizationForm");
-      // window.localStorage.removeItem("access_token");
+      await authStore!.sign_in_api();
+      this.onChangeStep("SetOrganizationForm");
       window.localStorage.removeItem("uid");
       window.localStorage.removeItem("permissions");
-      // authStore!.resetAll();
-      await authStore!.sign_out();
-      this.onChangeStep("LoginForm");
     } catch (e) {
       console.log(e);
     }

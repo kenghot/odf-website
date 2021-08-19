@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Button, Confirm, Divider, Grid, Header, Icon, Label, List } from "semantic-ui-react";
+import { Button, Confirm, Divider, Grid, Header, Icon, Label, List, Form } from "semantic-ui-react";
 import { Link } from "../../../../components/common";
 import { IRequestModel } from "../RequestModel";
 import { hasPermission } from "../../../../utils/render-by-permission";
@@ -111,6 +111,22 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
       </React.Fragment>
     );
   }
+  private renderNextStepSubmitButton() {
+    const { t } = this.props;
+    return (
+      <React.Fragment>
+        <Form.Button
+          id={"btn-submit-forget-password"}
+          primary
+          floated="right"
+          type="submit"
+        // onClick={this.nextFormOnlineStep}
+        >
+          {"บันทึกและดำเนินการต่อ"}
+        </Form.Button>
+      </React.Fragment>
+    );
+  }
   private renderLastStepButton() {
     const { hideSubmitButton, t, isInvalid } = this.props;
     return (
@@ -158,7 +174,7 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
     if (this.props.step === 3) {
       return this.props.viewMode ? null : this.renderLastStepButton();
     } else {
-      return hasPermission("REQUEST.ONLINE.CREATE") ? null : this.renderNextStepButton();
+      return hasPermission("REQUEST.ONLINE.CREATE") ? this.renderNextStepSubmitButton() : this.renderNextStepButton();
     }
   }
 

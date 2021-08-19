@@ -707,7 +707,7 @@ export const RequestModel = types
     }),
     updateRequesLoanDetails: flow(function* () {
       try {
-        self.setField({ fieldname: "status", value: "DF9" });
+        self.setField({ fieldname: "loading", value: true });
         const body = {
           status: self.status,
           requestBudget: self.requestBudget,

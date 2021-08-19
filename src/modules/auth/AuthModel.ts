@@ -34,7 +34,6 @@ export const AuthModel = types
     userProfile: types.optional(UserModel, {}),
     idCardNo: types.optional(types.string, ""),
     otpSms: types.optional(types.string, ""),
-    registerId: types.maybe(types.string),
     alert: types.optional(MessageModel, {}),
   })
   .views((self: any) => ({
@@ -130,8 +129,8 @@ export const AuthModel = types
           attachedFiles: self.userProfile.attachedFiles,
         };
         const result: any = yield RegisterUser.create_user(body);
-        // self.userProfile.setAllField(result.data);
-        console.log(result.data)
+        self.userProfile.setAllField(result.data);
+        // console.log(result.data)
         self.uid = result.data.id;
         self.username = result.data.username;
         self.userProfile.id = result.data.id;
@@ -162,6 +161,7 @@ export const AuthModel = types
           password: self.password,
           confirmPassword: self.confirmPassword,
         });
+        // self.passwordRegis = self.password;
         self.error.tigger = false;
       } catch (e) {
         self.error.tigger = true;
@@ -170,6 +170,32 @@ export const AuthModel = types
         self.error.message = e.message;
         self.error.technical_stack = e.technical_stack;
         console.log("=============== register password ========", self.error);
+        throw e;
+      } finally {
+        self.loading = false;
+      }
+    }),
+    sign_in_api: flow(function* () {
+      self.loading = true;
+      try {
+        const result: any = yield SignIn.sign_in({
+          username: "odf_api_user",
+          password: "odfapi1234",
+        });
+        // self.userProfile = {
+        //   ...result,
+        // };
+        self.uid = result.id;
+        self.permissions = result.permissions;
+        self.setLocalStorage("uid", +result.id);
+        self.setLocalStorage("permissions", result.permissions);
+        self.error.tigger = false;
+      } catch (e) {
+        self.error.tigger = true;
+        self.error.code = e.code;
+        self.error.title = e.name;
+        self.error.message = e.message;
+        self.error.technical_stack = e.technical_stack;
         throw e;
       } finally {
         self.loading = false;

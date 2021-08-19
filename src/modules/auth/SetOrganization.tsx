@@ -74,10 +74,11 @@ class SetOrganization extends React.Component<ISetOrganization> {
   private setOrg = async () => {
     const { authStore, onChangeStep } = this.props;
     try {
-      // const userId = authStore!.userProfile.id;
-      console.log(authStore!.userProfile)
-      // await authStore!.userProfile.updateUser;
-      // onChangeStep("LoginForm");
+      await authStore!.userProfile.updateUser(authStore!.userProfile.id);
+      window.localStorage.removeItem("uid");
+      window.localStorage.removeItem("permissions");
+      await authStore!.sign_out();
+      onChangeStep("LoginForm");
     } catch (e) {
       console.log(e);
     }
