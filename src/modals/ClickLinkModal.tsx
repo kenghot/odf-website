@@ -7,17 +7,22 @@ import { FILES_PATH } from "../constants";
 
 
 interface IClickLinkModal extends WithTranslation {
-  trigger: any;
+  // trigger: any;
+  startOpen?: boolean;
 }
 
 class ClickLinkModal extends React.Component<
   IClickLinkModal
 > {
+  public state = { modalOpen: true }
+  handleOpen = () => this.setState({ modalOpen: true });
+
+  handleClose = () => this.setState({ modalOpen: false });
   public render() {
     const { t } = this.props;
     return (
       <React.Fragment>
-        <Modal trigger={this.props.trigger} closeIcon size={"small"}>
+        <Modal open={this.state.modalOpen} onClose={this.handleClose} closeIcon size={"small"}>
           <Modal.Header>
             <Header shade={2} textAlign={"center"}>
               {t("modal.googleFromsModal.header")}

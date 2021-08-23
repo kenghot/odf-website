@@ -23,6 +23,7 @@ import {
   Memo,
   Visit
 } from "./DebtCollectionsService";
+import { fetchNoService } from "../../utils/request-noservice";
 
 export const DeathNotificationModel = types
   .model("DeathNotificationModel", {
@@ -171,7 +172,7 @@ export const DebtCollectionMemoModel = types
       self.setField({ fieldname: "isOnlyBirthYear", value: false });
       self.setField({ fieldname: "age", value: null });
     },
-    createDebtCollectionMemo: flow(function*(id: string) {
+    createDebtCollectionMemo: flow(function* (id: string) {
       if (id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -216,7 +217,7 @@ export const DebtCollectionMemoModel = types
         }
       }
     }),
-    updateMemo: flow(function*() {
+    updateMemo: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -260,7 +261,7 @@ export const DebtCollectionMemoModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    deleteMemo: flow(function*() {
+    deleteMemo: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         yield Memo.delete(parseInt(self.id));
@@ -276,7 +277,7 @@ export const DebtCollectionMemoModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    printMemo: flow(function*() {
+    printMemo: flow(function* () {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -391,7 +392,7 @@ export const DebtCollectionVisitModel = types
         }
       });
     },
-    createDebtCollectionVisit: flow(function*(id: string) {
+    createDebtCollectionVisit: flow(function* (id: string) {
       if (id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -445,7 +446,7 @@ export const DebtCollectionVisitModel = types
         }
       }
     }),
-    updateVisit: flow(function*() {
+    updateVisit: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -490,7 +491,7 @@ export const DebtCollectionVisitModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    deleteVisit: flow(function*() {
+    deleteVisit: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         yield Visit.delete(parseInt(self.id));
@@ -506,7 +507,7 @@ export const DebtCollectionVisitModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    printVisit: flow(function*() {
+    printVisit: flow(function* () {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -754,7 +755,7 @@ export const DebtCollectionLetterModel = types
         throw e;
       }
     },
-    getDebtCollectionLetterDetail: flow(function*(id: number) {
+    getDebtCollectionLetterDetail: flow(function* (id: number) {
       if (id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -769,7 +770,7 @@ export const DebtCollectionLetterModel = types
         }
       }
     }),
-    createDebtCollectionLetter: flow(function*(id: string) {
+    createDebtCollectionLetter: flow(function* (id: string) {
       if (id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -805,7 +806,7 @@ export const DebtCollectionLetterModel = types
         }
       }
     }),
-    updateLetter: flow(function*() {
+    updateLetter: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -837,7 +838,7 @@ export const DebtCollectionLetterModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    deleteLetter: flow(function*() {
+    deleteLetter: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         yield Letter.delete(parseInt(self.id));
@@ -853,7 +854,7 @@ export const DebtCollectionLetterModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    printLetter: flow(function*() {
+    printLetter: flow(function* () {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -997,7 +998,7 @@ export const DebtCollectionModel = types
     resetAll: () => {
       applySnapshot(self, {});
     },
-    getDebtCollectionDetail: flow(function*(nonLoading?: boolean) {
+    getDebtCollectionDetail: flow(function* (nonLoading?: boolean) {
       if (self.id) {
         try {
           if (nonLoading) {
@@ -1019,7 +1020,7 @@ export const DebtCollectionModel = types
         }
       }
     }),
-    createDebtCollection: flow(function*(id: string) {
+    createDebtCollection: flow(function* (id: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1035,7 +1036,7 @@ export const DebtCollectionModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateDeathNotification: flow(function*() {
+    updateDeathNotification: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1058,7 +1059,7 @@ export const DebtCollectionModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateDebtCollectionInfomationSue: flow(function*() {
+    updateDebtCollectionInfomationSue: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1086,7 +1087,7 @@ export const DebtCollectionModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    updateDebtCollectionResultSue: flow(function*() {
+    updateDebtCollectionResultSue: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const body = {
@@ -1116,7 +1117,7 @@ export const DebtCollectionModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    printCancelBorrower: flow(function*() {
+    printCancelBorrower: flow(function* () {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -1132,7 +1133,7 @@ export const DebtCollectionModel = types
         }
       }
     }),
-    printCancelGurantor: flow(function*() {
+    printCancelGurantor: flow(function* () {
       if (self.id) {
         try {
           self.setField({ fieldname: "loading", value: true });
@@ -1148,7 +1149,7 @@ export const DebtCollectionModel = types
         }
       }
     }),
-    onCalculateInterestRate: flow(function*() {
+    onCalculateInterestRate: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const result: any = yield Config.get(
@@ -1173,7 +1174,7 @@ export const DebtCollectionModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
-    onCalculateJudgementInterestRate: flow(function*() {
+    onCalculateJudgementInterestRate: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
         const result: any = yield Config.get(
@@ -1194,6 +1195,68 @@ export const DebtCollectionModel = types
       } catch (e) {
         self.error.setErrorMessage(e);
         console.log(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    printEnvelops: flow(function* (addressType: string,
+      fileType: string,
+      isReport: boolean,
+      envelopSize: string) {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        // const addressType = "idCardAddress";
+        // const fileType = "pdf";
+        // const isReport = false;
+        // const envelopSize = "1";
+        const result: any = yield fetchNoService(
+          `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/opentbs/tbs/template_envelop_debtcollection_borrower.php`,
+          {
+            show_debug: "0",
+            ids: self.accountReceivableId ? self.accountReceivableId : "0",
+            isReport,
+            fileType: isReport ? undefined : fileType,
+            envelopSize: envelopSize ? envelopSize : undefined,
+            addressType,
+          },
+          "template_envelop",
+          isReport ? undefined : fileType
+        );
+        self.error.setField({ fieldname: "tigger", value: false });
+        self.alert.setAlertMessage("", "");
+      } catch (e) {
+        self.error.setErrorMessage(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    printEnvelopsGuarantor: flow(function* (addressType: string,
+      fileType: string,
+      isReport: boolean,
+      envelopSize: string) {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        // const addressType = "idCardAddress";
+        // const fileType = "pdf";
+        // const isReport = false;
+        // const envelopSize = "1";
+        const result: any = yield fetchNoService(
+          `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/opentbs/tbs/template_envelop_debtcollection_guarantor.php`,
+          {
+            show_debug: "0",
+            ids: self.accountReceivableId ? self.accountReceivableId : "0",
+            isReport,
+            fileType: isReport ? undefined : fileType,
+            envelopSize: envelopSize ? envelopSize : undefined,
+            addressType,
+          },
+          "template_envelop",
+          isReport ? undefined : fileType
+        );
+        self.error.setField({ fieldname: "tigger", value: false });
+        self.alert.setAlertMessage("", "");
+      } catch (e) {
+        self.error.setErrorMessage(e);
       } finally {
         self.setField({ fieldname: "loading", value: false });
       }

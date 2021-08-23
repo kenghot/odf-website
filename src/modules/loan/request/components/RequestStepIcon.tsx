@@ -5,9 +5,6 @@ import { Button, Confirm, Divider, Grid, Header, Icon, Label, List, Form } from 
 import { Link } from "../../../../components/common";
 import { IRequestModel } from "../RequestModel";
 import { hasPermission } from "../../../../utils/render-by-permission";
-import {
-  ClickLinkModal
-} from "../../../../modals";
 
 interface IRequestStepIcon extends WithTranslation {
   step: number;
@@ -134,13 +131,16 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
         <List.Item>
           {
             hasPermission("REQUEST.ONLINE.CREATE") ?
-              <ClickLinkModal
-                trigger={
-                  <Button fluid color="brown" onClick={this.onSave} disabled={isInvalid}>
-                    {t("module.loan.requestDetail.saveRequestOnline")}
-                  </Button>
-                }
-              />
+              // <ClickLinkModal
+              //   trigger={
+              //     <Button fluid color="brown" onClick={this.onSave} disabled={isInvalid}>
+              //       {t("module.loan.requestDetail.saveRequestOnline")}
+              //     </Button>
+              //   }
+              // />
+              <Button fluid color="brown" onClick={this.onSave}>
+                {t("module.loan.requestDetail.saveRequestOnline")}
+              </Button>
               :
               <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
                 {t("module.loan.requestDetail.save")}
