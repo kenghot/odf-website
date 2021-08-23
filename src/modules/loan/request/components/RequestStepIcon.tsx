@@ -117,7 +117,7 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
           primary
           floated="right"
           type="submit"
-        // onClick={this.nextFormOnlineStep}
+        // onClick={this.onNextStep}
         >
           {"บันทึกและดำเนินการต่อ"}
         </Form.Button>

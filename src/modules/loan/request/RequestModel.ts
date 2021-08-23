@@ -718,7 +718,6 @@ export const RequestModel = types
           requestOccupationAddress: self.requestOccupationAddress
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -844,7 +843,7 @@ export const RequestModel = types
           requestItems: self.requestItems
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
+        // console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });

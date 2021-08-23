@@ -109,19 +109,19 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         if (pathname === "/loan/request/create") {
           history.push(`/loan/request/edit/${request.id}/${request.requestType}`);
           if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username && request.status == "DFO") {
-            // try {
-            //   const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
-            //   const result: any = await fetch(`${smsApiUrl}?msisdn=${authStore!.userProfile.telephone}&message=เอกสารแบบร่างคำร้องออนไลน์ ได้บันทึกและส่งไปยังระบบกองทุนผู้สูงอายุเรียบร้อยแล้ว`);
-            //   const response: any = await result.json();
-            //   if (response.QUEUE.Status == "0") {
-            //     console.log("ส่ง SMS ไม่สำเร็จ โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail);
-            //   } else {
-            //     console.log("ส่ง SMS สำเร็จ");
-            //   }
-            // } catch (e) {
-            //   console.log(e);
-            //   throw e;
-            // }
+            try {
+              const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
+              const result: any = await fetch(`${smsApiUrl}?msisdn=${authStore!.userProfile.telephone}&message=เอกสารแบบร่างคำร้องออนไลน์ ได้บันทึกและส่งไปยังระบบกองทุนผู้สูงอายุเรียบร้อยแล้ว`);
+              const response: any = await result.json();
+              if (response.QUEUE.Status == "0") {
+                console.log("ส่ง SMS ไม่สำเร็จ โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail);
+              } else {
+                console.log("ส่ง SMS สำเร็จ");
+              }
+            } catch (e) {
+              console.log(e);
+              throw e;
+            }
           }
           if (hasPermission("REQUEST.ONLINE.CREATE")) {
             request.setField({
@@ -169,6 +169,17 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   private sendFormStep2 = async () => {
     const { request, t, authStore } = this.props;
     try {
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && !request.requestOccupation.id) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกเลือกข้อมูลหัวข้อเพื่อนำไปประกอบอาชีพ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
       if (!request.checkTotalBudgetAllocationItems && request.requestBudget != '0.00') {
         if (request.id) {
           await request.updateRequesLoanDetails();
@@ -193,6 +204,44 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   private sendFormStep1 = async () => {
     const { request, authStore } = this.props;
     try {
+      console.log(request.requestItems[0].borrower.residenceStatusTypeDescription)
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestItems[0].borrower.residenceStatusType === 0
+          || request.requestItems[0].borrower.residenceStatusType === 1)
+        && (request.requestItems[0].borrower.residenceStatusTypeDescription == "0" || !request.requestItems[0].borrower.residenceStatusTypeDescription)) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกค่าเช่า/ผ่อน หรือ อื่นๆในหัวข้อสถานะการอยู่อาศัยของผู้กู้",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestItems[0].guarantor.residenceStatusType === 0
+          || request.requestItems[0].guarantor.residenceStatusType === 1)
+        && (request.requestItems[0].guarantor.residenceStatusTypeDescription == "0" || !request.requestItems[0].guarantor.residenceStatusTypeDescription)) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกค่าเช่า/ผ่อน หรือ อื่นๆในหัวข้อสถานะการอยู่อาศัยของผู้ค้ำ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestItems[0].guarantor.occupation.salary == "0" || !request.requestItems[0].guarantor.occupation.salary)) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกรายได้ของผู้ค้ำ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
       if (request.id) {
         await request!.updateRequest();
       } else {

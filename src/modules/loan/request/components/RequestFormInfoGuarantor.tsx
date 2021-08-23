@@ -126,6 +126,7 @@ class RequestFormInfoGuarantor extends React.Component<IRequestFormInfoGuarantor
           onChangeInputField={this.onChangeInputFieldBorrower}
         />
         <Form.Field
+          required
           label={t("module.loan.agreementDetail.livingStatus")}
           width={16}
           id={"request-form-info-guarantor-residence-status-type"}
