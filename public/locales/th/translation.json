@@ -616,6 +616,8 @@
         "lastNames": "นามสกุล",
         "underDepartment": "หน่วยงานที่สังกัด",
         "pleaseSelectAgency": "กรุณาเลือกหน่วยงานที่สังกัด",
+        "underProvince": "จังหวัด",
+        "pleaseSelectProvince": "กรุณาเลือกจังหวัด",
         "position": "ตำแหน่ง",
         "email": "อีเมล",
         "telephoneNumber": "หมายเลขโทรศัพท์",
