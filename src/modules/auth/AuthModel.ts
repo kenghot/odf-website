@@ -112,6 +112,30 @@ export const AuthModel = types
         self.loading = false;
       }
     }),
+    resetPasswordOtpSmsSend: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
+        const result: any = yield fetch(`${smsApiUrl}?msisdn=${self.userProfile.telephone}&message=OTP:${self.otpSms} ใช้ยืนยันตัวตนเพื่อรีเซ็ตรหัสผ่านระบบกองทุนผู้สูงอายุ`);
+        const response: any = yield result.json();
+        if (response.QUEUE.Status == "0") {
+          self.error.tigger = true;
+          self.error.title = "ส่ง SMS OTP ไม่สำเร็จ";
+          self.error.message = "โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail;
+        } else {
+          self.error.tigger = false;
+        }
+      } catch (e) {
+        self.error.tigger = true;
+        self.error.code = e.code;
+        self.error.title = e.name;
+        self.error.message = e.message;
+        self.error.technical_stack = e.technical_stack;
+        throw e;
+      } finally {
+        self.loading = false;
+      }
+    }),
     createUser: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
