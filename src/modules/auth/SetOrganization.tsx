@@ -5,7 +5,7 @@ import { Form, Grid, Header, Segment } from "semantic-ui-react";
 import { ErrorMessage, Link } from "../../components/common";
 import { Logo } from "../../components/project";
 import { IAuthModel } from "./AuthModel";
-import { OrganizationDDL } from "../admin/organization/components";
+import { ProvinceByOrgDDL } from "../admin/organization/components";
 import { OrgListModel } from "../admin/organization/OrgListModel";
 import { LocationModel } from "../../components/address";
 
@@ -25,19 +25,19 @@ class SetOrganization extends React.Component<ISetOrganization> {
       <Segment padded="very">
         <Logo />
         <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
-          {"เลือก" + t("module.admin.userInfoForm.underDepartment")}
+          {"เลือก" + t("module.admin.userInfoForm.underProvince") + "ตามข้อมูลทะเบียนบ้าน"}
           <Header.Subheader>
-            {"โปรดเลือกหน่วยงานที่สังกัด"}
+            {"โปรดเลือกจังหวัด"}
           </Header.Subheader>
         </Header>
         <Form loading={authStore!.loading} onSubmit={this.setOrg}>
           <Form.Field
             required
-            label={t("module.admin.userInfoForm.underDepartment")}
+            label={t("module.admin.userInfoForm.underProvince")}
             placeholder={t(
-              "module.admin.userInfoForm.underDepartment"
+              "module.admin.searchForm.pleaseSelectProvince"
             )}
-            control={OrganizationDDL}
+            control={ProvinceByOrgDDL}
             orgList={this.orgList}
             onChange={this.onChangeOrganizationDDL}
           />

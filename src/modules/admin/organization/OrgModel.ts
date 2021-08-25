@@ -100,6 +100,13 @@ export const OrgModel = types
         text: self.orgName,
         description: self.orgCode,
       };
+    }, get listitemProvince() {
+      return {
+        key: self.id,
+        value: self.id,
+        text: self.address.province,
+        description: self.orgCode,
+      };
     },
     get status() {
       return self.active

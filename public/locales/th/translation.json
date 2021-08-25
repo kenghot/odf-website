@@ -616,6 +616,8 @@
         "lastNames": "นามสกุล",
         "underDepartment": "หน่วยงานที่สังกัด",
         "pleaseSelectAgency": "กรุณาเลือกหน่วยงานที่สังกัด",
+        "underProvince": "จังหวัด",
+        "pleaseSelectProvince": "กรุณาเลือกจังหวัด",
         "position": "ตำแหน่ง",
         "email": "อีเมล",
         "telephoneNumber": "หมายเลขโทรศัพท์",
@@ -1208,7 +1210,7 @@
         "specifyDetails": "ระบุรายละเอียด",
         "baht": "บาท",
         "totalItemBaht": "{{total}} บาท",
-        "estimatedCostLessAmountRequested": "ประมาณการค่าใช้จ่ายน้อยกว่ายอดประสงค์ขอกู้",
+        "estimatedCostLessAmountRequested": "โปรดกรอกยอดเงินหรือประมาณการค่าใช้จ่ายน้อยกว่ายอดประสงค์ขอกู้",
         "totalAmount": "รวมเป็นจำนวนเงิน"
       },
       "factSheet": {

@@ -161,6 +161,7 @@ class RequestFormInfoBorrower extends React.Component<IRequestFormInfoBorrower> 
           onChangeInputField={this.onChangeInputFieldBorrower}
         />
         <Form.Field
+          required
           label={t("module.loan.agreementDetail.livingStatus")}
           width={16}
           control={ResidenceStatusType}

@@ -10,6 +10,8 @@ import { hasPermission } from "../../../../utils/render-by-permission";
 import { Form } from "semantic-ui-react";
 import { fetchNoService } from "../../../../utils/request-noservice";
 import { PermissionControl, NoPermissionMessage } from "../../../../components/permission";
+import { ClickLinkModal } from "../../../../modals";
+
 
 interface IRequestFormBody extends WithTranslation, RouteComponentProps {
   request: IRequestModel;
@@ -64,6 +66,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
               isInvalid={request.checkTotalBudgetAllocationItems}
             />
           </React.Fragment>
+          {hasPermission("REQUEST.ONLINE.CREATE") && mode == "editMode" ? <ClickLinkModal /> : null}
         </Form>
       );
     }
@@ -72,7 +75,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
     const { request, history, location, t, authStore } = this.props;
     const pathname = location.pathname;
     try {
-      if (request.checkTotalBudgetAllocationItems) {
+      if (request.checkTotalBudgetAllocationItems && request.requestBudget != '0.00') {
         const errorMessage = {
           code: "",
           name: "",
@@ -81,6 +84,25 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         };
         request.error.setErrorMessage(errorMessage);
         throw errorMessage;
+      }
+      if (hasPermission("REQUEST.ONLINE.CREATE")) {
+        if (
+          !request.requestItems[0].borrower.attachedFiles[0].file.filename
+          || !request.requestItems[0].borrower.attachedFiles[1].file.filename
+          || !request.requestItems[0].borrower.attachedFiles[6].file.filename
+          || !request.requestItems[0].guarantor.attachedFiles[0].file.filename
+          || !request.requestItems[0].guarantor.attachedFiles[1].file.filename
+          || !request.requestItems[0].guarantor.attachedFiles[3].file.filename
+        ) {
+          const errorMessage = {
+            code: "",
+            name: "",
+            message: "โปรดแนบเอกสารให้ครบและกดนำส่งเอกสาร",
+            technical_stack: "",
+          };
+          request.error.setErrorMessage(errorMessage);
+          throw errorMessage;
+        }
       }
       if (request.id) {
         // console.log(request.borrower.attachedFiles)
@@ -101,24 +123,28 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
               throw e;
             }
           }
+          if (hasPermission("REQUEST.ONLINE.CREATE")) {
+            request.setField({
+              fieldname: "successRequestOnline",
+              value: true
+            });
+          }
         } else {
-          request.setField({ fieldname: "status", value: request.status });
           await request!.updateRequestAll();
           await request!.getRequestDetail();
           await request!.setRequestItemsAttachedFiles();
           if (request.requestItems.length && request.requestItems[0].id) {
             await request.requestItems[0].getAttachedFiles(request.id || "");
           }
+          if (hasPermission("REQUEST.ONLINE.CREATE")) {
+            request.setField({
+              fieldname: "successRequestOnline",
+              value: true
+            });
+          }
         }
       } else {
-        if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
-          request.setField({ fieldname: "status", value: "DFO" });
-          await request!.createRequest();
-        } else {
-          request.setField({ fieldname: "status", value: "DF" });
-          await request!.createRequest();
-        }
-
+        await request!.createRequest();
       }
     } catch (e) {
       console.log(e);
@@ -143,16 +169,21 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   private sendFormStep2 = async () => {
     const { request, t, authStore } = this.props;
     try {
-      if (!request.checkTotalBudgetAllocationItems) {
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && !request.requestOccupation.id) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกเลือกข้อมูลหัวข้อเพื่อนำไปประกอบอาชีพ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (!request.checkTotalBudgetAllocationItems && request.requestBudget != '0.00') {
         if (request.id) {
-          request.setField({ fieldname: "status", value: request.status });
           await request.updateRequesLoanDetails();
         } else {
-          if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
-            request.setField({ fieldname: "status", value: "DFO" });
-          } else {
-            request.setField({ fieldname: "status", value: "DF" });
-          }
           await request.createRequest();
         }
         await this.setState({ step: 3 });
@@ -173,15 +204,47 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   private sendFormStep1 = async () => {
     const { request, authStore } = this.props;
     try {
+      console.log(request.requestItems[0].borrower.residenceStatusTypeDescription)
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestItems[0].borrower.residenceStatusType === 0
+          || request.requestItems[0].borrower.residenceStatusType === 1)
+        && (request.requestItems[0].borrower.residenceStatusTypeDescription == "0" || !request.requestItems[0].borrower.residenceStatusTypeDescription)) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกค่าเช่า/ผ่อน หรือ อื่นๆในหัวข้อสถานะการอยู่อาศัยของผู้กู้",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestItems[0].guarantor.residenceStatusType === 0
+          || request.requestItems[0].guarantor.residenceStatusType === 1)
+        && (request.requestItems[0].guarantor.residenceStatusTypeDescription == "0" || !request.requestItems[0].guarantor.residenceStatusTypeDescription)) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกค่าเช่า/ผ่อน หรือ อื่นๆในหัวข้อสถานะการอยู่อาศัยของผู้ค้ำ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestItems[0].guarantor.occupation.salary == "0" || !request.requestItems[0].guarantor.occupation.salary)) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกรายได้ของผู้ค้ำ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
       if (request.id) {
-        request.setField({ fieldname: "status", value: request.status });
         await request!.updateRequest();
       } else {
-        if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username) {
-          request.setField({ fieldname: "status", value: "DFO" });
-        } else {
-          request.setField({ fieldname: "status", value: "DF" });
-        }
         await request!.createRequest();
       }
       await this.setState({ step: 2 });
@@ -193,7 +256,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   private onCreate = async () => {
     const { request, history, t, authStore } = this.props;
     try {
-      if (request.checkTotalBudgetAllocationItems) {
+      if (request.checkTotalBudgetAllocationItems && request.requestBudget != '0.00') {
         const errorMessage = {
           code: "",
           name: "",
@@ -202,11 +265,6 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         };
         request.error.setErrorMessage(errorMessage);
         throw errorMessage;
-      }
-      if (request.status == "DFO") {
-        request.setField({ fieldname: "status", value: "NWO" });
-      } else {
-        request.setField({ fieldname: "status", value: "NW" });
       }
       if (request.id) {
         await request!.updateRequestStatusCreate();

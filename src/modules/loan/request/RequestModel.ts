@@ -30,6 +30,7 @@ import {
 } from "./FactSheetModel";
 import { Request } from "./RequestsService";
 import { ValidationModel } from "./ValidationModel";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 export const BudgetAllocationItemsModel = types
   .model("BudgetAllocationItemsModel", {
@@ -372,7 +373,8 @@ export const RequestModel = types
     error: types.optional(ErrorModel, {}),
     alert: types.optional(MessageModel, {}),
     loading: types.optional(types.boolean, false),
-    successRequest: types.optional(types.boolean, false)
+    successRequest: types.optional(types.boolean, false),
+    successRequestOnline: types.optional(types.boolean, false),
   })
   .views((self: any) => ({
     get full_name_id_card() {
@@ -592,7 +594,7 @@ export const RequestModel = types
             id: self.organizationId
           },
           // status: "DF",
-          status: self.status,
+          status: hasPermission("REQUEST.ONLINE.CREATE") ? "DFO" : "DF",
           requestType: self.requestType,
           documentDate: self.documentDate,
           requestItems: self.requestItems,
@@ -716,7 +718,6 @@ export const RequestModel = types
           requestOccupationAddress: self.requestOccupationAddress
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -793,7 +794,7 @@ export const RequestModel = types
         self.setField({ fieldname: "loading", value: true });
         const body = {
           // status: "NW"
-          status: self.status
+          status: self.status == "DFO" ? "NWO" : "NW"
         };
         const result: any = yield Request.update(body, self.id);
         // console.log(result);
@@ -835,14 +836,14 @@ export const RequestModel = types
           budgetAllocationItems: self.checkEmptyBudgetAllocationItems,
           requestOccupationAddress: self.requestOccupationAddress,
           // status: "NW",
-          status: self.status,
+          status: self.status == "DFO" ? "NWO" : "NW",
           name: self.requestType === "G" ? self.name : self.full_name,
           requestType: self.requestType,
           documentDate: self.documentDate,
           requestItems: self.requestItems
         };
         const result: any = yield Request.update(body, self.id);
-        console.log(result);
+        // console.log(result);
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
@@ -1476,6 +1477,76 @@ export const RequestModel = types
       }
     }),
     setRequestItemsAttachedFiles: () => {
+      self.requestItems.forEach((item: IRequestItemModel) => {
+        if (item.borrower.attachedFiles.length === 0) {
+          item.borrower.setField({
+            fieldname: "attachedFiles",
+            value: BORROWER
+          });
+        }
+        if (
+          item.borrower.marriageStatus === 1 &&
+          item.spouse.attachedFiles.length === 0
+        ) {
+          item.spouse.setField({
+            fieldname: "attachedFiles",
+            value: SPOUSE
+          });
+        }
+        if (
+          item.borrower.marriageStatus === 3 &&
+          item.spouse.attachedFiles.length === 0
+        ) {
+          item.spouse.setField({
+            fieldname: "attachedFiles",
+            value: SPOUSE
+          });
+        }
+        if (
+          item.borrower.marriageStatus === 4 &&
+          item.spouse.attachedFiles.length === 0
+        ) {
+          item.spouse.setField({
+            fieldname: "attachedFiles",
+            value: SPOUSE
+          });
+        }
+        if (item.guarantor.attachedFiles.length === 0) {
+          item.guarantor.setField({
+            fieldname: "attachedFiles",
+            value: GUARANTOR
+          });
+        }
+        if (
+          item.guarantor.marriageStatus === 1 &&
+          item.guarantorSpouse.attachedFiles.length === 0
+        ) {
+          item.guarantorSpouse.setField({
+            fieldname: "attachedFiles",
+            value: GUARANTORSPOUSE
+          });
+        }
+        if (
+          item.guarantor.marriageStatus === 3 &&
+          item.guarantorSpouse.attachedFiles.length === 0
+        ) {
+          item.guarantorSpouse.setField({
+            fieldname: "attachedFiles",
+            value: GUARANTORSPOUSE
+          });
+        }
+        if (
+          item.guarantor.marriageStatus === 4 &&
+          item.guarantorSpouse.attachedFiles.length === 0
+        ) {
+          item.guarantorSpouse.setField({
+            fieldname: "attachedFiles",
+            value: GUARANTORSPOUSE
+          });
+        }
+      });
+    },
+    checkRequestItemsAttachedFiles: () => {
       self.requestItems.forEach((item: IRequestItemModel) => {
         if (item.borrower.attachedFiles.length === 0) {
           item.borrower.setField({

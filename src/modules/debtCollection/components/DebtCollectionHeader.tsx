@@ -16,7 +16,7 @@ import { IAppModel } from "../../../AppModel";
 import { FormDisplay } from "../../../components/common";
 import { PermissionControl } from "../../../components/permission";
 import { ARStatusIcon } from "../../../components/project";
-import { M241DebtAcknowledgementModal } from "../../../modals";
+import { M241DebtAcknowledgementModal, EnvelopsModal } from "../../../modals";
 import { date_display_CE_TO_BE } from "../../../utils";
 import { IDebtCollectionModel } from "../DebtCollectionModel";
 import { Link } from "react-router-dom";
@@ -110,12 +110,11 @@ class DebtCollectionHeader extends React.Component<IDebtCollectionHeader> {
 
               <FormDisplay
                 title={t("module.debtCollection.debtCollectionHeader.arStatus")}
-                value={`${
-                  debtCollection.accountReceivable.status
-                } - ${appStore!.enumItemLabel(
-                  "accountReceivableStatus",
-                  debtCollection.accountReceivable.status
-                )}`}
+                value={`${debtCollection.accountReceivable.status
+                  } - ${appStore!.enumItemLabel(
+                    "accountReceivableStatus",
+                    debtCollection.accountReceivable.status
+                  )}`}
               />
 
               <Popup
@@ -179,6 +178,7 @@ class DebtCollectionHeader extends React.Component<IDebtCollectionHeader> {
             {this.renderActionButtons()}
           </PermissionControl>
         </Segment>
+        {this.renderActionButtonsPrint()}
       </Grid.Column>
     );
   }
@@ -205,6 +205,47 @@ class DebtCollectionHeader extends React.Component<IDebtCollectionHeader> {
             </Link>
           </PermissionControl>
         ) : null}
+      </React.Fragment>
+    );
+  }
+  private renderActionButtonsPrint() {
+    const { t, debtCollection, disableEditBtn } = this.props;
+    return (
+      <React.Fragment>
+        <div style={styles.cancelBtn}>
+          {/* <Button
+            color="blue"
+            onClick={debtCollection.printEnvelops}
+          >
+            {"พิมพ์ซองจดหมายผู้กู้"}
+          </Button> */}
+          <EnvelopsModal
+            // disabled={donationAllowanceListStore.statusMenu}
+            trigger={
+              <Button
+                style={styles.buttonItem}
+                // disabled={donationAllowanceListStore.statusMenu}
+                color="pink"
+              >
+                {t("module.donation.DonationAllowanceListTable.menuItem4") + "ผู้กู้"}
+              </Button>
+            }
+            onConfirm={debtCollection.printEnvelops}
+          />
+          <EnvelopsModal
+            // disabled={donationAllowanceListStore.statusMenu}
+            trigger={
+              <Button
+                style={styles.buttonItem}
+                // disabled={donationAllowanceListStore.statusMenu}
+                color="brown"
+              >
+                {t("module.donation.DonationAllowanceListTable.menuItem4") + "ผู้ค้ำ"}
+              </Button>
+            }
+            onConfirm={debtCollection.printEnvelopsGuarantor}
+          />
+        </div>
       </React.Fragment>
     );
   }
