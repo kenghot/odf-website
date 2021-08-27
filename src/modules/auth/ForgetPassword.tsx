@@ -77,7 +77,7 @@ class ForgetPassword extends React.Component<IForgetPassword> {
     try {
       await authStore!.new_password_request();
       if (authStore!.userProfile.email == "registeronline@odf.dop.go.th") {
-        authStore!.generatorOtpSmsSend();
+        authStore!.resetPasswordOtpSmsSend();
       }
       onChangeStep("VerifyForm");
     } catch (e) {

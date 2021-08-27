@@ -30,11 +30,21 @@ class VerifyPassword extends React.Component<IVerifyPassword> {
         <Logo />
         <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
           {t("page.loginPage.changePassword")}
-          <Header.Subheader>
-            {t("page.loginPage.specifyPin", {
-              email: authStore!.userProfile.email
-            })}
-          </Header.Subheader>
+          {authStore!.userProfile.email == "registeronline@odf.dop.go.th" ?
+            <Header.Subheader>
+              {t("page.loginPage.specifyPinMobile", {
+                telephone: authStore!.userProfile.telephone
+              })}
+            </Header.Subheader>
+            :
+            <Header.Subheader>
+
+              {t("page.loginPage.specifyPin", {
+                email: authStore!.userProfile.email
+              })}
+            </Header.Subheader>
+          }
+
         </Header>
         <Form loading={authStore!.loading} onSubmit={this.requestNewPassword}>
           <Form.Group widths="equal">
