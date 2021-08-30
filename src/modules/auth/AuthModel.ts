@@ -35,6 +35,7 @@ export const AuthModel = types
     idCardNo: types.optional(types.string, ""),
     otpSms: types.optional(types.string, ""),
     alert: types.optional(MessageModel, {}),
+    acceptAgree: types.optional(types.boolean, false),
   })
   .views((self: any) => ({
     get access_token() {

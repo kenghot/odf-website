@@ -97,7 +97,7 @@ class LoginForm extends React.Component<ILoginForm> {
             id={"link-register-borrower"}
             size="medium"
             shade={5}
-            onClick={() => onChangeStep("Register")}
+            onClick={() => onChangeStep("AcceptAgree")}
           >
             {t("page.loginPage.registerBorrower")}
           </Link>
