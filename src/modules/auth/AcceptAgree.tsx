@@ -73,7 +73,7 @@ class AcceptAgree extends React.Component<IAcceptAgree> {
                   floated="right"
                   type="submit"
                 >
-                  {t("continue")}
+                  {"ยืนยัน"}
                 </Form.Button>
                 {/* :
                     null
@@ -90,7 +90,20 @@ class AcceptAgree extends React.Component<IAcceptAgree> {
     const { authStore, onChangeStep } = this.props;
     try {
       if (authStore!.acceptAgree) {
-        onChangeStep("Register");
+        onChangeStep("Qualification");
+      } else {
+        authStore!.error.setField({
+          fieldname: "tigger",
+          value: true,
+        });
+        authStore!.error.setField({
+          fieldname: "title",
+          value: "โปรดกดยอมรับ",
+        });
+        authStore!.error.setField({
+          fieldname: "message",
+          value: "โปรดกดยอมรับ ว่าคุณได้อ่าน และเข้าใจข้อความตามรายละเอียดของข้อตกลง และความยินยอมข้างต้นโดยตลอดแล้ว",
+        });
       }
     } catch (e) {
       console.log(e);
