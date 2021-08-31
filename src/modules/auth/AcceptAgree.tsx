@@ -90,6 +90,10 @@ class AcceptAgree extends React.Component<IAcceptAgree> {
     try {
       if (authStore!.acceptAgree) {
         onChangeStep("Qualification");
+        authStore!.error.setField({
+          fieldname: "tigger",
+          value: false,
+        });
       } else {
         authStore!.error.setField({
           fieldname: "tigger",
