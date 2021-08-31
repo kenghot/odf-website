@@ -44,11 +44,10 @@ class AcceptAgree extends React.Component<IAcceptAgree> {
               <FormFieldCheckbox
                 id={`form-input-is-only-birth-year-${fieldname}`}
                 label_checkbox={t("ข้าพเจ้าได้อ่าน และเข้าใจข้อความตามรายละเอียดของข้อตกลง และความยินยอมข้างต้นโดยตลอดแล้ว")}
-                onChangeInputField={this.onChangeIsOnlyBirthYearInputField}
+                onChangeInputField={this.onChangeAcceptAgreeField}
                 fieldName="acceptAgree"
                 checked={authStore!.acceptAgree}
               />
-              {/* <br />&nbsp;&nbsp;&nbsp;&nbsp;{"ข้าพเจ้าได้อ่าน และเข้าใจข้อความตามรายละเอียดของข้อตกลง และความยินยอมข้างต้นโดยตลอดแล้ว"} */}
             </Header>
           </Form.Group>
 
@@ -113,7 +112,7 @@ class AcceptAgree extends React.Component<IAcceptAgree> {
     const { authStore } = this.props;
     authStore!.userProfile.organization.setField({ fieldname: "id", value });
   };
-  private onChangeIsOnlyBirthYearInputField = (
+  private onChangeAcceptAgreeField = (
     fieldname: string,
     value: any
   ) => {
