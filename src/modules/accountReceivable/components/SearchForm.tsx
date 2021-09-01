@@ -279,7 +279,7 @@ class SearchForm extends React.Component<ISearchForm> {
   private onClickLink = () => {
     const { accountReceivableListStore } = this.props;
     let url = process.env.REACT_APP_API_ODOO_ENDPOINT;
-    window.open(url + "/odf_debt_book.php?" + "OrganizationId=" + accountReceivableListStore!.filterOrganizationId, '_blank');
+    window.open(url + "/odf_debt_book.php?" + "OrganizationId=" + accountReceivableListStore!.filterOrganizationId + "&FiscalYear=" + accountReceivableListStore!.filterFiscalYear, '_blank');
   };
 }
 
