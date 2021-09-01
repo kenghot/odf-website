@@ -17,7 +17,6 @@ import { currency } from "../../../utils/format-helper";
 import { IAccountReceivableListModel } from "../AccountReceivableListModel";
 import { IAccountReceivableModel } from "../AccountReceivableModel";
 import { hasPermission } from "../../../utils/render-by-permission";
-import { Link } from "../../../components/common";
 
 interface IAccountReceivableTable extends WithTranslation, RouteComponentProps {
   accountReceivableListStore: IAccountReceivableListModel;
@@ -32,9 +31,6 @@ class AccountReceivableTable extends React.Component<IAccountReceivableTable> {
         <br />
         <br />
         <SectionContainer id="searchTable" stretch fluid basic>
-          <Link shade={5} onClick={this.onClickLink}>
-            {"ทะเบียนรับสมุดปีงบปรมาณ"}
-          </Link>
           <Table striped size="small" style={styles.table}>
             {this.renderTableHeader()}
             {this.renderTableBody()}
@@ -291,11 +287,6 @@ class AccountReceivableTable extends React.Component<IAccountReceivableTable> {
   };
   private checkEmptyText = (value: string) => {
     return value ? value : "-";
-  };
-
-  private onClickLink = () => {
-    let url = process.env.REACT_APP_API_ODOO_ENDPOINT;
-    window.open(url + "/odf_debt_book.php", '_blank');
   };
 }
 

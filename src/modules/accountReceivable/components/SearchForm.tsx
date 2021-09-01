@@ -41,6 +41,16 @@ class SearchForm extends React.Component<ISearchForm> {
               <Button
                 icon
                 labelPosition="left"
+                color="teal"
+                style={styles.button}
+                onClick={this.onClickLink}
+              >
+                {t("ทะเบียนรับสมุดปีงบปรมาณ")}
+                <Icon name="search" />
+              </Button>
+              <Button
+                icon
+                labelPosition="left"
                 color="blue"
                 style={styles.button}
                 onClick={() => this.onSearch()}
@@ -265,6 +275,11 @@ class SearchForm extends React.Component<ISearchForm> {
       value: ""
     });
     await this.orgList.load_data();
+  };
+  private onClickLink = () => {
+    const { accountReceivableListStore } = this.props;
+    let url = process.env.REACT_APP_API_ODOO_ENDPOINT;
+    window.open(url + "/odf_debt_book.php?" + "OrganizationId=" + accountReceivableListStore!.filterOrganizationId, '_blank');
   };
 }
 
