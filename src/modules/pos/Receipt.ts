@@ -323,7 +323,7 @@ const printHeaderAddress = (line1: string, line2: string, line3: string, line4: 
   epos.printer.addTextFont(epos.printer.FONT_B);
   epos.printThai4Pass(line1);
   if (+checkLine2to3 <= 39) {
-    epos.printThai4Pass(`${line2.trim() ? `${line2} ` : ""}${line3}`);
+    epos.printThai4Pass(`${line2.trim() ? `${line2.trim()} ` : ""}${line3}`);
   } else {
     epos.printThai4Pass(line2);
     epos.printThai4Pass(line3);

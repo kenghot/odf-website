@@ -14,6 +14,8 @@ import authStore, { IAuthModel } from "../modules/auth/AuthModel";
 import { ResetPassword } from "../modules/auth/components";
 import ForgetPassword from "../modules/auth/ForgetPassword";
 import Register from "../modules/auth/Register";
+import AcceptAgree from "../modules/auth/AcceptAgree";
+import Qualification from "../modules/auth/Qualification";
 import LoginForm from "../modules/auth/LoginForm";
 import VerifyPassword from "../modules/auth/VerifyPassword";
 import VerifyIdentity from "../modules/auth/VerifyIdentity";
@@ -126,6 +128,16 @@ class LoginPage extends Component<ILoginPage> {
             </Grid>
             {this.state.step === "LoginForm" ? (
               <LoginForm onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "AcceptAgree" ? (
+              <AcceptAgree
+                onChangeStep={this.onChangeStep}
+              />
+            ) : null}
+            {this.state.step === "Qualification" ? (
+              <Qualification
+                onChangeStep={this.onChangeStep}
+              />
             ) : null}
             {this.state.step === "Register" ? (
               <Register
