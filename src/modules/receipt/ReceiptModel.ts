@@ -521,6 +521,25 @@ export const ReceiptModel = types
               const response: any = yield res.json();
               console.log(response);
             }
+            //ระบบบริจาค
+            if (item.refType === "D") {
+              const odooDonateApiUrl = `${process.env.REACT_APP_API_ODOO_ENDPOINT}/rest_sync_payment_donate.php`;
+              const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contract_no: "ก99/9999",
+                  citizen_id: self.clientTaxNumber ? self.clientTaxNumber : "",
+                  last_max_payment_id: 0,
+                  payment_amount: item.price,
+                  full_name: item.description1 ? item.description1 : ""
+                })
+              };
+              const res: any = yield fetch(odooDonateApiUrl, requestOptions);
+              const response: any = yield res.json();
+              // console.log('เงินบริจาคสำหรับโครงการบริจาคเบี้ยยังชีพผู้สูงอายุเข้ากองทุนผู้สูงอายุ');
+              console.log(response);
+            }
           }
         }
       } catch (e) {
