@@ -86,6 +86,25 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         throw errorMessage;
       }
       if (hasPermission("REQUEST.ONLINE.CREATE")) {
+        if (request.requestItems[0].borrower.age > 80) {
+          try {
+            request.requestItems[0].borrower.attachedFiles[3].setField({
+              fieldname: "isSend",
+              value: "true"
+            });
+          } catch {
+          }
+          if (!request.requestItems[0].borrower.attachedFiles[3].file.filename) {
+            const errorMessage = {
+              code: "",
+              name: "",
+              message: "กรณีผู้ยื่นคำร้องมีอายุ 80 ปีขึ้นไป ควรมีใบรับรองแพทย์",
+              technical_stack: "",
+            };
+            request.error.setErrorMessage(errorMessage);
+            throw errorMessage;
+          }
+        }
         if (
           !request.requestItems[0].borrower.attachedFiles[0].file.filename
           || !request.requestItems[0].borrower.attachedFiles[1].file.filename
@@ -102,6 +121,26 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
           };
           request.error.setErrorMessage(errorMessage);
           throw errorMessage;
+        }
+        if (request.requestItems[0].borrower.marriageStatus === 1
+          || request.requestItems[0].borrower.marriageStatus === 3
+          || request.requestItems[0].borrower.marriageStatus === 4
+        ) {
+          if (
+            !request.requestItems[0].spouse.attachedFiles[0].file.filename
+            || !request.requestItems[0].spouse.attachedFiles[1].file.filename
+            || !request.requestItems[0].spouse.attachedFiles[2].file.filename
+            || !request.requestItems[0].spouse.attachedFiles[4].file.filename
+          ) {
+            const errorMessage = {
+              code: "",
+              name: "",
+              message: "โปรดแนบเอกสารเอกสารคู่สมรสของผู้กู้",
+              technical_stack: "",
+            };
+            request.error.setErrorMessage(errorMessage);
+            throw errorMessage;
+          }
         }
       }
       if (request.id) {
