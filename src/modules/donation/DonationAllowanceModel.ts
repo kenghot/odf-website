@@ -131,14 +131,14 @@ export const DonationAllowanceModel = types
       try {
         self.setField({ fieldname: "loading", value: true });
 
-        
+
         const body = {
           donationDate: self.donationDate,
           receiptDate: self.receiptDate,
           paidAmount: self.paidAmount,
           organizationId: self.organization.id,
           receiptOrganization: self.receiptOrganization,
-          posId: self.organization.posDonateAllowaceId || "",
+          posId: self.organization.posDonateAllowaceId || "3",
           note: self.note,
           donator: self.donator,
         };
