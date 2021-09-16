@@ -25,7 +25,6 @@ interface IDonationAllowanceFormCreate
 class DonationAllowanceFormCreate extends React.Component<IDonationAllowanceFormCreate> {
   public render() {
     const { t, donationAllowance, locationStore, orgList } = this.props;
-    // console.log(donationAllowance);
     return (
       <Segment padded="very">
         <Header
@@ -57,13 +56,11 @@ class DonationAllowanceFormCreate extends React.Component<IDonationAllowanceForm
         donationAllowance.error.setErrorMessage(errorMessage);
         throw errorMessage;
       }
-      // console.log('test');
-      // console.log(donationAllowance);
       await donationAllowance.createDonationAllowance();
 
       if (donationAllowance.id) {
         history.push(
-          `/donation/allowances/edit/${donationAllowance.id}/${donationAllowance.posId || "3"
+          `/donation/allowances/edit/${donationAllowance.id}/${donationAllowance.posId || ""
           }`
         );
       }
