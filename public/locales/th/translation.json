@@ -167,7 +167,9 @@
       "confirmOtpSms": "กรอกหมายเลข ยืนยัน OTP",
       "usernameBorrower": "รหัสผู้ใช้งานในการเข้าสู่ระบบ",
       "setPassword": "กำหนดรหัสผ่าน",
-      "reSendOtp": "ส่งรหัสยืนยันใหม่อีกครั้ง"
+      "reSendOtp": "ส่งรหัสยืนยันใหม่อีกครั้ง",
+      "buttonStaff": "สำหรับเจ้าหน้าที่กองทุนฯ",
+      "buttonOlder": "สำหรับผู้สูงอายุ"
     },
     "orgFormPage": {
       "findOrg": "ค้นหาหน่วยงาน",

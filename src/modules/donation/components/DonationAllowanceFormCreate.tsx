@@ -12,7 +12,7 @@ import DonatorFormBody from "./DonatorFormBody";
 
 interface IDonationAllowanceFormCreate
   extends WithTranslation,
-    RouteComponentProps {
+  RouteComponentProps {
   locationStore: ILocationModel;
   orgList: IOrgListModel;
   donationAllowance: IDonationAllowanceModel;
@@ -60,8 +60,7 @@ class DonationAllowanceFormCreate extends React.Component<IDonationAllowanceForm
 
       if (donationAllowance.id) {
         history.push(
-          `/donation/allowances/edit/${donationAllowance.id}/${
-            donationAllowance.posId || "-"
+          `/donation/allowances/edit/${donationAllowance.id}/${donationAllowance.posId || ""
           }`
         );
       }

@@ -2,33 +2,37 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Container, Form, Header, Segment } from "semantic-ui-react";
-import { Link } from "../../components/common";
+import { Container, Form, Header, Segment, List } from "semantic-ui-react";
+import { Link, Text } from "../../components/common";
 import { ErrorMessage } from "../../components/common/error";
 import { Logo } from "../../components/project";
 import { IAuthModel } from "./AuthModel";
+import {
+  M001RegisterInstructionModal,
+  M002DeactivateUserInstruction
+} from "../../modals";
 
-export interface ILoginForm extends WithTranslation, RouteComponentProps {
+export interface ILoginFormOlder extends WithTranslation, RouteComponentProps {
   onChangeStep: (stepName: string) => void;
   authStore?: IAuthModel;
 }
 
 @inject("authStore")
 @observer
-class LoginForm extends React.Component<ILoginForm> {
+class LoginFormOlder extends React.Component<ILoginFormOlder> {
   public render() {
     const { t, authStore, onChangeStep } = this.props;
     return (
       <Segment padded="very">
         <Logo />
-        {/* <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
-          {t("page.loginPage.logIn")}
+        <Header size="medium" textAlign="left" style={styles.headerSubStyle}>
+          {t("page.loginPage.logIn") + "(" + t("page.loginPage.buttonOlder") + ")"}
           <Header.Subheader>
             {t("module.auth.loginForm.inOrderToAccessProfessionalLoanService")}
           </Header.Subheader>
-        </Header> */}
+        </Header>
         <Form loading={authStore!.loading} onSubmit={this.onSignIn}>
-          {/* <Form.Input
+          <Form.Input
             id="form-input-username"
             required
             label={t("page.loginPage.username")}
@@ -77,30 +81,12 @@ class LoginForm extends React.Component<ILoginForm> {
             fluid
             style={styles.buttonMarginStyle}
             type="submit"
-            color="brown"
-          >
-            {t("page.loginPage.confirm")}
-          </Form.Button> */}
-          <Form.Button
-            id="form-button-login"
-            fluid
-            style={styles.buttonMarginStyle}
-            onClick={() => onChangeStep("LoginFormStaff")}
-            color="orange"
-          >
-            {t("page.loginPage.buttonStaff")}
-          </Form.Button>
-          <Form.Button
-            id="form-button-login"
-            fluid
-            style={styles.buttonMarginStyle2}
-            onClick={() => onChangeStep("LoginFormOlder")}
             color="teal"
           >
-            {t("page.loginPage.buttonOlder")}
+            {t("page.loginPage.confirm")}
           </Form.Button>
         </Form>
-        {/* <Container textAlign="center" style={styles.forgetPasswordStyle}>
+        <Container textAlign="center" style={styles.forgetPasswordStyle}>
           <Link
             id={"link-forget-password"}
             size="medium"
@@ -109,8 +95,8 @@ class LoginForm extends React.Component<ILoginForm> {
           >
             {t("page.loginPage.forgetPassword")}
           </Link>
-        </Container> */}
-        {/* <Container textAlign="center" style={styles.forgetPasswordStyle}>
+        </Container>
+        <Container textAlign="center" style={styles.forgetPasswordStyle}>
           <Link
             id={"link-register-borrower"}
             size="medium"
@@ -119,7 +105,16 @@ class LoginForm extends React.Component<ILoginForm> {
           >
             {t("page.loginPage.registerBorrower")}
           </Link>
-        </Container> */}
+        </Container>
+        <Container textAlign="center" style={styles.forgetPasswordStyle}>
+          <M002DeactivateUserInstruction
+            trigger={
+              <Text id={"link-label-m002"} shade={5} underline size="medium" style={styles.link}>
+                {t("page.loginPage.cancelAccount")}
+              </Text>
+            }
+          />
+        </Container>
       </Segment>
     );
   }
@@ -156,11 +151,7 @@ const styles: any = {
     marginBottom: 14
   },
   buttonMarginStyle: {
-    marginTop: 80,
-  },
-  buttonMarginStyle2: {
-    marginTop: 50,
-    marginBottom: 80
+    marginTop: 36
   },
   headerSubStyle: {
     marginTop: 28,
@@ -171,4 +162,4 @@ const styles: any = {
   }
 };
 
-export default withRouter(withTranslation()(LoginForm));
+export default withRouter(withTranslation()(LoginFormOlder));

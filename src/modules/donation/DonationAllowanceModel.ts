@@ -131,7 +131,7 @@ export const DonationAllowanceModel = types
       try {
         self.setField({ fieldname: "loading", value: true });
 
-        
+
         const body = {
           donationDate: self.donationDate,
           receiptDate: self.receiptDate,
@@ -161,6 +161,30 @@ export const DonationAllowanceModel = types
         });
         self.setAllField(result.data);
         self.error.setField({ fieldname: "tigger", value: false });
+        // console.log(self)
+        //ระบบบริจาคเงินบริจาคบริจาคเบี้ยยังชีพผู้สูงอายุ
+        if (result.success) {
+          const odooDonateApiUrl = `${process.env.REACT_APP_API_ODOO_ENDPOINT}/rest_sync_payment_donate_allowance.php`;
+          try {
+            const requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contract_no: "ก99/9999",
+                citizen_id: `${self.donator.idCardNo}` ? `${self.donator.idCardNo}` : "",
+                last_max_payment_id: 0,
+                payment_amount: self.paidAmount,
+                full_name: `${self.donator.title ? self.donator.title : ""}${self.donator.firstname ? self.donator.firstname : ""}  ${self.donator.lastname ? self.donator.lastname : ""}`
+              })
+            };
+            const res: any = yield fetch(odooDonateApiUrl, requestOptions);
+            const response: any = yield res.json();
+            // console.log('เงินบริจาคบริจาคเบี้ยยังชีพผู้สูงอายุ');
+            console.log(response);
+          } catch {
+            console.log('ส่งเข้าระบบบัญชีไม่สำเร็จ');
+          }
+        }
       } catch (e) {
         self.error.setErrorMessage(e);
         throw e;
