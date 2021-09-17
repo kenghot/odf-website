@@ -157,7 +157,9 @@
       "confirmPassword": "confirm password",
       "cancelAccount": "Cancel Account?",
       "logIn": "Log in",
-      "pleaseSpecifyDigitAt": "Please specify the digit at {{value}}"
+      "pleaseSpecifyDigitAt": "Please specify the digit at {{value}}",
+      "buttonStaff": "Staff only",
+      "buttonOlder": "Older only "
     },
     "orgFormPage": {
       "findOrg": "Find an organization",

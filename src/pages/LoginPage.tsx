@@ -20,6 +20,8 @@ import LoginForm from "../modules/auth/LoginForm";
 import VerifyPassword from "../modules/auth/VerifyPassword";
 import VerifyIdentity from "../modules/auth/VerifyIdentity";
 import SetOrganization from "../modules/auth/SetOrganization";
+import LoginFormOlder from "../modules/auth/LoginFormOlder";
+import LoginFormStaff from "../modules/auth/LoginFormStaff";
 const { login_bg } = IMAGES;
 
 interface ILoginPage extends WithTranslation, RouteComponentProps {
@@ -129,6 +131,12 @@ class LoginPage extends Component<ILoginPage> {
             {this.state.step === "LoginForm" ? (
               <LoginForm onChangeStep={this.onChangeStep} />
             ) : null}
+            {this.state.step === "LoginFormStaff" ? (
+              <LoginFormStaff onChangeStep={this.onChangeStep} />
+            ) : null}
+            {this.state.step === "LoginFormOlder" ? (
+              <LoginFormOlder onChangeStep={this.onChangeStep} />
+            ) : null}
             {this.state.step === "AcceptAgree" ? (
               <AcceptAgree
                 onChangeStep={this.onChangeStep}
@@ -178,7 +186,7 @@ class LoginPage extends Component<ILoginPage> {
                 isPasswordInCorrectFormat={authStore!.isPasswordInCorrectFormat}
               />
             ) : null}
-            {this.renderRegisterSection()}
+            {/* {this.renderRegisterSection()} */}
           </Grid.Column>
           <Grid.Column computer={4} mobile={16} />
         </Grid.Row>
