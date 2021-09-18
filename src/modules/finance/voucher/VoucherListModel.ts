@@ -150,9 +150,9 @@ export const VoucherListModel = types
           value: "อัพโหลดใบแทนใบรับเงินจากระบบ KTB Online เรียบร้อยแล้ว"
         });
         //Beer14082021 post api odoo
-        // console.log(result)
+        console.log(result.data.successAgreement.length)
         // console.log(result.data.successAgreement.length)
-        if (result.success) {
+        if (result.data.successAgreement.length > 0) {
           for (const item of result.data.successAgreement) {
             const odooApiUrl = `${process.env.REACT_APP_API_ODOO_ENDPOINT}/rest_sync_contract.php`;
             const requestOptions = {
@@ -163,14 +163,13 @@ export const VoucherListModel = types
             const res: any = yield fetch(odooApiUrl, requestOptions);
             const response: any = yield res.json();
             console.log(response);
-            console.log(response.result.success);
           }
-          if (result.data.successAgreement.length == 0) {
-            console.log("ไม่สามารถสร้างบัญชีลูกหนี้ได้")
-            self.error.setField({ fieldname: "tigger", value: true });
-            self.error.setField({ fieldname: "title", value: "ไม่สามารถสร้างบัญชีลูกหนี้ได้" });
-            self.error.setField({ fieldname: "message", value: "ไม่สามารถสร้างบัญชีลูกหนี้ได้ กรุณาลองใหม่อีกครั้ง" });
-          }
+        }
+        if (result.data.successAgreement.length == 0) {
+          console.log("ไม่สามารถสร้างบัญชีลูกหนี้ได้")
+          self.error.setField({ fieldname: "tigger", value: true });
+          self.error.setField({ fieldname: "title", value: "ไม่สามารถสร้างบัญชีลูกหนี้ได้" });
+          self.error.setField({ fieldname: "message", value: "ไม่สามารถสร้างบัญชีลูกหนี้ได้ กรุณาลองใหม่อีกครั้ง" });
         }
         self.setField({ fieldname: "ktbFile", value: undefined });
         self.error.setField({ fieldname: "tigger", value: false });
