@@ -32,7 +32,7 @@ class VerifyIdentity extends React.Component<IVerifyIdentity> {
           {t("page.loginPage.verifyIdentity")}
           <Header.Subheader>
             {t("page.loginPage.specifyPinMobile", {
-              email: authStore!.userProfile.telephone
+              telephone: authStore!.userProfile.telephone
             })}
           </Header.Subheader>
           <Header.Subheader>
