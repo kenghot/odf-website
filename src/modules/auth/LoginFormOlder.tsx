@@ -35,7 +35,7 @@ class LoginFormOlder extends React.Component<ILoginFormOlder> {
           <Form.Input
             id="form-input-username"
             required
-            label={t("page.loginPage.username")}
+            label={t("page.loginPage.username") + "(" + t("หมายเลขบัตรประชาชน 13 หลัก") + ")"}
             icon="user"
             iconPosition="left"
             placeholder={t("page.loginPage.username")}
@@ -119,10 +119,17 @@ class LoginFormOlder extends React.Component<ILoginFormOlder> {
     );
   }
   private onSignIn = async () => {
-    const { history, authStore } = this.props;
+    const { history, authStore, onChangeStep } = this.props;
     try {
       await authStore!.sign_in();
-      history.push("/loan/request");
+      if (authStore!.userProfile.organization.id) {
+        history.push("/loan/request");
+      } else {
+        await authStore!.sign_in_api();
+        onChangeStep("SetOrganizationForm");
+        window.localStorage.removeItem("uid");
+        window.localStorage.removeItem("permissions");
+      }
     } catch (e) {
       console.log(e);
     }

@@ -72,6 +72,12 @@ export const AuthModel = types
     checkUser: flow(function* () {
       try {
         self.setField({ fieldname: "loading", value: true });
+        if (self.idCardNo.length != 13) {
+          self.error.tigger = true;
+          self.error.title = "กรอกข้อมูลไม่ถูกต้อง";
+          self.error.message = "โปรดกรอกข้อมูลหมายเลขบัตรประชาชนให้ครบ 13 หลัก";
+          return;
+        }
         const body = {
           username: self.idCardNo
         };

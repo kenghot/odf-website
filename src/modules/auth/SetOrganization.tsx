@@ -74,11 +74,26 @@ class SetOrganization extends React.Component<ISetOrganization> {
   private setOrg = async () => {
     const { authStore, onChangeStep } = this.props;
     try {
-      await authStore!.userProfile.updateUser(authStore!.userProfile.id);
-      window.localStorage.removeItem("uid");
-      window.localStorage.removeItem("permissions");
-      await authStore!.sign_out();
-      onChangeStep("LoginForm");
+      if (authStore!.userProfile.organization.id) {
+        await authStore!.userProfile.updateUser(authStore!.userProfile.id);
+        window.localStorage.removeItem("uid");
+        window.localStorage.removeItem("permissions");
+        await authStore!.sign_out();
+        onChangeStep("LoginForm");
+      } else {
+        authStore!.error.setField({
+          fieldname: "tigger",
+          value: true
+        });
+        authStore!.error.setField({
+          fieldname: "title",
+          value: "เลือกข้อมูลไม่ถูกต้อง"
+        });
+        authStore!.error.setField({
+          fieldname: "message",
+          value: "โปรดเลือกจังหวัด"
+        });
+      }
     } catch (e) {
       console.log(e);
     }
