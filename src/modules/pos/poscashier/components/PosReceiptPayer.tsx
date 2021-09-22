@@ -206,6 +206,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           appStore!,
           printedTime
         );
+        console.log('PosReceiptPayer1')
         //printออก2ใบใน1รายการ
         await printFromTemplate(
           pos,
@@ -223,6 +224,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           appStore!,
           printedTime
         );
+        console.log('PosReceiptPayer2')
         //printออก2ใบใน1รายการ
         await printFromTemplate(
           pos,

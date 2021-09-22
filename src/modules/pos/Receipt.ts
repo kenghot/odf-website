@@ -275,6 +275,7 @@ const printSignature = (titile: string, name?: string) => {
 };
 
 const printLogo = () => {
+  console.log('printLogo')
   epos.printer.addTextAlign(epos.printer.ALIGN_CENTER);
   const { garuda_logo } = IMAGES;
   const canvas = document.createElement("canvas") as any;
@@ -296,6 +297,7 @@ const printLogo = () => {
 
 };
 const printFooterLogo = () => {
+  console.log('printFooterLogo')
   epos.printer.addTextAlign(epos.printer.ALIGN_CENTER);
   const { odf_w_text_logo } = IMAGES;
   const canvas = document.createElement("canvas") as any;

@@ -35,6 +35,8 @@ class PosLoginPage extends React.Component<IPosLoginPage> {
   public render() {
     const { t, posListStore } = this.props;
     this.props.appStore!.setHeaderHeight();
+    //show all 500
+    posListStore!.setField({ fieldname: "perPage", value: 500 });
     return (
       <React.Fragment>
         {/* <Segment padded="very"> */}
