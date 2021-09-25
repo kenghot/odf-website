@@ -289,7 +289,7 @@ class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
                 />
               ) : null}
               {
-                hasPermission("REQUEST.ONLINE.CREATE") ?
+                hasPermission("REQUEST.ONLINE.CREATE") && !readOnly ?
                   <Button
                     fluid color="brown" onClick={this.onCreateRequestOnline}>
                     {t("module.loan.requestDetail.saveRequestOnline")}

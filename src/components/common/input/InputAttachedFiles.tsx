@@ -4,6 +4,7 @@ import { withTranslation, WithTranslation } from "react-i18next";
 import { Button, Grid, Icon, Label } from "semantic-ui-react";
 import { DeleteModal } from "../../../modals";
 import { IAttachedFileModel } from "../fileupload/AttachedFileModel";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 interface IInputAttachedFiles extends WithTranslation {
   attachedFile?: IAttachedFileModel;
@@ -69,7 +70,7 @@ class InputAttachedFiles extends React.Component<IInputAttachedFiles> {
                     textAlign="right"
                     style={styles.row}
                   >
-                    {readOnly ? null : (
+                    {readOnly || hasPermission("REQUEST.ONLINE.CREATE") ? null : (
                       <DeleteModal
                         title={t("modal.DeleteModal.confirmDeleteFile")}
                         trigger={
@@ -80,7 +81,7 @@ class InputAttachedFiles extends React.Component<IInputAttachedFiles> {
                             color="red"
                             inverted
                             size="small"
-                            // onClick={this.removeFile}
+                          // onClick={this.removeFile}
                           />
                         }
                         onConfirmDelete={() => this.removeFile()}
