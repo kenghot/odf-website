@@ -109,6 +109,11 @@ export const RequestItemModel = types
     guarantorSpouse: types.optional(ProfileModel, {}),
     guarantor: types.optional(ProfileModel, {}),
     guarantorCompanyAddress: types.optional(AddressModel, {}),
+    borrowerCheckFile: types.optional(types.boolean, false),
+    spouseCheckFile: types.optional(types.boolean, false),
+    guarantorCheckFile: types.optional(types.boolean, false),
+    guarantorSpouseCheckFile: types.optional(types.boolean, false),
+    attachedFilesCheckFileAll: types.optional(types.boolean, false),
     error: types.optional(ErrorModel, {}),
     alert: types.optional(MessageModel, {}),
     loading: types.optional(types.boolean, false)
@@ -602,6 +607,97 @@ export const RequestModel = types
         };
         const result: any = yield Request.create(body);
         self.setAllField(result.data);
+        self.error.setField({ fieldname: "tigger", value: false });
+        self.alert.setField({ fieldname: "tigger", value: true });
+        self.alert.setField({
+          fieldname: "title",
+          value: "บันทึกสำเร็จค่ะ"
+        });
+        self.alert.setField({
+          fieldname: "message",
+          value: "เอกสารถูกสร้างเรียบร้อยแล้ว"
+        });
+      } catch (e) {
+        self.error.setField({ fieldname: "tigger", value: true });
+        self.error.setField({ fieldname: "code", value: e.code });
+        self.error.setField({ fieldname: "title", value: e.name });
+        self.error.setField({ fieldname: "message", value: e.message });
+        self.error.setField({
+          fieldname: "technical_stack",
+          value: e.technical_stack
+        });
+        console.log(e);
+        throw e;
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    createRequestOnline: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        for (const item of self.requestItems) {
+          ///// เซตค่าให้ที่อยู่ตามทะเบียนบ้าน ผู้กู้
+          if (item.borrower.registeredAddressType === 0) {
+            item.borrower.setField({
+              fieldname: "registeredAddress",
+              value: clone(item.borrower.idCardAddress)
+            });
+          }
+          ///// เซตค่าให้ที่อยู่ปัจบัน ผู้กู้
+          if (item.borrower.currentAddressType === 0) {
+            item.borrower.setField({
+              fieldname: "currentAddress",
+              value: clone(item.borrower.idCardAddress)
+            });
+          } else if (item.borrower.currentAddressType === 1) {
+            item.borrower.setField({
+              fieldname: "currentAddress",
+              value: clone(item.borrower.registeredAddress)
+            });
+          }
+          ///// เซตค่าให้ที่อยู่ตามทะเบียนบ้าน ผู้ค้ำ
+          if (item.guarantor.registeredAddressType === 0) {
+            item.guarantor.setField({
+              fieldname: "registeredAddress",
+              value: clone(item.guarantor.idCardAddress)
+            });
+          }
+          ///// เซตค่าให้ที่อยู่ปัจบัน ผู้ค้ำ
+          if (item.guarantor.currentAddressType === 0) {
+            item.guarantor.setField({
+              fieldname: "currentAddress",
+              value: clone(item.guarantor.idCardAddress)
+            });
+          } else if (item.guarantor.currentAddressType === 1) {
+            item.guarantor.setField({
+              fieldname: "currentAddress",
+              value: clone(item.guarantor.registeredAddress)
+            });
+          }
+        }
+        self.setField({ fieldname: "loading", value: true });
+        const body = {
+          organization: {
+            id: self.organizationId
+          },
+          // status: "DF",
+          status: "DFO",
+          requestType: self.requestType,
+          documentDate: self.documentDate,
+          requestItems: self.requestItems,
+          name: self.requestType === "G" ? self.name : self.full_name
+        };
+        const result: any = yield Request.create(body);
+        const bodyLoneDetail = {
+          status: "DFO",
+          requestBudget: self.requestBudget,
+          requestOccupation: self.requestOccupation,
+          budgetAllocationItems: self.checkEmptyBudgetAllocationItems,
+          requestOccupationAddress: self.requestOccupationAddress
+        };
+        const resultLoneDetail: any = yield Request.update(bodyLoneDetail, result.data.id);
+        self.setAllField(result.data);
+        self.setAllField(resultLoneDetail.data);
         self.error.setField({ fieldname: "tigger", value: false });
         self.alert.setField({ fieldname: "tigger", value: true });
         self.alert.setField({

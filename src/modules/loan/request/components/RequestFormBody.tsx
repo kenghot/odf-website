@@ -31,7 +31,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   }
   public state = { step: 1 };
   public render() {
-    const { request, mode } = this.props;
+    const { request, mode, history } = this.props;
     if (hasPermission("REQUEST.ONLINE.CREATE") && (request.status === "NWO" || request.status === "NW" || request.status === "QF"
       || request.status === "AP1" || request.status === "AP2" || request.status === "AP3" || request.status === "DN")) {
       return (<NoPermissionMessage />);
@@ -66,7 +66,8 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
               isInvalid={request.checkTotalBudgetAllocationItems}
             />
           </React.Fragment>
-          {hasPermission("REQUEST.ONLINE.CREATE") && mode == "editMode" ? <ClickLinkModal /> : null}
+          {hasPermission("REQUEST.ONLINE.CREATE") && (mode == "editMode" || request.successRequestOnline) ? <ClickLinkModal /> : null}
+          {hasPermission("REQUEST.ONLINE.CREATE") && (request.successRequestOnline && request.id && request.requestType) ? history.push(`/loan/request/edit/${request.id}/${request.requestType}`) : null}
         </Form>
       );
     }
@@ -85,101 +86,15 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         request.error.setErrorMessage(errorMessage);
         throw errorMessage;
       }
-      if (hasPermission("REQUEST.ONLINE.CREATE")) {
-        if (request.requestItems[0].borrower.age > 80) {
-          try {
-            request.requestItems[0].borrower.attachedFiles[3].setField({
-              fieldname: "isSend",
-              value: "true"
-            });
-          } catch {
-          }
-          if (!request.requestItems[0].borrower.attachedFiles[3].file.filename) {
-            const errorMessage = {
-              code: "",
-              name: "",
-              message: "กรณีผู้ยื่นคำร้องมีอายุ 80 ปีขึ้นไป ควรมีใบรับรองแพทย์",
-              technical_stack: "",
-            };
-            request.error.setErrorMessage(errorMessage);
-            throw errorMessage;
-          }
-        }
-        if (
-          !request.requestItems[0].borrower.attachedFiles[0].file.filename
-          || !request.requestItems[0].borrower.attachedFiles[1].file.filename
-          || !request.requestItems[0].borrower.attachedFiles[6].file.filename
-          || !request.requestItems[0].guarantor.attachedFiles[0].file.filename
-          || !request.requestItems[0].guarantor.attachedFiles[1].file.filename
-          || !request.requestItems[0].guarantor.attachedFiles[3].file.filename
-        ) {
-          const errorMessage = {
-            code: "",
-            name: "",
-            message: "โปรดแนบเอกสารให้ครบและกดนำส่งเอกสาร",
-            technical_stack: "",
-          };
-          request.error.setErrorMessage(errorMessage);
-          throw errorMessage;
-        }
-        if (request.requestItems[0].borrower.marriageStatus === 1
-          || request.requestItems[0].borrower.marriageStatus === 3
-          || request.requestItems[0].borrower.marriageStatus === 4
-        ) {
-          if (
-            !request.requestItems[0].spouse.attachedFiles[0].file.filename
-            || !request.requestItems[0].spouse.attachedFiles[1].file.filename
-            || !request.requestItems[0].spouse.attachedFiles[2].file.filename
-            || !request.requestItems[0].spouse.attachedFiles[4].file.filename
-          ) {
-            const errorMessage = {
-              code: "",
-              name: "",
-              message: "โปรดแนบเอกสารเอกสารคู่สมรสของผู้กู้",
-              technical_stack: "",
-            };
-            request.error.setErrorMessage(errorMessage);
-            throw errorMessage;
-          }
-        }
-      }
       if (request.id) {
-        // console.log(request.borrower.attachedFiles)
         if (pathname === "/loan/request/create") {
           history.push(`/loan/request/edit/${request.id}/${request.requestType}`);
-          if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username && request.status == "DFO") {
-            try {
-              const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
-              const result: any = await fetch(`${smsApiUrl}?msisdn=${authStore!.userProfile.telephone}&message=เอกสารแบบร่างคำร้องออนไลน์ ได้บันทึกและส่งไปยังระบบกองทุนผู้สูงอายุเรียบร้อยแล้ว`);
-              const response: any = await result.json();
-              if (response.QUEUE.Status == "0") {
-                console.log("ส่ง SMS ไม่สำเร็จ โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail);
-              } else {
-                console.log("ส่ง SMS สำเร็จ");
-              }
-            } catch (e) {
-              console.log(e);
-              throw e;
-            }
-          }
-          if (hasPermission("REQUEST.ONLINE.CREATE")) {
-            request.setField({
-              fieldname: "successRequestOnline",
-              value: true
-            });
-          }
         } else {
           await request!.updateRequestAll();
           await request!.getRequestDetail();
           await request!.setRequestItemsAttachedFiles();
           if (request.requestItems.length && request.requestItems[0].id) {
             await request.requestItems[0].getAttachedFiles(request.id || "");
-          }
-          if (hasPermission("REQUEST.ONLINE.CREATE")) {
-            request.setField({
-              fieldname: "successRequestOnline",
-              value: true
-            });
           }
         }
       } else {
@@ -219,11 +134,26 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
         request.error.setErrorMessage(errorMessage);
         throw errorMessage;
       }
+      if (hasPermission("REQUEST.ONLINE.CREATE")
+        && (request.requestOccupationAddress.latitude == "" || request.requestOccupationAddress.longitude == "")) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "โปรดกรอกระบุข้อมูลแผนผังสถานที่ประกอบอาชีพ",
+          technical_stack: "",
+        };
+        request.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
       if (!request.checkTotalBudgetAllocationItems && request.requestBudget != '0.00') {
         if (request.id) {
           await request.updateRequesLoanDetails();
         } else {
-          await request.createRequest();
+          if (hasPermission("REQUEST.ONLINE.CREATE") && !request.id) {
+            await request!.setRequestItemsAttachedFiles();
+          } else {
+            await request!.createRequest();
+          }
         }
         await this.setState({ step: 3 });
       } else {
@@ -243,7 +173,7 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
   private sendFormStep1 = async () => {
     const { request, authStore } = this.props;
     try {
-      console.log(request.requestItems[0].borrower.residenceStatusTypeDescription)
+      // console.log(request.requestItems[0].borrower.residenceStatusTypeDescription)
       if (hasPermission("REQUEST.ONLINE.CREATE")
         && (request.requestItems[0].borrower.residenceStatusType === 0
           || request.requestItems[0].borrower.residenceStatusType === 1)
@@ -283,8 +213,20 @@ class RequestFormBody extends React.Component<IRequestFormBody> {
       }
       if (request.id) {
         await request!.updateRequest();
+        if (hasPermission("REQUEST.ONLINE.CREATE")) {
+          await request!.updateRequestAll();
+          await request!.getRequestDetail();
+          await request!.setRequestItemsAttachedFiles();
+          if (request.requestItems.length && request.requestItems[0].id) {
+            await request.requestItems[0].getAttachedFiles(request.id || "");
+          }
+        }
       } else {
-        await request!.createRequest();
+        if (hasPermission("REQUEST.ONLINE.CREATE") && !request.id) {
+          //exit
+        } else {
+          await request!.createRequest();
+        }
       }
       await this.setState({ step: 2 });
     } catch (e) {

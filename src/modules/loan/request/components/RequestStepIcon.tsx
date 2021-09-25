@@ -131,16 +131,11 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
         <List.Item>
           {
             hasPermission("REQUEST.ONLINE.CREATE") ?
-              // <ClickLinkModal
-              //   trigger={
-              //     <Button fluid color="brown" onClick={this.onSave} disabled={isInvalid}>
-              //       {t("module.loan.requestDetail.saveRequestOnline")}
-              //     </Button>
-              //   }
-              // />
-              <Button fluid color="brown" onClick={this.onSave}>
-                {t("module.loan.requestDetail.saveRequestOnline")}
-              </Button>
+
+              // <Button fluid color="brown" onClick={this.onSave}>
+              //   {t("module.loan.requestDetail.saveRequestOnline")}
+              // </Button>
+              null
               :
               <Button fluid color="blue" basic={!hideSubmitButton} onClick={this.onSave}>
                 {t("module.loan.requestDetail.save")}
@@ -174,7 +169,7 @@ class RequestStepIcon extends React.Component<IRequestStepIcon> {
     if (this.props.step === 3) {
       return this.props.viewMode ? null : this.renderLastStepButton();
     } else {
-      return hasPermission("REQUEST.ONLINE.CREATE") ? this.renderNextStepSubmitButton() : this.renderNextStepButton();
+      return hasPermission("REQUEST.ONLINE.CREATE") && !this.props.viewMode ? this.renderNextStepSubmitButton() : this.renderNextStepButton();
     }
   }
 
