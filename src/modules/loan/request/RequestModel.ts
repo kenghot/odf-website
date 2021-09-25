@@ -174,6 +174,25 @@ export const RequestItemModel = types
     ) {
       try {
         profile.setField({ fieldname: "loading", value: true });
+        const numAge = self.borrower.ageDisplay('');
+        if (numAge > 80) {
+          self.borrower.attachedFiles.forEach((att: IAttachedFileModel) => {
+            self.borrower.attachedFiles[3].setField({
+              fieldname: "isSend",
+              value: "true"
+            });
+          });
+        }
+        if (hasPermission("REQUEST.ONLINE.CREATE")) {
+          profile.attachedFiles.forEach((att: IAttachedFileModel, index: number) => {
+            if (profile.attachedFiles[index].file.size) {
+              profile.attachedFiles[index].setField({
+                fieldname: "isSend",
+                value: "true"
+              });
+            }
+          });
+        }
         const body: any = {};
         profile.attachedFiles.forEach((att: IAttachedFileModel) => {
           att.refId = self.id;
@@ -1578,6 +1597,15 @@ export const RequestModel = types
           item.borrower.setField({
             fieldname: "attachedFiles",
             value: BORROWER
+          });
+        }
+        const numAge = item.borrower.ageDisplay('');
+        if (numAge > 80) {
+          item.borrower.attachedFiles.forEach((att: IAttachedFileModel) => {
+            item.borrower.attachedFiles[3].setField({
+              fieldname: "isSend",
+              value: "true"
+            });
           });
         }
         if (
