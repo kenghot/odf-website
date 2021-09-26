@@ -165,7 +165,9 @@ export const DonationAllowanceListModel = types
     }),
     printThankyouLetters: flow(function* (
       eSignature: boolean,
-      fileType: string
+      fileType: string,
+      dateDoc: string,
+      numberStartDoc: string
     ) {
       try {
         self.setField({ fieldname: "loading", value: true });
@@ -176,6 +178,8 @@ export const DonationAllowanceListModel = types
             ids: self.donation_list_id_check.join(","),
             fileType,
             eSignature,
+            dateDoc,
+            numberStartDoc,
           },
           "template_thankyou",
           fileType
@@ -192,6 +196,7 @@ export const DonationAllowanceListModel = types
       addressType: string,
       fileType: string,
       isReport: boolean,
+      commonAddress: boolean,
       envelopSize: string
     ) {
       try {
@@ -205,6 +210,7 @@ export const DonationAllowanceListModel = types
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
+            commonAddress,
           },
           "template_envelop",
           isReport ? undefined : fileType
