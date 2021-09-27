@@ -224,6 +224,7 @@ export const AccountReceivableTransactionsModel = types
     paymentReferenceNo: customtypes.optional(types.string, ""),
     paidDate: customtypes.optional(types.string, ""),
     paidAmount: customtypes.optional(types.string, ""),
+    oldPaidAmount: customtypes.optional(types.string, ""),
     outstandingDebtBalance: customtypes.optional(types.string, ""),
     status: customtypes.optional(types.string, ""),
     error: types.optional(ErrorModel, {}),
@@ -260,6 +261,7 @@ export const AccountReceivableTransactionsModel = types
           paymentMethod: self.paymentMethod,
           paidAmount: self.paidAmount,
           paymentReferenceNo: self.paymentReferenceNo,
+          outstandingDebtBalance: self.outstandingDebtBalance ? self.outstandingDebtBalance : "0.00"
         };
         const result: any = yield AccountReceivableTransactions.create(body);
         self.setAllField(result.data);
@@ -281,6 +283,7 @@ export const AccountReceivableTransactionsModel = types
           paymentMethod: self.paymentMethod,
           paidAmount: self.paidAmount,
           paymentReferenceNo: self.paymentReferenceNo,
+          outstandingDebtBalance: self.outstandingDebtBalance ? self.outstandingDebtBalance : "0.00"
         };
         const result: any = yield AccountReceivableTransactions.update(
           body,
@@ -510,6 +513,8 @@ export const AccountReceivableModel = types
           installmentTimes: self.installmentTimes,
           installmentFirstDate: self.installmentFirstDate,
           installmentLastDate: self.installmentLastDate,
+          lastPaymentDate: self.lastPaymentDate,
+          outstandingDebtBalance: self.outstandingDebtBalance,
           name: self.name,
         };
         const result: any = yield AccountReceivable.update(

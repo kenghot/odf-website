@@ -16,6 +16,7 @@ import {
   IAccountReceivableModel,
   IAccountReceivableTransactionsModel,
 } from "../modules/accountReceivable/AccountReceivableModel";
+import moment from "moment";
 
 interface IAccountReceivableTransactionModal extends WithTranslation {
   trigger?: any;
@@ -45,12 +46,15 @@ class AccountReceivableTransactionModal extends React.Component<IAccountReceivab
       this.arTransactionsItem.setAllField(
         this.props.arTransactionsItem.arTransactionsJSON
       );
+      this.arTransactionsItem.setField({
+        fieldname: "oldPaidAmount"
+        , value: this.arTransactionsItem.paidAmount
+      });
     }
   };
   public render() {
     const { trigger, t } = this.props;
     const { open } = this.state;
-
     return (
       <Modal
         trigger={trigger}
@@ -188,14 +192,37 @@ class AccountReceivableTransactionModal extends React.Component<IAccountReceivab
   };
 
   private onUpdate = async () => {
-    const { arTransactionsItem } = this.props;
+    const { accountReceivable, arTransactionsItem } = this.props;
     try {
+      const outstandingDebtBalance = parseFloat(accountReceivable.outstandingDebtBalance);
+      const paidAmount = parseFloat(this.arTransactionsItem.paidAmount);
+      const oldPaidAmount = parseFloat(this.arTransactionsItem.oldPaidAmount);
+      const totaloutstandingDebtBalance = (outstandingDebtBalance + oldPaidAmount) - paidAmount;
+      this.arTransactionsItem.setField({
+        fieldname: "outstandingDebtBalance"
+        , value: totaloutstandingDebtBalance.toString()
+      });
+      //AR beer27092021
+      accountReceivable.setField({
+        fieldname: "installmentLastAmount"
+        , value: paidAmount.toString()
+      });
+      accountReceivable.setField({
+        fieldname: "outstandingDebtBalance"
+        , value: totaloutstandingDebtBalance.toString()
+      });
+      accountReceivable.setField({
+        fieldname: "lastPaymentDate"
+        , value: moment(this.arTransactionsItem.paidDate).format("YYYY-MM-DD")
+      });
       await this.arTransactionsItem.updateArTransaction();
       if (arTransactionsItem) {
         await arTransactionsItem.setAllField(
           this.arTransactionsItem.arTransactionsJSON
         );
       }
+      await accountReceivable.updateAccountReceivable();
+      await accountReceivable.getAccountReceivableDetail();
       this.close();
     } catch (e) {
       console.log(e);
@@ -204,7 +231,28 @@ class AccountReceivableTransactionModal extends React.Component<IAccountReceivab
   private onCreate = async () => {
     const { accountReceivable } = this.props;
     try {
+      const outstandingDebtBalance = parseFloat(accountReceivable.outstandingDebtBalance);
+      const paidAmount = parseFloat(this.arTransactionsItem.paidAmount);
+      const totaloutstandingDebtBalance = outstandingDebtBalance - paidAmount;
+      this.arTransactionsItem.setField({
+        fieldname: "outstandingDebtBalance"
+        , value: totaloutstandingDebtBalance.toString()
+      });
+      //AR beer27092021
+      accountReceivable.setField({
+        fieldname: "installmentLastAmount"
+        , value: paidAmount.toString()
+      });
+      accountReceivable.setField({
+        fieldname: "outstandingDebtBalance"
+        , value: totaloutstandingDebtBalance.toString()
+      });
+      accountReceivable.setField({
+        fieldname: "lastPaymentDate"
+        , value: moment(this.arTransactionsItem.paidDate).format("YYYY-MM-DD")
+      });
       await this.arTransactionsItem.createArTransaction(accountReceivable.id);
+      await accountReceivable.updateAccountReceivable();
       await accountReceivable.getAccountReceivableDetail();
       await this.close();
     } catch (e) {

@@ -19,16 +19,18 @@ import {
   IAccountReceivableModel,
   IAccountReceivableTransactionsModel,
 } from "../AccountReceivableModel";
+import { MessageModel } from "../../../components/common/message";
 
 interface IAccountReceivableTransactionTable
   extends WithTranslation,
-    RouteComponentProps {
+  RouteComponentProps {
   accountReceivable: IAccountReceivableModel;
   appStore?: IAppModel;
 }
 @inject("appStore")
 @observer
 class AccountReceivableTransactionTable extends React.Component<IAccountReceivableTransactionTable> {
+  private alertMessageObj = MessageModel.create({});
   public render() {
     const { t, accountReceivable } = this.props;
     return (
@@ -71,6 +73,16 @@ class AccountReceivableTransactionTable extends React.Component<IAccountReceivab
           <Table.HeaderCell textAlign="center">
             {t(
               "module.accountReceivable.accountReceivableTransactionTable.paymentDate"
+            )}
+          </Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">
+            {t(
+              "module.accountReceivable.accountReceivableTransactionTable.paymentCreateName"
+            )}
+          </Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">
+            {t(
+              "module.accountReceivable.accountReceivableTransactionTable.paymentUpdateName"
             )}
           </Table.HeaderCell>
           <Table.HeaderCell textAlign="center">
@@ -131,6 +143,12 @@ class AccountReceivableTransactionTable extends React.Component<IAccountReceivab
                     {this.checkEmptyText(
                       date_display_CE_TO_BE(data.createdDate, true)
                     )}
+                  </Table.Cell>
+                  <Table.Cell textAlign="center">
+                    {this.checkEmptyText(data.createdByName)}
+                  </Table.Cell>
+                  <Table.Cell textAlign="center">
+                    {this.checkEmptyText(data.updatedByName)}
                   </Table.Cell>
                   <Table.Cell>
                     {this.checkEmptyText(
@@ -217,10 +235,19 @@ class AccountReceivableTransactionTable extends React.Component<IAccountReceivab
     const { t, accountReceivable } = this.props;
     try {
       await item.delete_data();
-      // this.alertMessageObj.setAlertMessage(
-      //   t("module.donation.DonationElderlyLivingListTable.alertMessage1"),
-      //   t("module.donation.DonationElderlyLivingListTable.alertMessage2")
-      // );
+      this.alertMessageObj.setAlertMessage(
+        t("module.donation.DonationElderlyLivingListTable.alertMessage1"),
+        t("module.donation.DonationElderlyLivingListTable.alertMessage2")
+      );
+      const outstandingDebtBalance = parseFloat(accountReceivable.outstandingDebtBalance);
+      const paidAmount = parseFloat(item.paidAmount);
+      const totaloutstandingDebtBalance = outstandingDebtBalance + paidAmount;
+      //AR beer27092021
+      accountReceivable.setField({
+        fieldname: "outstandingDebtBalance"
+        , value: totaloutstandingDebtBalance.toString()
+      });
+      await accountReceivable.updateAccountReceivable();
       await accountReceivable.getAccountReceivableDetail();
     } catch (e) {
       throw e;
