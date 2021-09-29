@@ -442,8 +442,8 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
         `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 20, true)}`
       );
       epos.setTextLeft();
-      epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`);
-      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20)}`);
+      epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 40)}`);
+      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 40)}`);
       break;
     case "CHECK":
       epos.printThai4Pass(
