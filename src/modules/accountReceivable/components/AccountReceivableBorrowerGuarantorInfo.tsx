@@ -113,14 +113,14 @@ IAccountReceivableBorrowerGuarantorInfo
       ),
       render: () => (
         <Tab.Pane>
-          {/* <AccountReceivableGuarantorInfo
+          <AccountReceivableGuarantorInfo
             accountReceivable={accountReceivable}
             id={accountReceivable.id}
             subDistrict={accountReceivable.guarantorContactAddress.subDistrict}
             district={accountReceivable.guarantorContactAddress.district}
             province={accountReceivable.guarantorContactAddress.province}
             editMode={editMode}
-          /> */}
+          />
         </Tab.Pane>
       )
     });

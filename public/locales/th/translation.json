@@ -1484,6 +1484,8 @@
         "loanPaymentHistory": "ประวัติการชำระเงินกู้",
         "time": "ครั้งที่",
         "paymentDate": "วันที่ทำรายการ",
+        "paymentCreateName": "ผู้สร้างรายการ",
+        "paymentUpdateName": "ผู้อัพเดตรายการ",
         "paymentType": "ช่องทางการชำระ",
         "paymentMethods": "วิธีการชำระ",
         "payments": "ยอดชำระ",

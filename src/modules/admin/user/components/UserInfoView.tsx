@@ -69,7 +69,7 @@ class UserInfoView extends React.Component<IUserInfoView> {
           />
           <FormDisplay
             title={t("module.admin.userInfoForm.position")}
-            value={user.organization.agreementAuthorizedPosition || "-"}
+            value={user.position || "-"}
           />
           <FormDisplay
             title={t("module.admin.userInfoForm.email")}

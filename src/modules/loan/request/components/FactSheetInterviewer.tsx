@@ -100,7 +100,7 @@ class FactSheetInterviewer extends Component<IFactSheetInterviewer> {
               />
             </Segment>
           </Form.Field>
-          {request!.status !== "DN" ? (
+          {request!.status !== "DN" && request!.status !== "DF" && request!.status !== "DFO" ? (
             <Button floated="right" color="blue" onClick={this.updatrForm}>
               {t("module.loan.factSheetInterviewer.memoStaffComments")}
             </Button>

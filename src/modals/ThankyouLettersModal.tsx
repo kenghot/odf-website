@@ -2,10 +2,11 @@ import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Button, Form, Header, Modal, Radio, Segment } from "semantic-ui-react";
 import { Loading } from "../components/common/loading";
+import { CurrencyInput, DateInput } from "../components/common/input";
 
 interface IThankyouLettersModal extends WithTranslation {
   trigger: any;
-  onConfirm: (eSignature: boolean, fileType: string) => void;
+  onConfirm: (eSignature: boolean, fileType: string, dateDoc: string, numberStartDoc: string) => void;
   disabled?: boolean;
 }
 
@@ -16,6 +17,8 @@ class ThankyouLettersModal extends React.Component<IThankyouLettersModal> {
     loading: false,
     fileType: "pdf",
     eSignature: false,
+    dateDoc: "",
+    numberStartDoc: "",
   };
   public componentDidMount() {
     this._isMounted = true;
@@ -101,6 +104,31 @@ class ThankyouLettersModal extends React.Component<IThankyouLettersModal> {
                 </Form.Group>
               </Segment>
             </Form.Field>
+            <Form.Field>
+              <label>{t("จัดการข้อมูลหนังสือขอบคุณ")}</label>
+              <Segment>
+                <Form.Group>
+                  <Form.Field
+                    label={"วันที่หนังสือ"}
+                    control={DateInput}
+                    value={this.state.dateDoc || undefined}
+                    fieldName="docDate"
+                    id={"docDate"}
+                    onChangeInputField={this.onChangeInputField}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Input
+                    fluid
+                    label={t("เลขที่หนังสือเริ่มต้น")}
+                    onChange={(event, data) =>
+                      this.setState({ numberStartDoc: data.value })
+                    }
+                    value={this.state.numberStartDoc || undefined}
+                  />
+                </Form.Group>
+              </Segment>
+            </Form.Field>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -123,7 +151,7 @@ class ThankyouLettersModal extends React.Component<IThankyouLettersModal> {
     const { onConfirm } = this.props;
     try {
       this.setState({ loading: true });
-      await onConfirm(this.state.eSignature, this.state.fileType);
+      await onConfirm(this.state.eSignature, this.state.fileType, this.state.dateDoc, this.state.numberStartDoc);
       this.close();
     } catch (e) {
       console.log(e);
@@ -131,6 +159,9 @@ class ThankyouLettersModal extends React.Component<IThankyouLettersModal> {
     } finally {
       this.setState({ loading: false });
     }
+  };
+  private onChangeInputField = (fieldname: string, value: any) => {
+    this.setState({ dateDoc: value });
   };
 }
 

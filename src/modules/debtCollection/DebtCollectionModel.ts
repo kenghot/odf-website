@@ -1202,6 +1202,7 @@ export const DebtCollectionModel = types
     printEnvelops: flow(function* (addressType: string,
       fileType: string,
       isReport: boolean,
+      commonAddress: boolean,
       envelopSize: string) {
       try {
         self.setField({ fieldname: "loading", value: true });
@@ -1233,6 +1234,7 @@ export const DebtCollectionModel = types
     printEnvelopsGuarantor: flow(function* (addressType: string,
       fileType: string,
       isReport: boolean,
+      commonAddress: boolean,
       envelopSize: string) {
       try {
         self.setField({ fieldname: "loading", value: true });

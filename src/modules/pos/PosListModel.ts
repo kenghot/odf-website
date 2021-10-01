@@ -77,7 +77,7 @@ export const PosListModel = types
     }),
     load_data_by_org: flow(function* (organizationId: string) {
       try {
-        const  body = {
+        const body = {
           posName: self.filterPosName,
           organizationId,
         };

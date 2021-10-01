@@ -275,6 +275,7 @@ const printSignature = (titile: string, name?: string) => {
 };
 
 const printLogo = () => {
+  console.log('printLogo')
   epos.printer.addTextAlign(epos.printer.ALIGN_CENTER);
   const { garuda_logo } = IMAGES;
   const canvas = document.createElement("canvas") as any;
@@ -296,6 +297,7 @@ const printLogo = () => {
 
 };
 const printFooterLogo = () => {
+  console.log('printFooterLogo')
   epos.printer.addTextAlign(epos.printer.ALIGN_CENTER);
   const { odf_w_text_logo } = IMAGES;
   const canvas = document.createElement("canvas") as any;
@@ -440,13 +442,13 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
         `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 20, true)}`
       );
       epos.setTextLeft();
-      epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 20)}`);
-      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 20)}`);
+      epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 40)}`);
+      epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 40)}`);
       break;
     case "CHECK":
       epos.printThai4Pass(
-        `${mainCharLabel(`${appStore.enumItemLabel("officePaymentMethod", "CHECK")} `, 20)}` +
-        `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 20, true)}`
+        `${mainCharLabel(`${appStore.enumItemLabel("officePaymentMethod", "CHECK")} `, 40)}` +
+        `${mainCharLabel(`${currency(receipt.paidAmount, 2)}`, 40, true)}`
       );
 
       const checkBankBranch = calMainChar(
@@ -465,13 +467,20 @@ const paymentMethodType = (appStore: IAppModel, receipt: IReceiptModel) => {
           )}`
         );
       }
-      epos.printThai4Pass(
-        `${mainCharLabel(
-          `เลขที่ ${receipt.paymentRefNo} ${`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`}`,
-          40,
-          true
-        )}`
-      );
+
+      const checkCHECKNo = calMainChar(`${receipt.paymentRefNo}`);
+      if (checkCHECKNo > 15) {
+        epos.printThai4Pass(`${mainCharLabel(`เลขที่ ${receipt.paymentRefNo}`, 40)}`);
+        epos.printThai4Pass(`${mainCharLabel(`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`, 40)}`);
+      } else {
+        epos.printThai4Pass(
+          `${mainCharLabel(
+            `เลขที่ ${receipt.paymentRefNo} ${`วันที่ ${date_display_CE_TO_BE(receipt.paidDate)}`}`,
+            40,
+            true
+          )}`
+        );
+      }
       break;
     default:
       epos.printThai4Pass(

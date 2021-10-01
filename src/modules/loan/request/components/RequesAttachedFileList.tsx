@@ -7,7 +7,9 @@ import {
   Grid,
   Icon,
   Popup,
-  Segment
+  Segment,
+  Message,
+  Header
 } from "semantic-ui-react";
 import { InputAttachedFiles } from "../../../../components/common";
 import { IAttachedFileModel } from "../../../../components/common/fileupload/AttachedFileModel";
@@ -37,6 +39,7 @@ class RequesAttachedFileList extends React.Component<IRequesAttachedFileList> {
     return (
       <Segment>
         <Loading active={loading || false} />
+        <Message color='red'> <Header as='h3'>กรุณาเซ็นชื่อและสำเนาถูกต้อง</Header></Message>
         {attachedFiles.map((item: IAttachedFileModel, index: number) => {
           return (
             <Grid columns={4} stackable key={index}>

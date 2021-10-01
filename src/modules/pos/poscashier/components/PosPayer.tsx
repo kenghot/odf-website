@@ -177,6 +177,7 @@ class PosPayer extends React.Component<IPosPayer> {
           "PD",
           appStore!
         );
+        console.log('PosPayer')
         //printออก2ใบใน1รายการ
         await printFromTemplate(
           pos,

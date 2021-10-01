@@ -24,10 +24,14 @@ class RequesFormHeader extends React.Component<IRequesFormHeader> {
   public render() {
     const { t, request, appStore, authStore } = this.props;
     if (hasPermission("REQUEST.ONLINE.CREATE")) {
-      request.setField({
-        fieldname: "organizationId",
-        value: authStore!.userProfile.organization.id ? authStore!.userProfile.organization.id : null
-      })
+      try {
+        request.setField({
+          fieldname: "organizationId",
+          value: authStore!.userProfile.organization.id ? authStore!.userProfile.organization.id : null
+        })
+      } catch {
+
+      }
       return (
         <Form.Group widths="equal">
           <FormDisplay

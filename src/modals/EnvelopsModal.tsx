@@ -18,6 +18,7 @@ interface IEnvelopsModal extends WithTranslation {
     addressType: string,
     fileType: string,
     isReport: boolean,
+    commonAddress: boolean,
     envelopSize: string
   ) => void;
   disabled?: boolean;
@@ -29,8 +30,9 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
     open: false,
     loading: false,
     isReport: false,
+    commonAddress: false,
     fileType: "pdf",
-    envelopSize: "",
+    envelopSize: "1",
     addressType: "idCardAddress",
   };
   public componentDidMount() {
@@ -104,6 +106,19 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
                     checked={this.state.addressType === "documentDelivery"}
                   />
                 </Form.Group>
+                <Form.Field>
+                  <label>{"กรณีพิมพ์หนึ่งซองที่อยู่เดียวกัน"}</label>
+                  <Segment>
+                    <Checkbox
+                      onChange={(event: any, data: any) =>
+                        this.setState({ commonAddress: data.checked })
+                      }
+                      id={`form-input-commonAddress`}
+                      checked={this.state.commonAddress}
+                      label={"ที่อยู่เดียวกัน"}
+                    />
+                  </Segment>
+                </Form.Field>
               </Segment>
             </Form.Field>
             <Form.Field>
@@ -172,6 +187,7 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
         this.state.addressType,
         this.state.fileType,
         this.state.isReport,
+        this.state.commonAddress,
         this.state.envelopSize
       );
       this.close();

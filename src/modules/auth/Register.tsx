@@ -156,7 +156,7 @@ class Register extends React.Component<IRegister> {
           <FormDisplay
             title={t(
               "page.loginPage.usernameBorrower"
-            )}
+            ) + "(" + t("หมายเลขบัตรประชาชน 13 หลัก") + ")"}
             value={authStore!.idCardNo}
           />
           {/* <ResetPasswordModal
@@ -210,13 +210,15 @@ class Register extends React.Component<IRegister> {
     const { authStore, onChangeStep } = this.props;
     try {
       await authStore!.checkUser();
-      authStore!.setField({
-        fieldname: "otpSms",
-        value: authStore!.isRandomOtpNumber
-      })
-      // console.log(authStore!.otpSms)
-      await authStore!.generatorOtpSmsSend();
-      onChangeStep("VerifyIdentityForm");
+      if (authStore!.idCardNo.length == 13) {
+        authStore!.setField({
+          fieldname: "otpSms",
+          value: authStore!.isRandomOtpNumber
+        })
+        //console.log(authStore!.otpSms)
+        await authStore!.generatorOtpSmsSend();
+        onChangeStep("VerifyIdentityForm");
+      }
     } catch (e) {
       console.log(e);
     }

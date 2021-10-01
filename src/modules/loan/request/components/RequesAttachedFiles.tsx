@@ -1,7 +1,7 @@
-import { observer } from "mobx-react";
+import { observer, inject } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Form, Menu, Tab } from "semantic-ui-react";
+import { Form, Menu, Tab, Button } from "semantic-ui-react";
 import { RequesAttachedFileList } from ".";
 import {
   AlertMessage,
@@ -10,6 +10,8 @@ import {
 } from "../../../../components/common";
 import { Loading } from "../../../../components/common/loading";
 import { IRequestItemModel, IRequestModel } from "../RequestModel";
+import { hasPermission } from "../../../../utils/render-by-permission";
+import { IAuthModel } from "../../../../modules/auth/AuthModel";
 
 interface IRequesAttachedFiles extends WithTranslation {
   request: IRequestModel;
@@ -17,7 +19,10 @@ interface IRequesAttachedFiles extends WithTranslation {
   readOnly?: boolean;
   hideButtonSubmit?: boolean;
   showButtonIsVerified?: boolean;
+  authStore?: IAuthModel;
+  calculateAgeDate?: string; // DDMMYYYY,
 }
+@inject("authStore")
 @observer
 class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
   public async componentDidMount() {
@@ -208,7 +213,7 @@ class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
                 requestItemId={item.id}
                 control={RequesAttachedFileList}
                 readOnly={readOnly}
-                hideButtonSubmit={hideButtonSubmit}
+                hideButtonSubmit={hasPermission("REQUEST.ONLINE.CREATE") ? true : hideButtonSubmit}
                 showButtonIsVerified={showButtonIsVerified}
                 attachedFiles={item.borrower.attachedFiles}
                 onSubmit={() =>
@@ -229,7 +234,7 @@ class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
                   requestItemId={item.id}
                   control={RequesAttachedFileList}
                   readOnly={readOnly}
-                  hideButtonSubmit={hideButtonSubmit}
+                  hideButtonSubmit={hasPermission("REQUEST.ONLINE.CREATE") ? true : hideButtonSubmit}
                   showButtonIsVerified={showButtonIsVerified}
                   attachedFiles={item.spouse.attachedFiles}
                   onSubmit={() =>
@@ -249,7 +254,7 @@ class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
                 requestItemId={item.id}
                 control={RequesAttachedFileList}
                 readOnly={readOnly}
-                hideButtonSubmit={hideButtonSubmit}
+                hideButtonSubmit={hasPermission("REQUEST.ONLINE.CREATE") ? true : hideButtonSubmit}
                 showButtonIsVerified={showButtonIsVerified}
                 attachedFiles={item.guarantor.attachedFiles}
                 onSubmit={() =>
@@ -270,7 +275,7 @@ class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
                   requestItemId={item.id}
                   control={RequesAttachedFileList}
                   readOnly={readOnly}
-                  hideButtonSubmit={hideButtonSubmit}
+                  hideButtonSubmit={hasPermission("REQUEST.ONLINE.CREATE") ? true : hideButtonSubmit}
                   showButtonIsVerified={showButtonIsVerified}
                   attachedFiles={item.guarantorSpouse.attachedFiles}
                   onSubmit={() =>
@@ -283,12 +288,153 @@ class RequesAttachedFiles extends React.Component<IRequesAttachedFiles> {
                   loading={item.guarantorSpouse.loading}
                 />
               ) : null}
+              {
+                hasPermission("REQUEST.ONLINE.CREATE") && !readOnly ?
+                  <Button
+                    fluid color="brown" onClick={this.onCreateRequestOnline}>
+                    {t("module.loan.requestDetail.saveRequestOnline")}
+                  </Button>
+                  :
+                  null
+              }
             </React.Fragment>
           );
-        })}
+        })
+        }
       </React.Fragment>
     );
   }
+  private onCreateRequestOnline = async () => {
+    const { request, authStore, calculateAgeDate } = this.props;
+    request.requestItems.map(async (item: IRequestItemModel, index: number) => {
+      if (!item.attachedFilesCheckFileAll && hasPermission("REQUEST.ONLINE.CREATE")) {
+        if (!item.borrower.attachedFiles[0].file.size
+          || !item.borrower.attachedFiles[1].file.size || !item.borrower.attachedFiles[6].file.size) {
+          item.error.setField({ fieldname: "tigger", value: true });
+          item.error.setField({ fieldname: "title", value: "โปรดแนบเอกสารผู้กู้" });
+          item.error.setField({ fieldname: "message", value: "โปรดแนบเอกสารผู้กู้ให้ครบและกดนำส่งเอกสาร" });
+        } else {
+          const numAge = item.borrower.ageDisplay(calculateAgeDate);
+          if (numAge > 80) {
+            if (!item.borrower.attachedFiles[3].file.size) {
+              item.error.setField({ fieldname: "tigger", value: true });
+              item.error.setField({ fieldname: "title", value: "โปรดแนบเอกสารผู้กู้ ใบรับรองแพทย์" });
+              item.error.setField({ fieldname: "message", value: "โปรดแนบเอกสาร กรณีผู้ยื่นคำร้องมีอายุ 80 ปีขึ้นไป ควรมีใบรับรองแพทย์" });
+              item.setField({ fieldname: "borrowerCheckFile", value: false });
+            } else {
+              item.setField({ fieldname: "borrowerCheckFile", value: true });
+            }
+          } else {
+            item.setField({ fieldname: "borrowerCheckFile", value: true });
+          }
+        }
+        if (item.borrower.marriageStatus == 1 && (!item.spouse.attachedFiles[0].file.size
+          || !item.spouse.attachedFiles[1].file.size || !item.spouse.attachedFiles[2].file.size || !item.spouse.attachedFiles[4].file.size)) {
+          item.error.setField({ fieldname: "tigger", value: true });
+          item.error.setField({ fieldname: "title", value: "โปรดแนบเอกสาร หนังสือยินยอมคู่สมรส,สำเนาบัตรประชาชน,สำเนาทะเบียนบ้าน,สำเนาใบสำคัญสมรส" });
+          item.error.setField({ fieldname: "message", value: "โปรดแนบเอกสารคู่สมรสของผู้กู้ ให้ครบและกดนำส่งเอกสาร" });
+        } else {
+          item.setField({ fieldname: "spouseCheckFile", value: true });
+        }
+        if ((item.borrower.marriageStatus == 3 || item.borrower.marriageStatus == 4) && (!item.spouse.attachedFiles[5].file.size
+          && !item.spouse.attachedFiles[6].file.size)) {
+          item.error.setField({ fieldname: "tigger", value: true });
+          item.error.setField({ fieldname: "title", value: "โปรดแนบเอกสาร สำเนาใบสำคัญหย่า หรือใบมรณะบัตร" });
+          item.error.setField({ fieldname: "message", value: "โปรดแนบเอกสารคู่สมรสของผู้กู้ให้ครบและกดนำส่งเอกสาร" });
+        } else {
+          item.setField({ fieldname: "spouseCheckFile", value: true });
+        }
+        if (item.borrower.marriageStatus == 0 && item.spouse.attachedFiles.length === 0) {
+          item.setField({ fieldname: "spouseCheckFile", value: true });
+        }
+        if (!item.guarantor.attachedFiles[0].file.size
+          || !item.guarantor.attachedFiles[1].file.size || !item.guarantor.attachedFiles[3].file.size) {
+          item.error.setField({ fieldname: "tigger", value: true });
+          item.error.setField({ fieldname: "title", value: "โปรดแนบเอกสารผู้ค้ำประกัน" });
+          item.error.setField({ fieldname: "message", value: "โปรดแนบเอกสารผู้ค้ำประกันให้ครบและกดนำส่งเอกสาร" });
+        } else {
+          item.setField({ fieldname: "guarantorCheckFile", value: true });
+        }
+        if (item.borrowerCheckFile && item.spouseCheckFile && item.guarantorCheckFile) {
+          item.setField({ fieldname: "attachedFilesCheckFileAll", value: true });
+        }
+      }
+
+      if (!request.id && item.attachedFilesCheckFileAll) {
+        await request.createRequestOnline();
+        await request.updateRequestAll();
+        await request.getRequestDetail();
+        await request.setRequestItemsAttachedFiles();
+        if (request.requestItems.length && request.requestItems[0].id) {
+          await request.requestItems[0].getAttachedFiles(request.id || "");
+        }
+        request.requestItems.map(async (itemResult: IRequestItemModel, index: number) => {
+          if (itemResult.borrower.attachedFiles.length > 0) {
+            for (let i = 0; i < itemResult.borrower.attachedFiles.length; i++) {
+              itemResult.borrower.attachedFiles[i].setField({
+                fieldname: "file",
+                value: item.borrower.attachedFiles[i].file
+              });
+            }
+          }
+          if (itemResult.spouse.attachedFiles.length > 0) {
+            for (let i = 0; i < itemResult.spouse.attachedFiles.length; i++) {
+              itemResult.spouse.attachedFiles[i].setField({
+                fieldname: "file",
+                value: item.spouse.attachedFiles[i].file
+              });
+            }
+          }
+          if (itemResult.guarantor.attachedFiles.length > 0) {
+            for (let i = 0; i < itemResult.guarantor.attachedFiles.length; i++) {
+              itemResult.guarantor.attachedFiles[i].setField({
+                fieldname: "file",
+                value: item.guarantor.attachedFiles[i].file
+              });
+            }
+          }
+          if (itemResult.guarantorSpouse.attachedFiles.length > 0) {
+            for (let i = 0; i < itemResult.guarantorSpouse.attachedFiles.length; i++) {
+              itemResult.guarantorSpouse.attachedFiles[i].setField({
+                fieldname: "file",
+                value: item.guarantorSpouse.attachedFiles[i].file
+              });
+            }
+          }
+          await itemResult.updateAttachedFiles(request.id || "", "borrower", itemResult.borrower);
+          await itemResult.updateAttachedFiles(request.id || "", "spouse", itemResult.spouse);
+          await itemResult.updateAttachedFiles(request.id || "", "guarantor", itemResult.guarantor);
+          await itemResult.updateAttachedFiles(request.id || "", "guarantorSpouse", itemResult.guarantorSpouse);
+          if (hasPermission("REQUEST.ONLINE.CREATE") && request.id_card == authStore!.userProfile.username && request.status == "DFO") {
+            try {
+              const smsApiUrl = `${process.env.REACT_APP_SMS_SERVICE_API}/odf_sms_api.php`;
+              const result: any = await fetch(`${smsApiUrl}?msisdn=${authStore!.userProfile.telephone}&message=เอกสารแบบร่างคำร้องออนไลน์ ได้บันทึกและส่งไปยังระบบกองทุนผู้สูงอายุเรียบร้อยแล้ว`);
+              const response: any = await result.json();
+              if (response.QUEUE.Status == "0") {
+                console.log("ส่ง SMS ไม่สำเร็จ โปรดตรวจสอบหมายเลขโทรศัพท์ หรือลองใหม่อีกครั้ง Error:" + response.QUEUE.Detail);
+              } else {
+                console.log("ส่ง SMS สำเร็จ");
+              }
+            } catch (e) {
+              console.log(e);
+              throw e;
+            }
+          }
+          if (hasPermission("REQUEST.ONLINE.CREATE")) {
+            request.setField({
+              fieldname: "successRequestOnline",
+              value: true
+            });
+          }
+        });
+      } else if (item.attachedFilesCheckFileAll) {
+        await item.updateAttachedFiles(request.id || "", "borrower", item.borrower);
+        await item.updateAttachedFiles(request.id || "", "spouse", item.spouse);
+        await item.updateAttachedFiles(request.id || "", "guarantor", item.guarantor);
+        await item.updateAttachedFiles(request.id || "", "guarantorSpouse", item.guarantorSpouse);
+      }
+    });
+  };
 }
 const styles: any = {
   container: {

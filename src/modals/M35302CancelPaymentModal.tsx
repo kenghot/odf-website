@@ -177,6 +177,7 @@ IM35302CancelPaymentModal
           "CL",
           appStore!
         );
+        console.log('CancelPaymentModal')
         //printออก2ใบใน1รายการ
         printedDatetime = await printFromTemplate(
           pos,
