@@ -41,11 +41,11 @@ interface IAgreementTable extends WithTranslation, RouteComponentProps {
 @inject("appStore")
 @observer
 class AgreementTable extends React.Component<IAgreementTable> {
-  public state = { open: false };
+  public state = { open: false ,isButtonDisabled: false};
   public open = () => this.setState({ open: true });
   public close = () => this.setState({ open: false });
 
-  public render() {
+    public render() {
     const { t } = this.props;
     return (
       <React.Fragment>
@@ -270,7 +270,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
                     "module.loan.agreementDetail.listOfContractsThatRequirePaymentVouchers"
                   )}
                 </Header>
-                <Form>
+                <Form onSubmit={this.onClickCreateVouchers}>
                   <Form.Field
                     required
                     control={DateInput}
@@ -283,7 +283,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
                     onChangeInputField={this.onChangeInputField}
                   />
                   {this.renderAgreementCheckList()}
-                  <Form.Button fluid color="purple" type="submit" onDoubleClick={this.onClickCreateVouchers}>
+                  <Form.Button fluid color="purple" type="submit" disabled={this.state.isButtonDisabled}>
                     {t(
                       "module.loan.agreementDetail.submitVoucherSubstituteReceipt"
                     )}
@@ -302,10 +302,16 @@ class AgreementTable extends React.Component<IAgreementTable> {
       fieldname: "documentDate",
       value: new Date().toISOString().substring(0, 10)
     });
+    this.setState({
+      isButtonDisabled: false
+    });
   };
   private onClickCreateVouchers = async () => {
     const { agreementListStore } = this.props;
     try {
+      this.setState({
+        isButtonDisabled: true
+      });
       await agreementListStore.createVouchersByIds();
       await agreementListStore.load_data();
     } catch (e) {
