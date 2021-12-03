@@ -12,6 +12,9 @@ import { FormDisplay } from "../../../components/common";
 import { date_display_CE_TO_BE } from "../../../utils";
 import { IAgreementItemModel } from "../../loan/agreement/AgreementModel";
 import { IAccountReceivableModel } from "../AccountReceivableModel";
+import {
+  ShwoGdxDataModal,
+} from "../../../modals";
 
 interface IAccountReceivableBorrowerInfo extends WithTranslation {
   accountReceivable: IAccountReceivableModel;
@@ -24,7 +27,7 @@ interface IAccountReceivableBorrowerInfo extends WithTranslation {
 
 @observer
 class AccountReceivableBorrowerInfo extends React.Component<
-  IAccountReceivableBorrowerInfo
+IAccountReceivableBorrowerInfo
 > {
   public borrowerAddress = LocationModel.create({});
   public _isMounted = false;
@@ -161,6 +164,8 @@ class AccountReceivableBorrowerInfo extends React.Component<
             />
           )}
           {editMode ? this.renderSaveButton() : null}
+          {this.renderButtonGdxData()}
+
         </Form>
       </Segment>
     );
@@ -187,6 +192,29 @@ class AccountReceivableBorrowerInfo extends React.Component<
         >
           {t("module.accountReceivable.accountReceivableDetail.save")}
         </Button>
+        <br />
+        <br />
+      </div>
+    );
+  }
+  private renderButtonGdxData() {
+    const { accountReceivable, t } = this.props;
+    return (
+      <div style={styles.marginTop}>
+        <ShwoGdxDataModal
+          accountReceivable={accountReceivable}
+          trigger={
+            <Button
+              color="grey"
+              floated="right"
+              type="button"
+              onClick={accountReceivable.getGdxBorrowers}
+            >
+              {t("module.accountReceivable.accountReceivableDetail.getGdxData")}
+
+            </Button>
+          }
+        />
         <br />
         <br />
       </div>

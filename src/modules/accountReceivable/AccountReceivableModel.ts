@@ -19,6 +19,7 @@ import { GuaranteeModel } from "../loan/guarantee/GuaranteeModel";
 import { IProfileModel } from "../share/profile/ProfileModel";
 import { AccountReceivable } from "./AccountReceivablesService";
 import { AccountReceivableTransactions } from "./AccountReceivableTransactionsService";
+import { fetchNoService } from "../../utils/request-noservice";
 
 export const DebtCollectionAcknowledgementModel = types
   .model("DebtCollectionAcknowledgementModel", {
@@ -406,6 +407,12 @@ export const AccountReceivableModel = types
     ),
     caseExpirationDate: customtypes.optional(types.string, ""),
     comments: types.optional(types.string, ""),
+    gdxFirstName: types.optional(types.string, ""),
+    gdxLastName: types.optional(types.string, ""),
+    gdxFullName: types.optional(types.string, ""),
+    gdxIdCardNo: types.optional(types.string, ""),
+    gdxBirthday: types.optional(types.string, ""),
+    gdxAddress: types.optional(types.string, ""),
     error: types.optional(ErrorModel, {}),
     loading: types.optional(types.boolean, false),
     alert: types.optional(MessageModel, {}),
@@ -478,6 +485,9 @@ export const AccountReceivableModel = types
         try {
           self.setField({ fieldname: "loading", value: true });
           const result: any = yield AccountReceivable.getById(self.id);
+          console.log(result.data)
+          console.log(result)
+
           self.setAllField(result.data);
           self.error.setField({ fieldname: "tigger", value: false });
         } catch (e) {
@@ -737,6 +747,55 @@ export const AccountReceivableModel = types
         }
       }
     }),
+    getGdxBorrowers: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const url = `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/get_dopa_borrowers.php`;
+        const idcardno = self.agreement.agreementItems[0] ? self.agreement.agreementItems[0].borrower.idCardNo : ''
+        const res: any = yield fetch(`${url}?idCardNo=${idcardno}`);
+        const result: any = yield res.json();
+        // console.log(result)
+        if (result) {
+          const data = result[0] ? result[0] : null;
+          self.setField({ fieldname: "gdxFullName", value: data[0] ? data[0].borrowerFirstname + '   ' + data[0].borrowerLastname : '' });
+          self.setField({ fieldname: "gdxIdCardNo", value: data[0] ? data[0].borrowerIdCardNo : '' });
+          const birthDate = self.agreement.agreementItems[0] ? self.agreement.agreementItems[0].borrower.birthDate : ''
+          self.setField({ fieldname: "gdxBirthday", value: data[0] ? birthDate : '' });
+          self.setField({ fieldname: "gdxAddress", value: data[0] ? data[0].dopa_address : '' });
+        }
+        self.error.setField({ fieldname: "tigger", value: false });
+        self.alert.setAlertMessage("", "");
+      } catch (e) {
+        self.error.setErrorMessage(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    getGdxGuarantors: flow(function* () {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const url = `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/get_dopa_guarantors.php`;
+        const idcardno = self.agreement.agreementItems[0] ? self.agreement.agreementItems[0].guarantor.idCardNo : ''
+        const res: any = yield fetch(`${url}?idCardNo=${idcardno}`);
+        const result: any = yield res.json();
+        // console.log(result)
+        if (result) {
+          const data = result[0] ? result[0] : null;
+          self.setField({ fieldname: "gdxFullName", value: data[0] ? data[0].guarantorFirstname + '   ' + data[0].guarantorLastname : '' });
+          self.setField({ fieldname: "gdxIdCardNo", value: data[0] ? data[0].guarantorIdCardNo : '' });
+          const birthDate = self.agreement.agreementItems[0] ? self.agreement.agreementItems[0].guarantor.birthDate : ''
+          self.setField({ fieldname: "gdxBirthday", value: data[0] ? birthDate : '' });
+          self.setField({ fieldname: "gdxAddress", value: data[0] ? data[0].dopa_address : '' });
+        }
+        self.error.setField({ fieldname: "tigger", value: false });
+        self.alert.setAlertMessage("", "");
+      } catch (e) {
+        self.error.setErrorMessage(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+
     resetAll: () => {
       applySnapshot(self, {});
     },

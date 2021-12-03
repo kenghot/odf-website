@@ -27,6 +27,12 @@ IAccountReceivableListPage
       fieldname: "pageHeader",
       value: "accountReceivable"
     });
+    if (!hasPermission("REQUEST.ONLINE.ACCESS")) {
+      this.props.searchAccountReceivableListStore!.setField({
+        fieldname: "filterOrganizationId",
+        value: this.props.authStore!.userProfile.organization.id ? this.props.authStore!.userProfile.organization.id : ''
+      });
+    }
     this.props.searchAccountReceivableListStore!.load_data();
   }
   public componentWillUnmount() {
