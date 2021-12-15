@@ -1893,7 +1893,7 @@
         "refuse": "ปฏิเสธ"
       },
       "debtCollectionSueForm": {
-        "courtFilingDate": "วันที่ยื่นฟ้องศาล",
+        "courtFilingDate": "วันที่ส่งเรื่องให้พนักงานอัยการฟ้องร้องดำเนินคดี",
         "judgmentDate": "วันที่พิพากษา",
         "principle": "จำนวนเงินต้นที่ส่งฟ้อง",
         "interestStartingDate": "วันที่เริ่มคิดดอกเบี้ย",

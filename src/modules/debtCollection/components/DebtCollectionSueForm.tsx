@@ -73,7 +73,7 @@ class DebtCollectionSueForm extends React.Component<IDebtCollectionSueForm> {
             fieldName="submitDate"
             onChangeInputField={this.onChangeInputField}
           />
-          <Form.Field
+          {/* <Form.Field
             label={t(
               "module.debtCollection.debtCollectionSueForm.judgmentDate"
             )}
@@ -81,7 +81,7 @@ class DebtCollectionSueForm extends React.Component<IDebtCollectionSueForm> {
             value={debtSue.judgementDate || undefined}
             fieldName="judgementDate"
             onChangeInputField={this.onChangeInputField}
-          />
+          /> */}
           <Form.Field
             label={t("module.debtCollection.debtCollectionSueForm.principle")}
             control={CurrencyInput}
@@ -93,7 +93,7 @@ class DebtCollectionSueForm extends React.Component<IDebtCollectionSueForm> {
           />
         </Form.Group>
         <Form.Group widths={"equal"}>
-          <Form.Field
+          {/* <Form.Field
             label={t(
               "module.debtCollection.debtCollectionSueForm.interestStartingDate"
             )}
@@ -123,7 +123,7 @@ class DebtCollectionSueForm extends React.Component<IDebtCollectionSueForm> {
             fieldName={"interestRate"}
             onBlur={onCalculateInterestRate}
             labelText={"%"}
-          />
+          /> */}
         </Form.Group>
         {hidePrintButton ? null : (
           <Grid columns={"1"}>

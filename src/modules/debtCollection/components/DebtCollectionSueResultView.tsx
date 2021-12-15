@@ -48,6 +48,12 @@ class DebtCollectionSueResultView extends React.Component<
     return (
       <React.Fragment>
         <Form.Group widths={"equal"}>
+        <FormDisplay
+            title={t(
+              "module.debtCollection.debtCollectionSueForm.judgmentDate"
+            )}
+            value={date_display_CE_TO_BE(debtSue.judgementDate)}
+          />
           <FormDisplay
             title={t(
               "module.debtCollection.debtCollectionSueForm.interestStartingDate"
