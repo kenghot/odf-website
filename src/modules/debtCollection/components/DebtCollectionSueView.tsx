@@ -70,19 +70,19 @@ class DebtCollectionSueView extends React.Component<IDebtCollectionSueView> {
             )}
             value={date_display_CE_TO_BE(debtSue.submitDate)}
           />
-          <FormDisplay
+          {/* <FormDisplay
             title={t(
               "module.debtCollection.debtCollectionSueForm.judgmentDate"
             )}
             value={date_display_CE_TO_BE(debtSue.judgementDate)}
-          />
+          /> */}
           <FormDisplay
             title={t("module.debtCollection.debtCollectionSueForm.principle")}
             value={debtSue.debtAmount || "-"}
           />
         </Form.Group>
         <Form.Group widths={"equal"}>
-          <FormDisplay
+          {/* <FormDisplay
             title={t(
               "module.debtCollection.debtCollectionSueForm.interestStartingDate"
             )}
@@ -97,7 +97,7 @@ class DebtCollectionSueView extends React.Component<IDebtCollectionSueView> {
           <FormDisplay
             title={t("module.debtCollection.debtCollectionSueForm.interest")}
             value={debtSue.interestRate || "-"}
-          />
+          /> */}
         </Form.Group>
         {hidePrintButton ? null : (
           <Grid columns={"1"}>

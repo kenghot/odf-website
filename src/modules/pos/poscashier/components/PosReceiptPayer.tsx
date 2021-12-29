@@ -197,6 +197,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
       }
       await connectPrinter(pos, previousReceipt);
       const printedTime = moment().format();
+      const paidDate = previousReceipt.paidDate ? previousReceipt.paidDate : moment().format();
       if (previousReceipt.status === "CL") {
         await previousReceipt.reprintReceiptPrintLog(printedTime, "CRP");
         await printFromTemplate(
@@ -204,7 +205,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           previousReceipt,
           "CL",
           appStore!,
-          printedTime
+          paidDate
         );
         console.log('PosReceiptPayer1')
         //printออก2ใบใน1รายการ
@@ -213,7 +214,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           previousReceipt,
           "CL",
           appStore!,
-          printedTime
+          paidDate
         );
       } else {
         await previousReceipt.reprintReceiptPrintLog(printedTime, "RP");
@@ -222,7 +223,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           previousReceipt,
           "PD",
           appStore!,
-          printedTime
+          paidDate
         );
         console.log('PosReceiptPayer2')
         //printออก2ใบใน1รายการ
@@ -231,7 +232,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
           previousReceipt,
           "PD",
           appStore!,
-          printedTime
+          paidDate
         );
       }
       await previousReceipt.getReceiptCashierDetail(pos.id);

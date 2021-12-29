@@ -52,6 +52,15 @@ class DebtCollectionSueResultForm extends React.Component<
     return (
       <React.Fragment>
         <Form.Group widths={"equal"}>
+        <Form.Field
+            label={t(
+              "module.debtCollection.debtCollectionSueForm.judgmentDate"
+            )}
+            control={DateInput}
+            value={debtSue.judgementDate || undefined}
+            fieldName="judgementDate"
+            onChangeInputField={this.onChangeInputField}
+          />
           <Form.Field
             label={t(
               "module.debtCollection.debtCollectionSueForm.interestStartingDate"

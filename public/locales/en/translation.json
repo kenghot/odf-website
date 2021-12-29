@@ -1394,6 +1394,7 @@
       "accountReceivableDetail": {
         "receivables": "Receivables",
         "guarantorInformation": "Guarantor information",
+        "getGdxData": "Government Data Exchange",
         "contractualLoanInfo": "Contractual loan information",
         "name": "Name",
         "iDCardNumber": "ID card number",

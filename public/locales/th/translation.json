@@ -435,6 +435,22 @@
       "baht": "บาท",
       "created": "สร้าง"
     },
+    "ShowGdxDataModal": {
+      "createdDate": "",
+      "type": "",
+      "header": "ข้อมูลกรมการปกครอง",
+      "paymentMethodPlaceholder": "",
+      "referenceNoPlaceholder": "",
+      "baht": "",
+      "created": "",
+      "name": "ชื่อ",
+      "iDCardNumber": "หมายเลขบัตรประชาชน",
+      "dateOfBirth": "วันเดือนปีเกิด",
+      "age": "อายุ",
+      "year": "{{year}} ปี",
+      "telephoneNumber": "หมายเลขโทรศัพท์",
+      "addressContacted": "ที่อยู่"
+    },
     "KTBTransactionModal": {
       "createdDate": "วันที่สร้าง",
       "type": "ประเภท"
@@ -1421,6 +1437,7 @@
       "accountReceivableDetail": {
         "receivables": "ข้อมูลลูกหนี้",
         "guarantorInformation": "ข้อมูลผู้ค้ำประกัน",
+        "getGdxData": "ข้อมูลกรมการปกครอง",
         "contractualLoanInfo": "ข้อมูลเงินกู้ตามสัญญา",
         "name": "ชื่อ",
         "iDCardNumber": "หมายเลขบัตรประชาชน",
@@ -1876,7 +1893,7 @@
         "refuse": "ปฏิเสธ"
       },
       "debtCollectionSueForm": {
-        "courtFilingDate": "วันที่ยื่นฟ้องศาล",
+        "courtFilingDate": "วันที่ส่งเรื่องให้พนักงานอัยการฟ้องร้องดำเนินคดี",
         "judgmentDate": "วันที่พิพากษา",
         "principle": "จำนวนเงินต้นที่ส่งฟ้อง",
         "interestStartingDate": "วันที่เริ่มคิดดอกเบี้ย",

@@ -33,3 +33,4 @@ export { default as AccountReceivableTransactionModal } from "./AccountReceivabl
 export { default as ThankyouLettersModal } from "./ThankyouLettersModal";
 export { default as EnvelopsModal } from "./EnvelopsModal";
 export { default as OwnerModal } from "./OwnerModal";
+export { default as ShwoGdxDataModal } from "./ShwoGdxDataModal";

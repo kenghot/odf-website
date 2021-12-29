@@ -216,10 +216,10 @@ class M241DebtAcknowledgementModal extends React.Component<
               </Form.Group>
               {this.debtAcknowledgementItem.isAcknowledge ? (
                 <React.Fragment>
-                  <Form.Field
+                  {/* <Form.Field
                     label={t("modal.M241DebtCollectionModal.isAcknowledge")}
                     error
-                  />
+                  /> */}
                   <br />
                 </React.Fragment>
               ) : null}

@@ -13,6 +13,9 @@ import { date_display_CE_TO_BE } from "../../../utils";
 import { currency } from "../../../utils/format-helper";
 import { IGuaranteeItemModel } from "../../loan/guarantee/GuaranteeModel";
 import { IAccountReceivableModel } from "../AccountReceivableModel";
+import {
+  ShwoGdxDataModal,
+} from "../../../modals";
 
 interface IAccountReceivableGuarantorInfo extends WithTranslation {
   accountReceivable: IAccountReceivableModel;
@@ -25,7 +28,7 @@ interface IAccountReceivableGuarantorInfo extends WithTranslation {
 
 @observer
 class AccountReceivableGuarantorInfo extends React.Component<
-  IAccountReceivableGuarantorInfo
+IAccountReceivableGuarantorInfo
 > {
   public guarantorAddress = LocationModel.create({});
   public _isMounted = false;
@@ -116,9 +119,8 @@ class AccountReceivableGuarantorInfo extends React.Component<
                         title={t(
                           "module.accountReceivable.accountReceivableDetail.occupation"
                         )}
-                        value={`${item.guarantorOccupation.name} ${
-                          item.guarantorOccupation.description ? "-" : ""
-                        } ${item.guarantorOccupation.description}`}
+                        value={`${item.guarantorOccupation.name} ${item.guarantorOccupation.description ? "-" : ""
+                          } ${item.guarantorOccupation.description}`}
                       />
                       <FormDisplay
                         title={t(
@@ -194,6 +196,8 @@ class AccountReceivableGuarantorInfo extends React.Component<
             />
           )}
           {editMode ? this.renderSaveButton() : null}
+          {this.renderButtonGdxData()}
+
         </Form>
       </Segment>
     );
@@ -220,6 +224,29 @@ class AccountReceivableGuarantorInfo extends React.Component<
         >
           {t("module.accountReceivable.accountReceivableDetail.save")}
         </Button>
+        <br />
+        <br />
+      </div>
+    );
+  }
+  private renderButtonGdxData() {
+    const { accountReceivable, t } = this.props;
+    return (
+      <div style={styles.marginTop}>
+        <ShwoGdxDataModal
+          accountReceivable={accountReceivable}
+          trigger={
+            <Button
+              color="grey"
+              floated="right"
+              type="button"
+              onClick={accountReceivable.getGdxGuarantors}
+            >
+              {t("module.accountReceivable.accountReceivableDetail.getGdxData")}
+
+            </Button>
+          }
+        />
         <br />
         <br />
       </div>
