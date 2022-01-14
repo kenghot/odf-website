@@ -197,7 +197,7 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
       }
       await connectPrinter(pos, previousReceipt);
       const printedTime = moment().format();
-      const paidDate = previousReceipt.paidDate ? previousReceipt.paidDate : moment().format();
+      const paidDate = previousReceipt.paidDate ? moment(previousReceipt.paidDate).format() : moment().format();
       if (previousReceipt.status === "CL") {
         await previousReceipt.reprintReceiptPrintLog(printedTime, "CRP");
         await printFromTemplate(

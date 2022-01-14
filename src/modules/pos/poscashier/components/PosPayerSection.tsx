@@ -72,9 +72,10 @@ class PosPayerSection extends React.Component<IPosPayerSection> {
               placeholder={t("component.idCardReader.prefix")}
               width={4}
               options={appStore!.enumItems("titleType")}
-              onChange={(event, data) =>
-                this.onChangeInputField("clientTitle", data.value)
-              }
+              onChange={(event, data) =>{
+                this.onChangeInputField("clientTitle", data.value);
+                this.onChangeClientNameField();
+              }}
               value={receipt.clientTitle}
             />
             <Form.Input
@@ -85,6 +86,7 @@ class PosPayerSection extends React.Component<IPosPayerSection> {
               value={receipt.clientFirstname}
               onChange={(event: any, data: any) => {
                 this.onChangeInputField("clientFirstname", data.value);
+                this.onChangeClientNameField();
               }}
             />
             <Form.Input
@@ -95,6 +97,7 @@ class PosPayerSection extends React.Component<IPosPayerSection> {
               value={receipt.clientLastname}
               onChange={(event: any, data: any) => {
                 this.onChangeInputField("clientLastname", data.value);
+                this.onChangeClientNameField();
               }}
             />
           </Form.Group>
@@ -197,6 +200,13 @@ class PosPayerSection extends React.Component<IPosPayerSection> {
   private onChangeInputField = (fieldname: string, value: any) => {
     const { receipt } = this.props;
     receipt.setField({ fieldname, value });
+  };
+  private onChangeClientNameField = () => {
+    const { receipt } = this.props;
+    const name = `${receipt.clientTitle || ""}${
+    receipt.clientFirstname || ""
+    }${" "}${receipt.clientLastname || ""}`;
+    receipt.setField({ fieldname: "clientName", value: name });
   };
 }
 

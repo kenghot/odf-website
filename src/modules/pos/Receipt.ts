@@ -59,10 +59,10 @@ export const printFromTemplate = async (
     if (recieptTempate === "CL") {
       epos.printThai4Pass(`ผู้ยกเลิก ${pos.lastestPosShift.onDutymanager.fullname}`);
     } else {
-      epos.printThai4Pass(`ผู้รับชำระ ${pos.lastestPosShift.onDutymanager.fullname}`);
+      epos.printThai4Pass(`ผู้รับชำระ ${pos.lastestPosShift.currentCashier.fullname}`);
     }
 
-    epos.printThai4Pass(`ผู้บันทึกรายการ ${pos.lastestPosShift.currentCashier.fullname}`);
+    epos.printThai4Pass(`ผู้บันทึกรายการ ${pos.lastestPosShift.onDutymanager.fullname}`);
     printFooterLogo()
     epos.submit();
     return printedDatetime;
