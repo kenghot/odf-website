@@ -25,6 +25,7 @@ import { IReceiptModel, ReceiptModel } from "../../../receipt/ReceiptModel";
 import { IPosModel } from "../../PosModel";
 import { connectPrinter, printFromTemplate } from "../../Receipt";
 import moment from "moment";
+import { hasPermission } from "../../../../utils/render-by-permission";
 
 interface IPosReceiptPayer extends WithTranslation {
   appStore?: IAppModel;
@@ -77,16 +78,18 @@ class PosReceiptPayer extends React.Component<IPosReceiptPayer> {
             <Grid columns="equal">
               <Grid.Row verticalAlign="middle">
                 <Grid.Column textAlign="right">
+                  { hasPermission("POS.RECEIPTS.CANCEL")?
                   <M35302CancelPaymentModal
-                    receiptList={receiptList}
-                    pos={pos}
-                    receipt={previousReceipt}
-                    trigger={
-                      <Button basic floated="left" color="red">
-                        {t("module.pos.posReceiptPayer.cancelPaymentButton")}
-                      </Button>
-                    }
-                  />
+                  receiptList={receiptList}
+                  pos={pos}
+                  receipt={previousReceipt}
+                  trigger={
+                    <Button basic floated="left" color="red">
+                      {t("module.pos.posReceiptPayer.cancelPaymentButton")}
+                    </Button>
+                  }
+                />
+                  :null}
                   <M372ReceiptEditModal
                     pos={pos}
                     receiptList={receiptList}
