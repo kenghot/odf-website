@@ -56,6 +56,36 @@ class DonationAllowanceFormCreate extends React.Component<IDonationAllowanceForm
         donationAllowance.error.setErrorMessage(errorMessage);
         throw errorMessage;
       }
+      if (!donationAllowance.donationDate) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "กรุณาระบุวันที่แจ้งความประสงค์บริจาค",
+          technical_stack: "",
+        };
+        donationAllowance.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (!donationAllowance.receiptDate) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "กรุณาระบุวันที่หน่วยงานรับเงินบริจาค",
+          technical_stack: "",
+        };
+        donationAllowance.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
+      if (!donationAllowance.paidAmount) {
+        const errorMessage = {
+          code: "",
+          name: "",
+          message: "กรุณาระบุจำนวนเงินที่บริจาค",
+          technical_stack: "",
+        };
+        donationAllowance.error.setErrorMessage(errorMessage);
+        throw errorMessage;
+      }
       await donationAllowance.createDonationAllowance();
 
       if (donationAllowance.id) {

@@ -47,6 +47,7 @@ class DonationInfoFormDetails extends React.Component<IDonationInfoFormDetails> 
           value={donationAllowance.receiptOrganization}
         />
         <Form.Field
+          required
           label={t("module.donation.DonationInfoFormDetails.donationDate")}
           control={DateInput}
           value={donationAllowance.donationDate || undefined}
@@ -55,6 +56,7 @@ class DonationInfoFormDetails extends React.Component<IDonationInfoFormDetails> 
           onChangeInputField={this.onChangeInputField}
         />
         <Form.Field
+          required
           label={t("module.donation.DonationInfoFormDetails.createdDate")}
           control={DateInput}
           value={donationAllowance.receiptDate || undefined}
@@ -63,6 +65,7 @@ class DonationInfoFormDetails extends React.Component<IDonationInfoFormDetails> 
           onChangeInputField={this.onChangeInputField}
         />
         <Form.Field
+          required
           label={t("module.donation.DonationInfoFormDetails.paidAmount")}
           fluid
           control={CurrencyInput}
