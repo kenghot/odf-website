@@ -170,10 +170,14 @@ const printBody = (receipt: IReceiptModel) => {
           `${mainCharLabel(`รหัสโครงการ ${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
-          receipt.paymentMethod === "TRANSFER"
-            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
-            : undefined
+          `${item.ref3}`,
+          `${item.ref4}`,
         );
+        if(receipt.paymentMethod === "TRANSFER"){
+          epos.printThai4Pass( receipt.paymentMethod === "TRANSFER"
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+          : "");
+        }
         // epos.printThai4Pass(
         //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
         // );
