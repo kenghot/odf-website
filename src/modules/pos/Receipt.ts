@@ -509,7 +509,15 @@ export const printReceipt = async (receipt: IReceiptModel, pos: IPosModel, appSt
         await receiptTemp.createReceiptPrintLog(printedDatetime, "CL");
       }
     } else {
-      printedDatetime = await printFromTemplate(pos, receiptTemp, "PD", appStore);
+      if(!receipt.receiptPrintLogs.length){
+        printedDatetime = await printFromTemplate(pos, receiptTemp, "PD", appStore);
+        printedDatetime = await printFromTemplate(pos, receiptTemp, "PD", appStore);
+      }else  if(receipt.receiptPrintLogs.length>0){
+        const printedDatetimeLog = receipt.receiptPrintLogs && receipt.receiptPrintLogs[0] && receipt.receiptPrintLogs[0].printedDatetime ? moment(receipt.receiptPrintLogs[0].printedDatetime).format() : moment().format()
+        await printFromTemplate(pos, receiptTemp, "PD", appStore,printedDatetimeLog);
+      }else{
+        printedDatetime = await printFromTemplate(pos, receiptTemp, "PD", appStore);
+      }
       if (receiptTemp.receiptPrintLogs.length) {
         await receiptTemp.createReceiptPrintLog(printedDatetime, "RP");
       } else {
