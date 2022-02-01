@@ -167,7 +167,7 @@ const printBody = (receipt: IReceiptModel) => {
       case "PR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`รหัสโครงการ ${item.ref1}`, 30)}`,
+          `${mainCharLabel(`เลขที่สัญญา ${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
           `${item.ref3}`,

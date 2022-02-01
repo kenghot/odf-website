@@ -196,7 +196,7 @@ class PosProject extends React.Component<IPosProject> {
     });
     this.receiptItem.setField({
       fieldname: "description1",
-      value: "รหัสโครงการ"
+      value: "เลขที่สัญญา"
     });
     this.receiptItem.setField({
       fieldname: "description2",
