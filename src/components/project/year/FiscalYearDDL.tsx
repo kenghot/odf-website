@@ -47,8 +47,9 @@ class FiscalYearDDL extends React.Component<IFiscalYearDDL> {
       .format("YYYY");
     let i = 1;
     const yearListOptions: any = [];
-    for (i = 20; i >= 0; i--) {
-      const year = Number.parseInt(currentBuddhistYear) - i;
+    const buddhistYear=Number.parseInt(currentBuddhistYear);
+    for (i = buddhistYear; i >= 2549; i--) {
+      const year =  i;
       yearListOptions.push({
         key: i.toString(),
         text: year.toString(),
