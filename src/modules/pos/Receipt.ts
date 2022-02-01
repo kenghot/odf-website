@@ -199,7 +199,7 @@ const printBody = (receipt: IReceiptModel) => {
       case "FR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`สำนักงานอัยการสูงสุด`, 30)}`,
+          `${mainCharLabel(`${item.ref3}`, 30)}`,
           `${mainCharLabel(`${item.description1} ` + `${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
