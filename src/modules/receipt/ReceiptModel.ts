@@ -462,6 +462,18 @@ export const ReceiptModel = types
               });
             }
           }
+          if (item.refType === "O") {
+            if (self.paymentMethod === "TRANSFER") {
+              item.setField({
+                fieldname: "ref3",
+                value: self.tempTransferDate,
+              });
+              item.setField({
+                fieldname: "ref4",
+                value: self.tempPaymentRefNo,
+              });
+            }
+          }
         }
         let body = { ...self };
         body = {

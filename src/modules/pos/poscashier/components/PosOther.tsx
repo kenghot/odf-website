@@ -38,7 +38,7 @@ class PosOther extends React.Component<IPosOther> {
             label={t("module.pos.posDonation.line1")}
             placeholder={t("module.pos.posDonation.placeholder")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
-              this.onChangeInputField("description1", data.value)
+              this.onChangeInputField("description1", calMainChar(data.value)>30 ? data.value.substring(0, 35):data.value)
             }
             value={this.receiptItem.description1}
           />
@@ -52,7 +52,7 @@ class PosOther extends React.Component<IPosOther> {
             label={t("module.pos.posDonation.line2")}
             placeholder={t("module.pos.posDonation.placeholder")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
-              this.onChangeInputField("description2", data.value)
+              this.onChangeInputField("description2", calMainChar(data.value)>40 ? data.value.substring(0, 45):data.value)
             }
             value={this.receiptItem.description2}
           />
@@ -66,7 +66,7 @@ class PosOther extends React.Component<IPosOther> {
             label={t("module.pos.posDonation.line3")}
             placeholder={t("module.pos.posDonation.placeholder")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
-              this.onChangeInputField("description3", data.value)
+              this.onChangeInputField("description3", calMainChar(data.value)>40 ? data.value.substring(0, 45):data.value)
             }
             value={this.receiptItem.description3}
           />
@@ -80,7 +80,7 @@ class PosOther extends React.Component<IPosOther> {
             label={t("module.pos.posDonation.line4")}
             placeholder={t("module.pos.posDonation.placeholder")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
-              this.onChangeInputField("description4", data.value)
+              this.onChangeInputField("description4", calMainChar(data.value)>40 ? data.value.substring(0, 45):data.value)
             }
             value={this.receiptItem.description4}
           />

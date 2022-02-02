@@ -96,7 +96,7 @@ const printHeader = (pos: IPosModel, receipt: IReceiptModel, printedDatetime: st
     epos.printThai4PassNo(`${mainCharLabel(`02`, 33, true)}`);
   } else if (receipt.receiptItems.length && receipt.receiptItems[0].refType === "AR") {
     epos.printThai4PassNo(`${mainCharLabel(`01`, 33, true)}`);
-  } else if (receipt.receiptItems.length && (receipt.receiptItems[0].refType === "PR" || receipt.receiptItems[0].refType === "LR" || receipt.receiptItems[0].refType === "FR")) {
+  } else if (receipt.receiptItems.length && (receipt.receiptItems[0].refType === "PR" || receipt.receiptItems[0].refType === "LR" || receipt.receiptItems[0].refType === "FR" || receipt.receiptItems[0].refType === "O")) {
     epos.printThai4PassNo(`${mainCharLabel(`03`, 33, true)}`);
   } else {
     // epos.printThai4PassNo(`${mainCharLabel(`00`, 33, true)}`);
@@ -146,7 +146,19 @@ const printBody = (receipt: IReceiptModel) => {
           true
         );
         if (receipt.paymentMethod === "TRANSFER") {
-          epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `);
+          // epos.printThai4Pass(`${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `);
+          if(calMainChar(item.description3)>14){
+            epos.printThai4Pass(item.description2 && item.description2!= ""
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}`, 40)} `
+            : "");
+            epos.printThai4Pass(item.description3 && item.description3!= ""
+          ? `${mainCharLabel(`${item.description3}`, 40)} `
+          : "");
+          }else{
+          epos.printThai4Pass(item.description2 && item.description2!= ""
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description2)}  ${item.description3}`, 40)} `
+          : "");
+          }
         }
 
         break;
@@ -159,10 +171,22 @@ const printBody = (receipt: IReceiptModel) => {
           //item.description2 ? `${mainCharLabel(`${item.description2}`, 30)} ` : undefined,
           //false,
           //true,
-          receipt.paymentMethod === "TRANSFER"
-            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
-            : undefined
+          undefined
         );
+        if(receipt.paymentMethod === "TRANSFER"){
+          if(calMainChar(item.description4)>14){
+            epos.printThai4Pass(item.description3 && item.description3!= ""
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}`, 40)} `
+            : "");
+            epos.printThai4Pass(item.description4 && item.description4!= ""
+          ? `${mainCharLabel(`${item.description4}`, 40)} `
+          : "");
+          }else{
+          epos.printThai4Pass(item.description3 && item.description3!= ""
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+          : "");
+          }
+        }
         break;
       case "PR":
         printItem(
@@ -174,9 +198,18 @@ const printBody = (receipt: IReceiptModel) => {
           `${item.ref4}`,
         );
         if(receipt.paymentMethod === "TRANSFER"){
-          epos.printThai4Pass( receipt.paymentMethod === "TRANSFER"
+          if(calMainChar(item.description4)>14){
+            epos.printThai4Pass(item.description3 && item.description3!= ""
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}`, 40)} `
+            : "");
+            epos.printThai4Pass(item.description4 && item.description4!= ""
+          ? `${mainCharLabel(`${item.description4}`, 40)} `
+          : "");
+          }else{
+          epos.printThai4Pass(item.description3 && item.description3!= ""
           ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
           : "");
+          }
         }
         // epos.printThai4Pass(
         //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
@@ -188,10 +221,22 @@ const printBody = (receipt: IReceiptModel) => {
           `${mainCharLabel(`${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
-          receipt.paymentMethod === "TRANSFER"
-            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
-            : undefined
+          undefined
         );
+        if(receipt.paymentMethod === "TRANSFER"){
+          if(calMainChar(item.description4)>14){
+            epos.printThai4Pass(item.description3 && item.description3!= ""
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}`, 40)} `
+            : "");
+            epos.printThai4Pass(item.description4 && item.description4!= ""
+          ? `${mainCharLabel(`${item.description4}`, 40)} `
+          : "");
+          }else{
+          epos.printThai4Pass(item.description3 && item.description3!= ""
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+          : "");
+          }
+        }
         // epos.printThai4Pass(
         //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
         // );
@@ -203,10 +248,22 @@ const printBody = (receipt: IReceiptModel) => {
           `${mainCharLabel(`${item.description1} ` + `${item.ref1}`, 30)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
-          receipt.paymentMethod === "TRANSFER"
-            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
-            : undefined
+          undefined
         );
+        if(receipt.paymentMethod === "TRANSFER"){
+          if(calMainChar(item.description4)>14){
+            epos.printThai4Pass(item.description3 && item.description3!= ""
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}`, 40)} `
+            : "");
+            epos.printThai4Pass(item.description4 && item.description4!= ""
+          ? `${mainCharLabel(`${item.description4}`, 40)} `
+          : "");
+          }else{
+          epos.printThai4Pass(item.description3 && item.description3!= ""
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
+          : "");
+          }
+        }
         // epos.printThai4Pass(
         //   `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.description3)}  ${item.description4}`, 40)} `
         // );
@@ -215,10 +272,24 @@ const printBody = (receipt: IReceiptModel) => {
         printItem(
           `${item.name}`,
           `${mainCharLabel(item.description1, 30)}` + `${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${mainCharLabel(item.description2, 30)}`,
-          `${mainCharLabel(item.description3, 30)}`,
-          item.description4.trim() ? `${mainCharLabel(item.description4, 30)}` : undefined
+          `${mainCharLabel(item.description2, 40)}`,
+          `${mainCharLabel(item.description3, 40)}`,
+          item.description4.trim() ? `${mainCharLabel(item.description4, 40)}` : undefined
         );
+        if(receipt.paymentMethod === "TRANSFER"){
+          if(calMainChar(item.ref4)>14){
+            epos.printThai4Pass(item.ref3 && item.ref3!= ""
+            ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.ref3)}`, 40)} `
+            : "");
+            epos.printThai4Pass(item.ref4 && item.ref4!= ""
+          ? `${mainCharLabel(`${item.ref4}`, 40)} `
+          : "");
+          }else{
+          epos.printThai4Pass(item.ref3 && item.ref3!= ""
+          ? `${mainCharLabel(`วันที่รับโอน ${date_display_CE_TO_BE(item.ref3)}  ${item.ref4}`, 40)} `
+          : "");
+          }
+        }
         break;
     }
   });
