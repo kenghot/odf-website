@@ -171,20 +171,20 @@ IM35302CancelPaymentModal
 
       let printedDatetime = moment().format();
       if (!this.state.confirmPrinter) {
-        printedDatetime = await printFromTemplate(
-          pos,
-          this.receiptTemp,
-          "CL",
-          appStore!
-        );
+        // printedDatetime = await printFromTemplate(
+        //   pos,
+        //   this.receiptTemp,
+        //   "CL",
+        //   appStore!
+        // );
         console.log('CancelPaymentModal')
         //printออก2ใบใน1รายการ
-        printedDatetime = await printFromTemplate(
-          pos,
-          this.receiptTemp,
-          "CL",
-          appStore!
-        );
+        // printedDatetime = await printFromTemplate(
+        //   pos,
+        //   this.receiptTemp,
+        //   "CL",
+        //   appStore!
+        // );
       }
       await this.receiptTemp.reprintReceiptPrintLog(printedDatetime, "CL");
       await receipt.setAllField(this.receiptTemp.receiptJSON);

@@ -46,7 +46,7 @@ class PosProject extends React.Component<IPosProject> {
             required
             fluid
             maxLength={
-              calMainChar(this.receiptItem.ref1) === 40
+              calMainChar(this.receiptItem.ref1) === 35
                 ? this.receiptItem.ref1.length
                 : ""
             }
@@ -60,16 +60,44 @@ class PosProject extends React.Component<IPosProject> {
           <Form.Input
             fluid
             maxLength={
-              calMainChar(this.receiptItem.ref2) === 40
+              calMainChar(this.receiptItem.ref2) === 35
                 ? this.receiptItem.ref2.length
                 : ""
             }
-            label={t("module.pos.posProject.name")}
+            label={t("ชื่อโครงการ บรรทัดที่1")}
             placeholder={t("module.pos.posProject.placeholderName")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
-              this.onChangeInputField("ref2", data.value)
+              this.onChangeInputField("ref2", calMainChar(data.value)>35 ? data.value.substring(0, 35):data.value )
             }
             value={this.receiptItem.ref2}
+          />
+          <Form.Input
+            fluid
+            maxLength={
+              calMainChar(this.receiptItem.ref3) === 40
+                ? this.receiptItem.ref3.length
+                : ""
+            }
+            label={t("ชื่อโครงการ บรรทัดที่2")}
+            placeholder={t("module.pos.posProject.placeholderName")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputField("ref3", calMainChar(data.value)>40 ? data.value.substring(0, 40):data.value )
+            }
+            value={this.receiptItem.ref3}
+          />
+          <Form.Input
+            fluid
+            maxLength={
+              calMainChar(this.receiptItem.ref4) === 40
+                ? this.receiptItem.ref4.length
+                : ""
+            }
+            label={t("ชื่อโครงการ บรรทัดที่3")}
+            placeholder={t("module.pos.posProject.placeholderName")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputField("ref4", calMainChar(data.value)>40 ? data.value.substring(0, 40):data.value )
+            }
+            value={this.receiptItem.ref4}
           />
           <Form.Field
             required
@@ -168,7 +196,7 @@ class PosProject extends React.Component<IPosProject> {
     });
     this.receiptItem.setField({
       fieldname: "description1",
-      value: "รหัสโครงการ"
+      value: "เลขที่สัญญา"
     });
     this.receiptItem.setField({
       fieldname: "description2",
