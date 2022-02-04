@@ -218,7 +218,7 @@ const printBody = (receipt: IReceiptModel) => {
       case "LR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.ref1}`, 30)}`,
+          `${mainCharLabel(`${item.ref1}`, 40)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
           `${item.description2} ` + `${item.ref2}`,
           undefined
@@ -244,11 +244,11 @@ const printBody = (receipt: IReceiptModel) => {
       case "FR":
         printItem(
           `${item.name}`,
-          `${mainCharLabel(`${item.ref3}`, 30)}`,
-          `${mainCharLabel(`${item.description1} ` + `${item.ref1}`, 30)}`,
+          `${mainCharLabel(`${item.ref3}`, 40)}`,
+          `${mainCharLabel(`${item.ref4}`, 40)}`,
+          `${mainCharLabel(`${item.description1} ` + `${item.ref1}`, 40)}`,
           //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${item.description2} ` + `${item.ref2}`,
-          undefined
+          `${item.description2} ` + `${item.ref2}`
         );
         if(receipt.paymentMethod === "TRANSFER"){
           if(calMainChar(item.description4)>14){
@@ -331,7 +331,12 @@ const printBodySummary = (
     }
     epos.setBigFont(false);
     epos.setTextCenter();
-    epos.printThai4Pass(`( ${convertFullMoney(+receipt.total)} )`);
+    if(calMainChar(`( ${convertFullMoney(+receipt.total)}  )`)>40){
+      epos.printThai4Pass((`( ${convertFullMoney(+receipt.total)} )`).substring(0,40));
+      epos.printThai4Pass((`( ${convertFullMoney(+receipt.total)} )`).substring(40,(`( ${convertFullMoney(+receipt.total)} )`).length));
+    }else{
+      epos.printThai4Pass(`( ${convertFullMoney(+receipt.total)} )`);
+    }
     epos.setTextRight();
     paymentMethodType(appStore, receipt);
     printSignature("ผู้รับเงิน", pos.lastestPosShift.currentCashier.fullname);
