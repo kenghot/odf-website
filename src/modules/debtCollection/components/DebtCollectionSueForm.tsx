@@ -125,7 +125,7 @@ class DebtCollectionSueForm extends React.Component<IDebtCollectionSueForm> {
             labelText={"%"}
           /> */}
         </Form.Group>
-        {hidePrintButton ? null : (
+        {/* {hidePrintButton ? null : (
           <Grid columns={"1"}>
             <Grid.Column textAlign={"right"}>
               <PermissionControl
@@ -150,7 +150,7 @@ class DebtCollectionSueForm extends React.Component<IDebtCollectionSueForm> {
               </PermissionControl>
             </Grid.Column>
           </Grid>
-        )}
+        )} */}
       </React.Fragment>
     );
   }

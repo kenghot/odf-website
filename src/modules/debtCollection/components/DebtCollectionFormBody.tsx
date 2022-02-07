@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Button, Header, Segment, Tab } from "semantic-ui-react";
+import { Button, Header, Segment, Tab,Grid,Icon } from "semantic-ui-react";
 import {
   DebtCollectionLetterTable,
   DebtCollectionMemoTable,
@@ -19,6 +19,10 @@ import { IAuthModel } from "../../auth/AuthModel";
 import { IDebtCollectionModel } from "../DebtCollectionModel";
 import DebtCollectionSueForm from "./DebtCollectionSueForm";
 import DebtCollectionSueView from "./DebtCollectionSueView";
+import {
+  NoPermissionMessage,
+  PermissionControl
+} from "../../../components/permission";
 
 interface IDebtCollectionFormBody extends WithTranslation {
   debtCollection: IDebtCollectionModel;
@@ -62,6 +66,14 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
         render: () => (
           <Tab.Pane>
             <Segment basic>{this.renderVisitTab()}</Segment>
+          </Tab.Pane>
+        )
+      },
+      {
+        menuItem: t("module.debtCollection.debtCollectionFormBody.makeContractCancel"),
+        render: () => (
+          <Tab.Pane>
+            <Segment basic> {this.renderDebtCollectionMakePrintCancel()}</Segment>
           </Tab.Pane>
         )
       },
@@ -383,6 +395,42 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
         />
       );
     }
+  }
+  private renderDebtCollectionMakePrintCancel() {
+    const { debtCollection, editMode,t } = this.props;
+    const debtSue = debtCollection.debtSue;
+    return (
+      <React.Fragment>
+          <Grid columns={"1"}>
+            <Grid.Column textAlign={"right"}>
+              <PermissionControl
+                codes={["DEBTCOLLECTION.LEGAL.PRINT.CANCELLETTER"]}
+              >
+                <Button color={"orange"} onClick={debtCollection.printCancelBorrower}>
+                  <Icon name="print" />
+                  {t(
+                    "module.debtCollection.debtCollectionSueForm.printDenounceTheBorrower"
+                  )}
+                </Button>
+              </PermissionControl>
+            </Grid.Column>
+          </Grid>
+          <Grid columns={"1"}>
+            <Grid.Column textAlign={"right"}>
+              <PermissionControl
+                codes={["DEBTCOLLECTION.LEGAL.PRINT.GUARANTORLETTER"]}
+              >
+                <Button color={"purple"} onClick={debtCollection.printCancelGurantor}>
+                  <Icon name="print" />
+                  {t(
+                    "module.debtCollection.debtCollectionSueForm.printDenounceTheGuarantor"
+                  )}
+                </Button>
+              </PermissionControl>
+            </Grid.Column>
+          </Grid>
+      </React.Fragment>
+    );
   }
 
   private renderDebtCollectionSueResult() {

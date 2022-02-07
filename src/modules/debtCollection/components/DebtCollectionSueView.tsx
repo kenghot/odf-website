@@ -99,7 +99,7 @@ class DebtCollectionSueView extends React.Component<IDebtCollectionSueView> {
             value={debtSue.interestRate || "-"}
           /> */}
         </Form.Group>
-        {hidePrintButton ? null : (
+        {/* {hidePrintButton ? null : (
           <Grid columns={"1"}>
             <Grid.Column textAlign={"right"}>
               <PermissionControl
@@ -124,7 +124,7 @@ class DebtCollectionSueView extends React.Component<IDebtCollectionSueView> {
               </PermissionControl>
             </Grid.Column>
           </Grid>
-        )}
+        )} */}
       </React.Fragment>
     );
   }
