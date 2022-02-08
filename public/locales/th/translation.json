@@ -484,8 +484,10 @@
       "openingAmount": "ยอดยกมา",
       "transactionAmount": "ยอดรับชำระ",
       "transactionCashAmount": "เงินสด",
+      "transactionTransferAmount": "เงินโอน",
       "transactionMoneyOrderAmount": "ธนาณัติ",
       "transactionCheckAmount": "เช็ค",
+      "transactionCancelAmount": "ยอดยกเลิก",
       "expectedDrawerAmount": "ยอดเงินในลิ้นชัก",
       "drawerAmount": "ยอดเงินนับได้",
       "overShortAmount": "ยอดปรับปรุง (-ขาด/+เกิน)",
@@ -2201,8 +2203,10 @@
         "transactionCount": "รายการรับชำระ",
         "transactionAmount": "ยอดรับชำระทั้งหมด",
         "cash": "เงินสด",
+        "transfer": "เงินโอน",
         "moneyOrder": "ธนาณัติ",
-        "check": "เช็ค"
+        "check": "เช็ค",
+        "transactionCancelAmount": "ยอดยกเลิก"
       },
       "posShiftSummaryItem": {
         "note": "เลขที่ใบเสร็จ :",

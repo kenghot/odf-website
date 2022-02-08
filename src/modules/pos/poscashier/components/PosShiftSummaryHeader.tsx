@@ -165,6 +165,19 @@ class PosShiftSummaryHeader extends React.Component<IPosShiftSummaryHeader> {
           <Grid.Column>
             <Statistic size="tiny">
               <Statistic.Label>
+                {t("module.pos.posShiftSummaryHeader.transactionCancelAmount")}
+              </Statistic.Label>
+              <Statistic.Value>
+                {currency(posShift.transactionCancelAmount)}
+              </Statistic.Value>
+              <Statistic.Label>
+                {`(${posShift.transactionCancelCount || 0} ${t("list")})`}
+              </Statistic.Label>
+            </Statistic>
+          </Grid.Column>
+          <Grid.Column>
+            <Statistic size="tiny">
+              <Statistic.Label>
                 {t("module.pos.posShiftSummaryHeader.cash")}{" "}
               </Statistic.Label>
               <Statistic.Value>
@@ -172,6 +185,19 @@ class PosShiftSummaryHeader extends React.Component<IPosShiftSummaryHeader> {
               </Statistic.Value>
               <Statistic.Label>
                 {`(${posShift.transactionCashCount || 0} ${t("list")})`}
+              </Statistic.Label>
+            </Statistic>
+          </Grid.Column>
+          <Grid.Column>
+            <Statistic size="mini">
+              <Statistic.Label>
+                {t("module.pos.posShiftSummaryHeader.transfer")}
+              </Statistic.Label>
+              <Statistic.Value>
+                {currency(posShift.transactionTransferAmount)}
+              </Statistic.Value>
+              <Statistic.Label>
+                {`(${posShift.transactionTransferCount || 0} ${t("list")})`}
               </Statistic.Label>
             </Statistic>
           </Grid.Column>
