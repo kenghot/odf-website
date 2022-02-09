@@ -2,8 +2,9 @@ import { flow } from "mobx";
 import { applySnapshot, types } from "mobx-state-tree";
 import { ErrorModel } from "../../components/common/error";
 import { IInput } from "../../utils/common-interface";
-import { AccountReceivableModel } from "../accountReceivable/AccountReceivableModel";
+import { AccountReceivableModel,IAccountReceivableModel } from "../accountReceivable/AccountReceivableModel";
 import { DebtCollectionList } from "./DebtCollectionsService";
+import { fetchNoService } from "../../utils/request-noservice";
 
 export const DebtCollectionListModel = types
   .model("DebtCollectionListModel", {
@@ -32,10 +33,32 @@ export const DebtCollectionListModel = types
     totalPages: types.optional(types.number, 1),
     loading: types.optional(types.boolean, false)
   })
-  .views((self: any) => ({}))
+  .views((self: any) => ({
+    get selected_checkbox() {
+      if (self.list.length > 0) {
+        const selectedList = self.list.map(
+          (item: IAccountReceivableModel) => item.isSelected
+        );
+        return selectedList.every((item: boolean) => item);
+      } else {
+        return false;
+      }
+    },
+    get debtcollection_list_id_check() {
+      return self.list
+        .filter((item: IAccountReceivableModel) => item.isSelected === true)
+        .map((item: IAccountReceivableModel) => item.id);
+    },
+  }))
   .actions((self: any) => ({
     setField: ({ fieldname, value }: IInput) => {
       self[fieldname] = value;
+    },
+    selected_all: (selected: boolean) => {
+      self.selectedAllCheckbox = selected;
+      self.list.forEach((item: IAccountReceivableModel) => {
+        item.setField({ fieldname: "isSelected", value: selected });
+      });
     },
     load_data: flow(function*() {
       try {
@@ -88,6 +111,25 @@ export const DebtCollectionListModel = types
           value: e.technical_stack
         });
         console.log(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    printReportDebtcollection: flow(function* () {
+      console.log('printReportDebtcollection',self.debtcollection_list_id_check.join);
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const result: any = yield fetchNoService(
+          `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/opentbs/tbs/template_report_debtcollection.php`,
+          {
+            ids: self.debtcollection_list_id_check.join(","),
+          },
+          "template_report_debtcollection",
+          "xls"
+        );
+        self.error.setField({ fieldname: "tigger", value: false });
+      } catch (e) {
+        self.error.setErrorMessage(e);
       } finally {
         self.setField({ fieldname: "loading", value: false });
       }
