@@ -1263,6 +1263,21 @@ export const DebtCollectionModel = types
         self.setField({ fieldname: "loading", value: false });
       }
     }),
+    printFormMemo: flow(function* () {
+      if (self.id) {
+        try {
+          self.setField({ fieldname: "loading", value: true });
+          yield Memo.getById(self.id, {
+            name: "print_form"
+          });
+        } catch (e) {
+          self.error.setErrorMessage(e);
+          throw e;
+        } finally {
+          self.setField({ fieldname: "loading", value: false });
+        }
+      }
+    }),
     deleteVisitFromList: (item: IDebtCollectionVisitModel) => {
       const index = self.visits.indexOf(item);
       if (index !== -1) self.visits.splice(index, 1);

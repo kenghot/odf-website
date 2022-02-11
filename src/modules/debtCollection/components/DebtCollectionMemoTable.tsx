@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Header, Icon, List, Table } from "semantic-ui-react";
+import { Header, Icon, List, Table,Button,Grid } from "semantic-ui-react";
 import { IAppModel } from "../../../AppModel";
 import { EmptyTableRow, SectionContainer } from "../../../components/common";
 import {
@@ -71,11 +71,36 @@ class DebtCollectionMemoTable extends React.Component<
               : undefined
           }
         >
+           {hasPermissionMode(
+            "DEBTCOLLECTION.MEMO.VIEW",
+            "DEBTCOLLECTION.MEMO.EDIT",
+            editMode
+          ) ? 
+          (
+         
+          <Grid>
+          <Grid.Column floated='left' width={4}>
+          <Button
+            color="blue"
+            fluid
+            size='small'
+            type="button"
+            icon="print"
+            content={t("modal.M231MemoFormModal.printMemoForm")}
+            onClick={this.printFromMemo}
+            style={styles.buttonTop}
+          />
+          </Grid.Column>
+        </Grid>
+          ) : (
+            <NoPermissionMessage />
+          )}
           {hasPermissionMode(
             "DEBTCOLLECTION.MEMO.VIEW",
             "DEBTCOLLECTION.MEMO.EDIT",
             editMode
-          ) ? (
+          ) ? 
+          (
             <Table striped size="small" structured>
               {this.renderTableHeader()}
               {this.renderTableBody()}
@@ -287,6 +312,14 @@ class DebtCollectionMemoTable extends React.Component<
       });
     } finally {
       debtCollection.setField({ fieldname: "loading", value: false });
+    }
+  };
+  private printFromMemo = async () => {
+    const { debtCollection } = this.props;
+    try {
+      await debtCollection.printFormMemo();
+    } catch (e) {
+      console.log(e);
     }
   };
 }
