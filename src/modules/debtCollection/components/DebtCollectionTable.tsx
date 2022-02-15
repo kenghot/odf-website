@@ -167,11 +167,38 @@ class DebtCollectionTable extends React.Component<IDebtCollectionTable> {
       <>
       <Button
       color="blue"
+      disabled={searchDebtCollectionListPageStore.statusMenu}
       content={t("module.report.reportCard.getReport")+"ออกเลขหนังสือ"}
       icon="print"
       labelPosition="left"
       onClick={searchDebtCollectionListPageStore.printReportDebtcollection}
     />
+    <EnvelopsModal
+            disabled={searchDebtCollectionListPageStore.statusMenu}
+            trigger={
+              <Button
+                style={styles.buttonItem}
+                disabled={searchDebtCollectionListPageStore.statusMenu}
+                color="pink"
+              >
+              พิมพ์ซองจดหมายผู้กู้
+              </Button>
+            }
+            onConfirm={searchDebtCollectionListPageStore.printEnvelopsDebtcollection}
+          />
+          <EnvelopsModal
+            disabled={searchDebtCollectionListPageStore.statusMenu}
+            trigger={
+              <Button
+                style={styles.buttonItem}
+                disabled={searchDebtCollectionListPageStore.statusMenu}
+                color="brown"
+              >
+                พิมพ์ซองจดหมายผู้ค้ำ
+              </Button>
+            }
+            onConfirm={searchDebtCollectionListPageStore.printEnvelopsGuarantorDebtcollection}
+          />
       </>
     );
   }

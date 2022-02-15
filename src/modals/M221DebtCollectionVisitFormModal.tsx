@@ -182,7 +182,7 @@ class M221DebtCollectionVisitFormModal extends React.Component<
     const { t, editMode } = this.props;
     return (
       <React.Fragment>
-        {editMode && !this.visitItem.id ? (
+        {editMode || !this.visitItem.id ? (
           <Form.Field
             required
             label={t("modal.M221DebtCollectionVisitFormModal.dateVisit")}

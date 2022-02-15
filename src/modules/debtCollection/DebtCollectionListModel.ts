@@ -34,6 +34,13 @@ export const DebtCollectionListModel = types
     loading: types.optional(types.boolean, false)
   })
   .views((self: any) => ({
+    get statusMenu() {
+      return self.list.find(
+        (item: IAccountReceivableModel) => item.isSelected === true
+      )
+        ? false
+        : true;
+    },
     get selected_checkbox() {
       if (self.list.length > 0) {
         const selectedList = self.list.map(
@@ -128,6 +135,62 @@ export const DebtCollectionListModel = types
           "xls"
         );
         self.error.setField({ fieldname: "tigger", value: false });
+      } catch (e) {
+        self.error.setErrorMessage(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    printEnvelopsDebtcollection: flow(function* (addressType: string,
+      fileType: string,
+      isReport: boolean,
+      commonAddress: boolean,
+      envelopSize: string) {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const result: any = yield fetchNoService(
+          `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/opentbs/tbs/template_envelop_debtcollection_borrower.php`,
+          {
+            show_debug: "0",
+            ids: self.debtcollection_list_id_check.join(","),
+            isReport,
+            fileType: isReport ? undefined : fileType,
+            envelopSize: envelopSize ? envelopSize : undefined,
+            addressType,
+          },
+          "template_envelop",
+          isReport ? undefined : fileType
+        );
+        self.error.setField({ fieldname: "tigger", value: false });
+        // self.alert.setAlertMessage("", "");
+      } catch (e) {
+        self.error.setErrorMessage(e);
+      } finally {
+        self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    printEnvelopsGuarantorDebtcollection: flow(function* (addressType: string,
+      fileType: string,
+      isReport: boolean,
+      commonAddress: boolean,
+      envelopSize: string) {
+      try {
+        self.setField({ fieldname: "loading", value: true });
+        const result: any = yield fetchNoService(
+          `${process.env.REACT_APP_DOP_DOCS_ENDPOINT}/opentbs/tbs/template_envelop_debtcollection_guarantor.php`,
+          {
+            show_debug: "0",
+            ids: self.debtcollection_list_id_check.join(","),
+            isReport,
+            fileType: isReport ? undefined : fileType,
+            envelopSize: envelopSize ? envelopSize : undefined,
+            addressType,
+          },
+          "template_envelop",
+          isReport ? undefined : fileType
+        );
+        self.error.setField({ fieldname: "tigger", value: false });
+        // self.alert.setAlertMessage("", "");
       } catch (e) {
         self.error.setErrorMessage(e);
       } finally {
