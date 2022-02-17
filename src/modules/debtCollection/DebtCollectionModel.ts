@@ -1203,7 +1203,8 @@ export const DebtCollectionModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string) {
+      envelopSize: string,
+      adviceOfRreceipt : boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         // const addressType = "idCardAddress";
@@ -1216,6 +1217,7 @@ export const DebtCollectionModel = types
             show_debug: "0",
             ids: self.accountReceivableId ? self.accountReceivableId : "0",
             isReport,
+            adviceOfRreceipt,
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
@@ -1224,7 +1226,7 @@ export const DebtCollectionModel = types
           isReport ? undefined : fileType
         );
         self.error.setField({ fieldname: "tigger", value: false });
-        self.alert.setAlertMessage("", "");
+        // self.alert.setAlertMessage("", "");
       } catch (e) {
         self.error.setErrorMessage(e);
       } finally {
@@ -1235,7 +1237,8 @@ export const DebtCollectionModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string) {
+      envelopSize: string,
+      adviceOfRreceipt : boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         // const addressType = "idCardAddress";
@@ -1248,6 +1251,7 @@ export const DebtCollectionModel = types
             show_debug: "0",
             ids: self.accountReceivableId ? self.accountReceivableId : "0",
             isReport,
+            adviceOfRreceipt,
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
@@ -1256,7 +1260,7 @@ export const DebtCollectionModel = types
           isReport ? undefined : fileType
         );
         self.error.setField({ fieldname: "tigger", value: false });
-        self.alert.setAlertMessage("", "");
+        // self.alert.setAlertMessage("", "");
       } catch (e) {
         self.error.setErrorMessage(e);
       } finally {

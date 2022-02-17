@@ -166,7 +166,8 @@ export const DonationDirectListModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string
+      envelopSize: string,
+      adviceOfRreceipt : boolean
     ) {
       try {
         self.setField({ fieldname: "loading", value: true });

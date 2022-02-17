@@ -145,7 +145,8 @@ export const DebtCollectionListModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string) {
+      envelopSize: string,
+      adviceOfRreceipt : boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const result: any = yield fetchNoService(
@@ -154,6 +155,7 @@ export const DebtCollectionListModel = types
             show_debug: "0",
             ids: self.debtcollection_list_id_check.join(","),
             isReport,
+            adviceOfRreceipt,
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
@@ -173,7 +175,8 @@ export const DebtCollectionListModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string) {
+      envelopSize: string,
+      adviceOfRreceipt : boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         const result: any = yield fetchNoService(
@@ -182,6 +185,7 @@ export const DebtCollectionListModel = types
             show_debug: "0",
             ids: self.debtcollection_list_id_check.join(","),
             isReport,
+            adviceOfRreceipt,
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
