@@ -948,7 +948,12 @@ export const DebtCollectionModel = types
     },
     get letter_list_ascertain_heirs() {
       return self.letters.filter(
-        (item: IDebtCollectionLetterModel) => item.letterType === "CSH"
+        (item: IDebtCollectionLetterModel) => item.letterType === "CSB"
+      );
+    },
+    get letter_list_ascertain_heirs_gurantor() {
+      return self.letters.filter(
+        (item: IDebtCollectionLetterModel) => item.letterType === "CSG"
       );
     },
     get letter_list_heir() {
