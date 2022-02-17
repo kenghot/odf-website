@@ -107,6 +107,11 @@ class DebtCollectionLetterTable extends React.Component<
           </Table.HeaderCell>
           <Table.HeaderCell textAlign="center" rowSpan="2" width={2}>
             {t(
+              "module.debtCollection.debtCollectionDemandLetterTable.documentNumber"
+            )}
+          </Table.HeaderCell>
+          <Table.HeaderCell textAlign="center" rowSpan="2" width={2}>
+            {t(
               "module.debtCollection.debtCollectionDemandLetterTable.dateMakingBook"
             )}
           </Table.HeaderCell>
@@ -164,6 +169,9 @@ class DebtCollectionLetterTable extends React.Component<
             return (
               <Table.Row key={index}>
                 <Table.Cell textAlign="center">{index + 1}</Table.Cell>
+                <Table.Cell textAlign="center">
+                  {data.documentNumber?data.documentNumber:"-"}
+                </Table.Cell>
                 <Table.Cell textAlign="center">
                   {date_display_CE_TO_BE(data.documentDate, true)}
                 </Table.Cell>

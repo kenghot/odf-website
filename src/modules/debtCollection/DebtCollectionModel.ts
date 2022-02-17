@@ -699,6 +699,7 @@ export const DebtCollectionLetterModel = types
     debtCollectionId: customtypes.optional(types.string, ""),
     letterType: types.optional(types.string, ""),
     documentDate: types.optional(types.string, moment().format("YYYY-MM-DD")),
+    documentNumber: customtypes.optional(types.string, ""),
     postDate: customtypes.optional(types.string, ""),
     attachedFiles: customtypes.optional(types.array(AttachedFileModel), []),
     isSentBack: types.maybeNull(types.boolean),
@@ -778,6 +779,7 @@ export const DebtCollectionLetterModel = types
             debtCollectionId: id,
             letterType: self.letterType,
             documentDate: self.documentDate,
+            documentNumber:self.documentNumber,
             postDate: self.postDate ? self.postDate : undefined,
             attachedFiles: self.attachedFiles,
             sentBackReasonType: self.sentBackReasonType,
@@ -812,6 +814,7 @@ export const DebtCollectionLetterModel = types
         const body = {
           letterType: self.letterType,
           documentDate: self.documentDate,
+          documentNumber:self.documentNumber,
           postDate: self.postDate ? self.postDate : undefined,
           attachedFiles: self.attachedFiles,
           sentBackReasonType: self.sentBackReasonType,

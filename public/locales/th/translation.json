@@ -311,6 +311,7 @@
     },
     "M211DebtCollectionLetterFormModal": {
       "demandBook": "หนังสือทวงถาม",
+      "documentNumber": "เลขที่หนังสือ",
       "dateMakingBook": "วันที่ทำหนังสือ",
       "bookDeliveryDate": "วันที่จัดส่งหนังสือ",
       "attachment": "เอกสารแนบและหลักฐานการส่ง",
@@ -1843,6 +1844,7 @@
         "createDemandBook": "สร้างหนังสือทวงถาม",
         "createBtnLabelDemandBook": "พิมพ์หนังสือทวงถาม",
         "time": "ครั้งที่",
+        "documentNumber": "เลขที่หนังสือ",
         "dateMakingBook": "วันที่ทำหนังสือ",
         "dateNotificationSent": "วันที่ส่งทำหนังสือแจ้ง",
         "document": "เอกสาร",
