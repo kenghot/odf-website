@@ -181,8 +181,8 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               )}
               editMode={editMode}
               debtCollection={debtCollection}
-              letterType={"CSB"}
-              letterList={debtCollection.letter_list_ascertain_heirs}
+              letterType={"CNB"}
+              letterList={debtCollection.letter_list_notification_heir_borrower}
               headerTitle={t(
                 "module.debtCollection.debtCollectionFormBody.letterFindHeirBorrower"
               )}
@@ -214,8 +214,8 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               )}
               editMode={editMode}
               debtCollection={debtCollection}
-              letterType={"CSG"}
-              letterList={debtCollection.letter_list_ascertain_heirs_gurantor}
+              letterType={"CNG"}
+              letterList={debtCollection.letter_list_notification_heir_gurantor}
               headerTitle={t(
                 "module.debtCollection.debtCollectionFormBody.letterFindHeirGurantor"
               )}
@@ -247,8 +247,8 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               )}
               editMode={editMode}
               debtCollection={debtCollection}
-              letterType={"CSM"}
-              letterList={debtCollection.letter_list_inheritance}
+              letterType={"CNM"}
+              letterList={debtCollection.letter_list_notification_manager}
               headerTitle={t(
                 "module.debtCollection.debtCollectionFormBody.heritageManagerBooks"
               )}
@@ -340,6 +340,73 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
     return (
       <React.Fragment>
         {debtCollection.isPassAway ? (
+           <React.Fragment>
+           <DebtCollectionLetterTable
+           createBtnLabel={t(
+             "module.debtCollection.debtCollectionFormBody.createBtnLabelLetterNotifyHeirsBorrowers"
+           )}
+           subHeaderTitle={t(
+             "module.debtCollection.debtCollectionFormBody.creationStorageDocumentsHeirsTrusteeBorrowers"
+           )}
+           editMode={editMode}
+           debtCollection={debtCollection}
+           letterType={"CSB"}
+           letterList={debtCollection.letter_list_ascertain_heirs}
+           headerTitle={t(
+             "module.debtCollection.debtCollectionFormBody.letterInformingStatutoryHeirsBorrowers"
+           )}
+           linkModalLabel={t(
+             "module.debtCollection.debtCollectionFormBody.createLetterNotifyHeirsBorrowers"
+           )}
+           hasPermissionView={hasPermissionMode(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.VIEW",
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT",
+             editMode
+           )}
+           hasPermissionEdit={hasPermission(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT"
+           )}
+           hasPermissionCreate={hasPermission(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.CREATE"
+           )}
+           hasPermissionDelete={hasPermission(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.DEL"
+           )}
+         />
+         <br />
+         <DebtCollectionLetterTable
+         createBtnLabel={t(
+           "module.debtCollection.debtCollectionFormBody.createBtnLabelLetterNotifyHeirsGurantor"
+         )}
+         subHeaderTitle={t(
+           "module.debtCollection.debtCollectionFormBody.creationStorageDocumentsHeirsTrusteeGurantor"
+         )}
+         editMode={editMode}
+         debtCollection={debtCollection}
+         letterType={"CSG"}
+         letterList={debtCollection.letter_list_ascertain_heirs_gurantor}
+         headerTitle={t(
+           "module.debtCollection.debtCollectionFormBody.letterInformingStatutoryHeirsGurantor"
+         )}
+         linkModalLabel={t(
+           "module.debtCollection.debtCollectionFormBody.createLetterNotifyHeirsGurantor"
+         )}
+         hasPermissionView={hasPermissionMode(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.VIEW",
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT",
+           editMode
+         )}
+         hasPermissionEdit={hasPermission(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT"
+         )}
+         hasPermissionCreate={hasPermission(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.CREATE"
+         )}
+         hasPermissionDelete={hasPermission(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.DEL"
+         )}
+       />
+       <br />
           <DebtCollectionLetterTable
             createBtnLabel={t(
               "module.debtCollection.debtCollectionFormBody.createBtnLabelLetterNotifyHeirs"
@@ -349,8 +416,8 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
             )}
             editMode={editMode}
             debtCollection={debtCollection}
-            letterType={"CLR"}
-            letterList={debtCollection.letter_list_heir}
+            letterType={"CSM"}
+            letterList={debtCollection.letter_list_inheritance}
             headerTitle={t(
               "module.debtCollection.debtCollectionFormBody.letterInformingStatutoryHeirs"
             )}
@@ -372,6 +439,7 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               "DEBTCOLLECTION.CASEOFDEATH.LETTER.DEL"
             )}
           />
+           </React.Fragment>
         ) : (
           <React.Fragment>
             <DebtCollectionVisitTable

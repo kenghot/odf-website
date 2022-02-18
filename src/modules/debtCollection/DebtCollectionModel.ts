@@ -956,9 +956,19 @@ export const DebtCollectionModel = types
         (item: IDebtCollectionLetterModel) => item.letterType === "CSG"
       );
     },
-    get letter_list_heir() {
+    get letter_list_notification_manager() {
       return self.letters.filter(
-        (item: IDebtCollectionLetterModel) => item.letterType === "CLR"
+        (item: IDebtCollectionLetterModel) => item.letterType === "CNM"
+      );
+    },
+    get letter_list_notification_heir_borrower() {
+      return self.letters.filter(
+        (item: IDebtCollectionLetterModel) => item.letterType === "CNB"
+      );
+    },
+    get letter_list_notification_heir_gurantor() {
+      return self.letters.filter(
+        (item: IDebtCollectionLetterModel) => item.letterType === "CNG"
       );
     },
     get letter_list_borrower() {

@@ -1837,10 +1837,18 @@
         "heritageManagerBooks": "หนังสือสืบหาผู้จัดการมรดก",
         "createTrusteeBook": "สร้างหนังสือสืบหาผู้จัดการมรดก",
         "createBtnLabelTrusteeBook": "พิมพ์หนังสือสืบหาผู้จัดการมรดก",
-        "creationStorageDocumentsHeirsTrustee": "สำหรับสร้างและจัดเก็บเอกสารการส่งหลักฐานการส่งหนังสือเพื่อแจ้งทายาทและผู้จัดการมรดกพร้อมผลการจัดการ",
-        "letterInformingStatutoryHeirs": "หนังสือแจ้งทายาทโดยธรรมที่มีสิทธิหรือผู้จัดการมรดก",
-        "createLetterNotifyHeirs": "สร้างหนังสือแจ้งทายาทฯหรือผู้จัดการมรดก",
-        "createBtnLabelLetterNotifyHeirs": "พิมพ์หนังสือแจ้งทายาทฯหรือผู้จัดการมรดก"
+        "creationStorageDocumentsHeirsTrustee": "สำหรับสร้างและจัดเก็บเอกสารการส่งหลักฐานการส่งหนังสือเพื่อแจ้งผู้จัดการมรดกพร้อมผลการจัดการ",
+        "creationStorageDocumentsHeirsTrusteeBorrowers": "สำหรับสร้างและจัดเก็บเอกสารการส่งหลักฐานการส่งหนังสือเพื่อแจ้งทายาทผู้กู้พร้อมผลการจัดการ",
+        "creationStorageDocumentsHeirsTrusteeGurantor": "สำหรับสร้างและจัดเก็บเอกสารการส่งหลักฐานการส่งหนังสือเพื่อแจ้งทายาทผู้ค้ำพร้อมผลการจัดการ",
+        "letterInformingStatutoryHeirs": "หนังสือแจ้งผู้จัดการมรดก",
+        "letterInformingStatutoryHeirsBorrowers": "หนังสือแจ้งทายาทโดยธรรมที่มีสิทธิของผู้กู้",
+        "letterInformingStatutoryHeirsGurantor": "หนังสือแจ้งทายาทโดยธรรมที่มีสิทธิของผู้ค้ำ",
+        "createLetterNotifyHeirs": "สร้างหนังสือแจ้งผู้จัดการมรดก",
+        "createLetterNotifyHeirsBorrowers": "สร้างหนังสือแจ้งทายาทผู้กู้",
+        "createLetterNotifyHeirsGurantor": "สร้างหนังสือแจ้งทายาทผู้ค้ำ",
+        "createBtnLabelLetterNotifyHeirs": "พิมพ์หนังสือแจ้งผู้จัดการมรดก",
+        "createBtnLabelLetterNotifyHeirsBorrowers": "พิมพ์หนังสือแจ้งทายาทผู้กู้",
+        "createBtnLabelLetterNotifyHeirsGurantor": "พิมพ์หนังสือแจ้งทายาทผู้ค้ำ"
       },
       "debtCollectionDemandLetterTable": {
         "creatingManagingDocumentsSendingDocuments": "สำหรับสร้างและจัดการเอกสารหลักฐานการส่งหนังสือทวงถามพร้อมผลการจัดส่ง",
