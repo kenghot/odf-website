@@ -11,7 +11,8 @@ import {
   List,
   Modal,
   Segment,
-  Table
+  Table,
+  Message
 } from "semantic-ui-react";
 import { RequestTableMessage } from ".";
 import { IAppModel } from "../../../../AppModel";
@@ -386,6 +387,7 @@ class RequestTable extends React.Component<IRequestTable> {
                       )}
                     />
                     {this.renderRequestCheckList()}
+                    <Message color='red'>*กรุณาตรวจสอบเลขที่เอกสารสัญญาปัจจุบันให้ถูกต้อง(ปีงบประมาณ,ลำดับที่เอกสารล่าสุด) ก่อนส่งทำสัญญา</Message>
                     <Form.Button fluid color="purple" type="submit">
                       {t("module.loan.requestTable.sendContract")}
                     </Form.Button>
