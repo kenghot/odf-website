@@ -699,6 +699,7 @@ export const DebtCollectionLetterModel = types
     debtCollectionId: customtypes.optional(types.string, ""),
     letterType: types.optional(types.string, ""),
     documentDate: types.optional(types.string, moment().format("YYYY-MM-DD")),
+    documentNumber: customtypes.optional(types.string, ""),
     postDate: customtypes.optional(types.string, ""),
     attachedFiles: customtypes.optional(types.array(AttachedFileModel), []),
     isSentBack: types.maybeNull(types.boolean),
@@ -778,6 +779,7 @@ export const DebtCollectionLetterModel = types
             debtCollectionId: id,
             letterType: self.letterType,
             documentDate: self.documentDate,
+            documentNumber:self.documentNumber,
             postDate: self.postDate ? self.postDate : undefined,
             attachedFiles: self.attachedFiles,
             sentBackReasonType: self.sentBackReasonType,
@@ -812,6 +814,7 @@ export const DebtCollectionLetterModel = types
         const body = {
           letterType: self.letterType,
           documentDate: self.documentDate,
+          documentNumber:self.documentNumber,
           postDate: self.postDate ? self.postDate : undefined,
           attachedFiles: self.attachedFiles,
           sentBackReasonType: self.sentBackReasonType,
@@ -945,12 +948,27 @@ export const DebtCollectionModel = types
     },
     get letter_list_ascertain_heirs() {
       return self.letters.filter(
-        (item: IDebtCollectionLetterModel) => item.letterType === "CSH"
+        (item: IDebtCollectionLetterModel) => item.letterType === "CSB"
       );
     },
-    get letter_list_heir() {
+    get letter_list_ascertain_heirs_gurantor() {
       return self.letters.filter(
-        (item: IDebtCollectionLetterModel) => item.letterType === "CLR"
+        (item: IDebtCollectionLetterModel) => item.letterType === "CSG"
+      );
+    },
+    get letter_list_notification_manager() {
+      return self.letters.filter(
+        (item: IDebtCollectionLetterModel) => item.letterType === "CNM"
+      );
+    },
+    get letter_list_notification_heir_borrower() {
+      return self.letters.filter(
+        (item: IDebtCollectionLetterModel) => item.letterType === "CNB"
+      );
+    },
+    get letter_list_notification_heir_gurantor() {
+      return self.letters.filter(
+        (item: IDebtCollectionLetterModel) => item.letterType === "CNG"
       );
     },
     get letter_list_borrower() {
@@ -1203,7 +1221,8 @@ export const DebtCollectionModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string) {
+      envelopSize: string,
+      adviceOfRreceipt : boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         // const addressType = "idCardAddress";
@@ -1216,6 +1235,7 @@ export const DebtCollectionModel = types
             show_debug: "0",
             ids: self.accountReceivableId ? self.accountReceivableId : "0",
             isReport,
+            adviceOfRreceipt,
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
@@ -1224,7 +1244,7 @@ export const DebtCollectionModel = types
           isReport ? undefined : fileType
         );
         self.error.setField({ fieldname: "tigger", value: false });
-        self.alert.setAlertMessage("", "");
+        // self.alert.setAlertMessage("", "");
       } catch (e) {
         self.error.setErrorMessage(e);
       } finally {
@@ -1235,7 +1255,8 @@ export const DebtCollectionModel = types
       fileType: string,
       isReport: boolean,
       commonAddress: boolean,
-      envelopSize: string) {
+      envelopSize: string,
+      adviceOfRreceipt : boolean) {
       try {
         self.setField({ fieldname: "loading", value: true });
         // const addressType = "idCardAddress";
@@ -1248,6 +1269,7 @@ export const DebtCollectionModel = types
             show_debug: "0",
             ids: self.accountReceivableId ? self.accountReceivableId : "0",
             isReport,
+            adviceOfRreceipt,
             fileType: isReport ? undefined : fileType,
             envelopSize: envelopSize ? envelopSize : undefined,
             addressType,
@@ -1256,11 +1278,26 @@ export const DebtCollectionModel = types
           isReport ? undefined : fileType
         );
         self.error.setField({ fieldname: "tigger", value: false });
-        self.alert.setAlertMessage("", "");
+        // self.alert.setAlertMessage("", "");
       } catch (e) {
         self.error.setErrorMessage(e);
       } finally {
         self.setField({ fieldname: "loading", value: false });
+      }
+    }),
+    printFormMemo: flow(function* () {
+      if (self.id) {
+        try {
+          self.setField({ fieldname: "loading", value: true });
+          yield Memo.getById(self.id, {
+            name: "print_form"
+          });
+        } catch (e) {
+          self.error.setErrorMessage(e);
+          throw e;
+        } finally {
+          self.setField({ fieldname: "loading", value: false });
+        }
       }
     }),
     deleteVisitFromList: (item: IDebtCollectionVisitModel) => {

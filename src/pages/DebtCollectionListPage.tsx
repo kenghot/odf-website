@@ -8,20 +8,30 @@ import { Loading } from "../components/common/loading";
 import { DebtCollectionTable } from "../modules/debtCollection/components";
 import SearchForm from "../modules/debtCollection/components/SearchForm";
 import { IDebtCollectionListModel } from "../modules/debtCollection/DebtCollectionListModel";
+import { hasPermission } from "../utils/render-by-permission";
+import { IAuthModel } from "../modules/auth/AuthModel";
 
 interface IDebtCollectionListPage extends WithTranslation {
   appStore?: IAppModel;
   searchDebtCollectionListPageStore?: IDebtCollectionListModel;
+  authStore?: IAuthModel;
 }
 
-@inject("appStore", "searchDebtCollectionListPageStore")
+@inject("appStore", "searchDebtCollectionListPageStore","authStore")
 @observer
 class DebtCollectionListPage extends React.Component<IDebtCollectionListPage> {
+
   public componentDidMount() {
     this.props.appStore!.setField({
       fieldname: "pageHeader",
       value: "debtCollection"
     });
+    if (!hasPermission("REQUEST.ONLINE.ACCESS")) {
+      this.props.searchDebtCollectionListPageStore!.setField({
+        fieldname: "filterOrganizationId",
+        value: this.props.authStore!.userProfile.organization.id ? this.props.authStore!.userProfile.organization.id : ''
+      });
+    }
     this.props.searchDebtCollectionListPageStore!.load_data();
   }
   public componentWillUnmount() {

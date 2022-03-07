@@ -19,7 +19,8 @@ interface IEnvelopsModal extends WithTranslation {
     fileType: string,
     isReport: boolean,
     commonAddress: boolean,
-    envelopSize: string
+    envelopSize: string,
+    adviceOfRreceipt : boolean
   ) => void;
   disabled?: boolean;
 }
@@ -34,6 +35,7 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
     fileType: "pdf",
     envelopSize: "1",
     addressType: "idCardAddress",
+    adviceOfRreceipt:false
   };
   public componentDidMount() {
     this._isMounted = true;
@@ -76,6 +78,16 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
                   id={`form-input-isReport`}
                   checked={this.state.isReport}
                   label={"พิมพ์รายงานซองจดหมาย"}
+                />
+              </Segment>
+              <Segment>
+                <Checkbox
+                  onChange={(event: any, data: any) =>
+                    this.setState({ adviceOfRreceipt: data.checked })
+                  }
+                  id={`form-input-adviceOfRreceipt`}
+                  checked={this.state.adviceOfRreceipt}
+                  label={"ใบตอบรับ (ใบเหลือง)"}
                 />
               </Segment>
             </Form.Field>
@@ -151,6 +163,7 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
             <Form.Field
               label={"ขนาดซองจดหมาย"}
               width={16}
+              disabled={this.state.adviceOfRreceipt}
               control={EnvelopSize}
               inputFieldEnvelopSize="envelopSize"
               valueFieldEnvelopSize={this.state.envelopSize}
@@ -188,7 +201,8 @@ class EnvelopsModal extends React.Component<IEnvelopsModal> {
         this.state.fileType,
         this.state.isReport,
         this.state.commonAddress,
-        this.state.envelopSize
+        this.state.envelopSize,
+        this.state.adviceOfRreceipt
       );
       this.close();
     } catch (e) {

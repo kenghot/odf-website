@@ -160,6 +160,28 @@ class M35402CloseShiftModal extends React.Component<IM35402CloseShiftModal> {
           <Item.Content>
             <Item.Meta style={styles.subItemMeta}>
               <Text>
+                {t("modal.M35402CloseShiftModal.transactionTransferAmount")}
+                {` : ${pos.lastestPosShift.transactionTransferCount || 0} ${t(
+                  "list"
+                )}`}
+              </Text>
+            </Item.Meta>
+          </Item.Content>
+          <Item.Content>
+            <Item.Meta style={styles.itemMetaRight}>
+              <Text>
+                {currency(pos.lastestPosShift.transactionTransferAmount, 2)}
+                <span style={styles.unit}>
+                  {t("modal.M35402CloseShiftModal.baht")}
+                </span>
+              </Text>
+            </Item.Meta>
+          </Item.Content>
+        </Item>
+        <Item>
+          <Item.Content>
+            <Item.Meta style={styles.subItemMeta}>
+              <Text>
                 {t("modal.M35402CloseShiftModal.transactionMoneyOrderAmount")}
                 {` : ${pos.lastestPosShift.transactionMoneyOrderCount || 0} ${t(
                   "list"
@@ -193,6 +215,27 @@ class M35402CloseShiftModal extends React.Component<IM35402CloseShiftModal> {
             <Item.Meta style={styles.itemMetaRight}>
               <Text>
                 {currency(pos.lastestPosShift.transactionCheckAmount, 2)}
+                <span style={styles.unit}>
+                  {t("modal.M35402CloseShiftModal.baht")}
+                </span>
+              </Text>
+            </Item.Meta>
+          </Item.Content>
+        </Item>
+        
+        <Item>
+          <Item.Content>
+            <Item.Meta style={styles.itemMeta}>
+              <Text>
+                {t("modal.M35402CloseShiftModal.transactionCancelAmount")}
+                {` : ${pos.lastestPosShift.transactionCancelCount || 0} ${t("list")}`}
+              </Text>
+            </Item.Meta>
+          </Item.Content>
+          <Item.Content>
+            <Item.Meta style={styles.itemMetaRight}>
+              <Text>
+                {currency(pos.lastestPosShift.transactionCancelAmount, 2)}
                 <span style={styles.unit}>
                   {t("modal.M35402CloseShiftModal.baht")}
                 </span>

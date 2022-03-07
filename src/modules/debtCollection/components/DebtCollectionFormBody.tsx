@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Button, Header, Segment, Tab } from "semantic-ui-react";
+import { Button, Header, Segment, Tab,Grid,Icon } from "semantic-ui-react";
 import {
   DebtCollectionLetterTable,
   DebtCollectionMemoTable,
@@ -19,6 +19,10 @@ import { IAuthModel } from "../../auth/AuthModel";
 import { IDebtCollectionModel } from "../DebtCollectionModel";
 import DebtCollectionSueForm from "./DebtCollectionSueForm";
 import DebtCollectionSueView from "./DebtCollectionSueView";
+import {
+  NoPermissionMessage,
+  PermissionControl
+} from "../../../components/permission";
 
 interface IDebtCollectionFormBody extends WithTranslation {
   debtCollection: IDebtCollectionModel;
@@ -35,6 +39,8 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
     const tempLetterListGuarantor = debtCollection.letter_list_guarantor;
     const tempLetterListAscertainHeirs =
       debtCollection.letter_list_ascertain_heirs;
+      const tempLetterListAscertainHeirsGurantor =
+      debtCollection.letter_list_ascertain_heirs_gurantor;
     const tempLetterListInheritance = debtCollection.letter_list_inheritance;
     const debtSue = debtCollection.debtSue;
     const name = debtCollection.deathNotification.name;
@@ -62,6 +68,14 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
         render: () => (
           <Tab.Pane>
             <Segment basic>{this.renderVisitTab()}</Segment>
+          </Tab.Pane>
+        )
+      },
+      {
+        menuItem: t("module.debtCollection.debtCollectionFormBody.makeContractCancel"),
+        render: () => (
+          <Tab.Pane>
+            <Segment basic> {this.renderDebtCollectionMakePrintCancel()}</Segment>
           </Tab.Pane>
         )
       },
@@ -167,14 +181,46 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               )}
               editMode={editMode}
               debtCollection={debtCollection}
-              letterType={"CSH"}
-              letterList={debtCollection.letter_list_ascertain_heirs}
+              letterType={"CNB"}
+              letterList={debtCollection.letter_list_notification_heir_borrower}
               headerTitle={t(
                 "module.debtCollection.debtCollectionFormBody.letterFindHeirBorrower"
               )}
-              hidePrintButton
               linkModalLabel={t(
                 "module.debtCollection.debtCollectionFormBody.createSuccessorBorrowers"
+              )}
+              hasPermissionView={hasPermissionMode(
+                "DEBTCOLLECTION.CASEOFDEATH.DETECT.LETTER.VIEW",
+                "DEBTCOLLECTION.CASEOFDEATH.DETECT.LETTER.EDIT",
+                editMode
+              )}
+              hasPermissionEdit={hasPermission(
+                "DEBTCOLLECTION.CASEOFDEATH.DETECT.LETTER.EDIT"
+              )}
+              hasPermissionCreate={hasPermission(
+                "DEBTCOLLECTION.CASEOFDEATH.DETECT.LETTER.CREATE"
+              )}
+              hasPermissionDelete={hasPermission(
+                "DEBTCOLLECTION.CASEOFDEATH.DETECT.LETTER.DEL"
+              )}
+            />
+            <br />
+            <DebtCollectionLetterTable
+              createBtnLabel={t(
+                "module.debtCollection.debtCollectionFormBody.createGurantorBtnLabel"
+              )}
+              subHeaderTitle={t(
+                "module.debtCollection.debtCollectionFormBody.creatingStoringDocumentsHeirsDeliveryResults"
+              )}
+              editMode={editMode}
+              debtCollection={debtCollection}
+              letterType={"CNG"}
+              letterList={debtCollection.letter_list_notification_heir_gurantor}
+              headerTitle={t(
+                "module.debtCollection.debtCollectionFormBody.letterFindHeirGurantor"
+              )}
+              linkModalLabel={t(
+                "module.debtCollection.debtCollectionFormBody.createSuccessorGurantor"
               )}
               hasPermissionView={hasPermissionMode(
                 "DEBTCOLLECTION.CASEOFDEATH.DETECT.LETTER.VIEW",
@@ -201,12 +247,11 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               )}
               editMode={editMode}
               debtCollection={debtCollection}
-              letterType={"CSM"}
-              letterList={debtCollection.letter_list_inheritance}
+              letterType={"CNM"}
+              letterList={debtCollection.letter_list_notification_manager}
               headerTitle={t(
                 "module.debtCollection.debtCollectionFormBody.heritageManagerBooks"
               )}
-              hidePrintButton
               linkModalLabel={t(
                 "module.debtCollection.debtCollectionFormBody.createTrusteeBook"
               )}
@@ -295,6 +340,73 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
     return (
       <React.Fragment>
         {debtCollection.isPassAway ? (
+           <React.Fragment>
+           <DebtCollectionLetterTable
+           createBtnLabel={t(
+             "module.debtCollection.debtCollectionFormBody.createBtnLabelLetterNotifyHeirsBorrowers"
+           )}
+           subHeaderTitle={t(
+             "module.debtCollection.debtCollectionFormBody.creationStorageDocumentsHeirsTrusteeBorrowers"
+           )}
+           editMode={editMode}
+           debtCollection={debtCollection}
+           letterType={"CSB"}
+           letterList={debtCollection.letter_list_ascertain_heirs}
+           headerTitle={t(
+             "module.debtCollection.debtCollectionFormBody.letterInformingStatutoryHeirsBorrowers"
+           )}
+           linkModalLabel={t(
+             "module.debtCollection.debtCollectionFormBody.createLetterNotifyHeirsBorrowers"
+           )}
+           hasPermissionView={hasPermissionMode(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.VIEW",
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT",
+             editMode
+           )}
+           hasPermissionEdit={hasPermission(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT"
+           )}
+           hasPermissionCreate={hasPermission(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.CREATE"
+           )}
+           hasPermissionDelete={hasPermission(
+             "DEBTCOLLECTION.CASEOFDEATH.LETTER.DEL"
+           )}
+         />
+         <br />
+         <DebtCollectionLetterTable
+         createBtnLabel={t(
+           "module.debtCollection.debtCollectionFormBody.createBtnLabelLetterNotifyHeirsGurantor"
+         )}
+         subHeaderTitle={t(
+           "module.debtCollection.debtCollectionFormBody.creationStorageDocumentsHeirsTrusteeGurantor"
+         )}
+         editMode={editMode}
+         debtCollection={debtCollection}
+         letterType={"CSG"}
+         letterList={debtCollection.letter_list_ascertain_heirs_gurantor}
+         headerTitle={t(
+           "module.debtCollection.debtCollectionFormBody.letterInformingStatutoryHeirsGurantor"
+         )}
+         linkModalLabel={t(
+           "module.debtCollection.debtCollectionFormBody.createLetterNotifyHeirsGurantor"
+         )}
+         hasPermissionView={hasPermissionMode(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.VIEW",
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT",
+           editMode
+         )}
+         hasPermissionEdit={hasPermission(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.EDIT"
+         )}
+         hasPermissionCreate={hasPermission(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.CREATE"
+         )}
+         hasPermissionDelete={hasPermission(
+           "DEBTCOLLECTION.CASEOFDEATH.LETTER.DEL"
+         )}
+       />
+       <br />
           <DebtCollectionLetterTable
             createBtnLabel={t(
               "module.debtCollection.debtCollectionFormBody.createBtnLabelLetterNotifyHeirs"
@@ -304,12 +416,11 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
             )}
             editMode={editMode}
             debtCollection={debtCollection}
-            letterType={"CLR"}
-            letterList={debtCollection.letter_list_heir}
+            letterType={"CSM"}
+            letterList={debtCollection.letter_list_inheritance}
             headerTitle={t(
               "module.debtCollection.debtCollectionFormBody.letterInformingStatutoryHeirs"
             )}
-            hidePrintButton
             linkModalLabel={t(
               "module.debtCollection.debtCollectionFormBody.createLetterNotifyHeirs"
             )}
@@ -328,6 +439,7 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
               "DEBTCOLLECTION.CASEOFDEATH.LETTER.DEL"
             )}
           />
+           </React.Fragment>
         ) : (
           <React.Fragment>
             <DebtCollectionVisitTable
@@ -383,6 +495,42 @@ class DebtCollectionFormBody extends React.Component<IDebtCollectionFormBody> {
         />
       );
     }
+  }
+  private renderDebtCollectionMakePrintCancel() {
+    const { debtCollection, editMode,t } = this.props;
+    const debtSue = debtCollection.debtSue;
+    return (
+      <React.Fragment>
+          <Grid columns={"1"}>
+            <Grid.Column textAlign={"right"}>
+              <PermissionControl
+                codes={["DEBTCOLLECTION.LEGAL.PRINT.CANCELLETTER"]}
+              >
+                <Button color={"orange"} onClick={debtCollection.printCancelBorrower}>
+                  <Icon name="print" />
+                  {t(
+                    "module.debtCollection.debtCollectionSueForm.printDenounceTheBorrower"
+                  )}
+                </Button>
+              </PermissionControl>
+            </Grid.Column>
+          </Grid>
+          <Grid columns={"1"}>
+            <Grid.Column textAlign={"right"}>
+              <PermissionControl
+                codes={["DEBTCOLLECTION.LEGAL.PRINT.GUARANTORLETTER"]}
+              >
+                <Button color={"purple"} onClick={debtCollection.printCancelGurantor}>
+                  <Icon name="print" />
+                  {t(
+                    "module.debtCollection.debtCollectionSueForm.printDenounceTheGuarantor"
+                  )}
+                </Button>
+              </PermissionControl>
+            </Grid.Column>
+          </Grid>
+      </React.Fragment>
+    );
   }
 
   private renderDebtCollectionSueResult() {

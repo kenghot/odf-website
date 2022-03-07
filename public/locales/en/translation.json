@@ -1681,6 +1681,7 @@
         "pending": "Pending",
         "makeDemandLetter": "Make a demand letter",
         "followDomicile": "Follow at domicile",
+        "contractCancel": "Make a contract cancel",
         "prosecute": "Prosecute",
         "agreementNumber": "Agreement number",
         "organizationCode": "Organization code",
@@ -1764,6 +1765,7 @@
       "debtCollectionFormBody": {
         "makeDemandLetter": "Make a demand letter",
         "followDomicile": "Follow at domicile",
+        "contractCancel": "Make a contract cancel",
         "prosecute": "Prosecute",
         "borrowerRequestLetter": "Borrower's request letter",
         "claimsGuarantors": "Claims for guarantors",

@@ -50,12 +50,26 @@ class PosFeesRefund extends React.Component<IPosFeesRefund> {
                 ? this.receiptItem.ref3.length
                 : ""
             }
-            label={t("ชื่อสำนักงานที่รับคืนเงิน")}
+            label={t("ชื่อสำนักงานที่รับคืนเงิน บรรทัดที่ 1")}
             placeholder={t("กรุณากรอกชื่อสำนักงานที่รับคืนเงิน")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
               this.onChangeInputField("ref3", calMainChar(data.value)>40 ? data.value.substring(0, 40):data.value )
             }
             value={this.receiptItem.ref3}
+          />
+           <Form.Input
+            fluid
+            maxLength={
+              calMainChar(this.receiptItem.ref4) === 40
+                ? this.receiptItem.ref4.length
+                : ""
+            }
+            label={t("ชื่อสำนักงานที่รับคืนเงิน บรรทัดที่ 2")}
+            placeholder={t("กรุณากรอกชื่อสำนักงานที่รับคืนเงิน")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputField("ref4", calMainChar(data.value)>40 ? data.value.substring(0, 40):data.value )
+            }
+            value={this.receiptItem.ref4}
           />
           <Form.Input
             required

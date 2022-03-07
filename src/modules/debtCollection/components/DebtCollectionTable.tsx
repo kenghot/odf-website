@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Header, Icon, List, Popup, Table } from "semantic-ui-react";
+import { Header, Icon, List, Popup, Table ,Checkbox,Button} from "semantic-ui-react";
 import { DebtCollectionStepIcon } from ".";
 import { IAppModel } from "../../../AppModel";
 import {
@@ -12,7 +12,7 @@ import {
 } from "../../../components/common";
 import { PermissionControl } from "../../../components/permission";
 import { ARStatusIcon } from "../../../components/project";
-import { ConfirmModal } from "../../../modals";
+import { ConfirmModal,EnvelopsModal } from "../../../modals";
 import {
   currency,
   date_display_CE_TO_BE,
@@ -39,6 +39,7 @@ class DebtCollectionTable extends React.Component<IDebtCollectionTable> {
         <br />
         <SectionContainer id="searchTable" stretch fluid basic>
           <div style={styles.containerTable}>
+            {this.renderMenuTableHeader()}
             <Table striped size="small" style={styles.table}>
               {this.renderTableHeader()}
               {this.renderTableBody()}
@@ -160,12 +161,60 @@ class DebtCollectionTable extends React.Component<IDebtCollectionTable> {
       </List>
     );
   }
-
+  private renderMenuTableHeader() {
+    const { t, searchDebtCollectionListPageStore } = this.props;
+    return (
+      <>
+      <Button
+      color="blue"
+      disabled={searchDebtCollectionListPageStore.statusMenu}
+      content={t("module.report.reportCard.getReport")+"ออกเลขหนังสือ"}
+      icon="print"
+      labelPosition="left"
+      onClick={searchDebtCollectionListPageStore.printReportDebtcollection}
+    />
+    <EnvelopsModal
+            disabled={searchDebtCollectionListPageStore.statusMenu}
+            trigger={
+              <Button
+                style={styles.buttonItem}
+                disabled={searchDebtCollectionListPageStore.statusMenu}
+                color="pink"
+              >
+              พิมพ์ซองจดหมายผู้กู้
+              </Button>
+            }
+            onConfirm={searchDebtCollectionListPageStore.printEnvelopsDebtcollection}
+          />
+          <EnvelopsModal
+            disabled={searchDebtCollectionListPageStore.statusMenu}
+            trigger={
+              <Button
+                style={styles.buttonItem}
+                disabled={searchDebtCollectionListPageStore.statusMenu}
+                color="brown"
+              >
+                พิมพ์ซองจดหมายผู้ค้ำ
+              </Button>
+            }
+            onConfirm={searchDebtCollectionListPageStore.printEnvelopsGuarantorDebtcollection}
+          />
+      </>
+    );
+  }
   private renderTableHeader() {
-    const { t } = this.props;
+    const { t,searchDebtCollectionListPageStore } = this.props;
     return (
       <Table.Header>
         <Table.Row>
+        <Table.HeaderCell textAlign="center" width="1">
+            <Checkbox
+              checked={searchDebtCollectionListPageStore.selected_checkbox}
+              onChange={(event, value) =>
+                searchDebtCollectionListPageStore.selected_all(value.checked || false)
+              }
+            />
+          </Table.HeaderCell>
           <Table.HeaderCell textAlign="center" singleLine width={1}>
             {t(
               "module.accountReceivable.accountReceivableTable.agreementNumber"
@@ -340,6 +389,17 @@ class DebtCollectionTable extends React.Component<IDebtCollectionTable> {
           dataTable.map((data: IAccountReceivableModel, index: number) => {
             return (
               <Table.Row key={index}>
+                <Table.Cell textAlign="center">
+                  <Checkbox
+                    checked={data.isSelected}
+                    onChange={(event, value) =>
+                      data.setField({
+                        fieldname: "isSelected",
+                        value: value.checked,
+                      })
+                    }
+                  />
+                </Table.Cell>
                 <Table.Cell singleLine>
                   {this.checkEmptyText(data.documentNumber)}
                 </Table.Cell>

@@ -11,7 +11,8 @@ import {
   List,
   Modal,
   Segment,
-  Table
+  Table,
+  Message
 } from "semantic-ui-react";
 import { AgreementTableMessage } from ".";
 import { IAppModel } from "../../../../AppModel";
@@ -283,6 +284,7 @@ class AgreementTable extends React.Component<IAgreementTable> {
                     onChangeInputField={this.onChangeInputField}
                   />
                   {this.renderAgreementCheckList()}
+                  <Message color='red'>*กรุณาตรวจสอบเลขที่เอกสารใบสำคัญจ่ายปัจจุบันให้ถูกต้อง(ปีงบประมาณ,ลำดับที่เอกสารล่าสุด) ก่อนส่งทำใบสำคัญจ่าย / ใบแทนใบรับเงิน</Message>
                   <Form.Button fluid color="purple" type="submit" disabled={this.state.isButtonDisabled}>
                     {t(
                       "module.loan.agreementDetail.submitVoucherSubstituteReceipt"

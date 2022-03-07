@@ -104,6 +104,20 @@ class M211DebtCollectionLetterFormModal extends React.Component<
           onChangeInputField={this.onChangeInputField}
           id={`documentDateLetterItem${letterType}`}
         />
+        <Form.Input
+              fluid
+              label={t("modal.M211DebtCollectionLetterFormModal.documentNumber")}
+              placeholder={t(
+                "modal.M211DebtCollectionLetterFormModal.documentNumber"
+              )}
+              onChange={(event: any, data: any) =>
+                this.letterItem.setField({
+                  fieldname: "documentNumber",
+                  value: data.value
+                })
+              }
+              value={this.letterItem.documentNumber}
+            />
         <Form.Field
           label={t("modal.M211DebtCollectionLetterFormModal.bookDeliveryDate")}
           control={DateInput}

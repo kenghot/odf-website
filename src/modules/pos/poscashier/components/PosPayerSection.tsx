@@ -111,6 +111,7 @@ class PosPayerSection extends React.Component<IPosPayerSection> {
               value={receipt.clientName}
               onChange={(event: any, data: any) => {
                 this.onChangeInputField("clientName", data.value);
+                this.onChangeInputField("clientFirstname", data.value);
               }}
             />
             <Form.Input
@@ -206,7 +207,9 @@ class PosPayerSection extends React.Component<IPosPayerSection> {
     const name = `${receipt.clientTitle || ""}${
     receipt.clientFirstname || ""
     }${" "}${receipt.clientLastname || ""}`;
-    receipt.setField({ fieldname: "clientName", value: name });
+    if(receipt.clientType !== "C"){
+      receipt.setField({ fieldname: "clientName", value: name });
+    }
   };
 }
 
