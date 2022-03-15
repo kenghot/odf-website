@@ -20,6 +20,7 @@ import {
   IAccountReceivableTransactionsModel,
 } from "../AccountReceivableModel";
 import { MessageModel } from "../../../components/common/message";
+import { hasPermission } from "../../../utils/render-by-permission";
 
 interface IAccountReceivableTransactionTable
   extends WithTranslation,
@@ -184,7 +185,7 @@ class AccountReceivableTransactionTable extends React.Component<IAccountReceivab
                   </Table.Cell>
                   <Table.Cell textAlign="right">
                     <List horizontal verticalAlign="middle">
-                      {data.paymentType === "OFFICE-M" ? (
+                      {data.paymentType === "OFFICE-M" && hasPermission("AR.LOANPAYMENT.EDIT") ? (
                         <List.Item style={styles.listItem}>
                           <AccountReceivableTransactionModal
                             accountReceivable={accountReceivable}
@@ -202,7 +203,7 @@ class AccountReceivableTransactionTable extends React.Component<IAccountReceivab
                           />
                         </List.Item>
                       ) : null}
-                      {data.paymentType === "OFFICE-M" ? (
+                      {data.paymentType === "OFFICE-M" && hasPermission("AR.LOANPAYMENT.DEL")? (
                         <List.Item style={styles.listItem}>
                           <DeleteModal
                             trigger={
