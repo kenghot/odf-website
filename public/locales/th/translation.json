@@ -1465,7 +1465,10 @@
         "accountStartDate": "วันที่เริ่มบัญชี",
         "accountDueDate": "วันครบกำหนดบัญชี",
         "refNumber": "อ้างอิงบัญชีลูกหนี้เลขที่",
-        "acknowledgeDate": "วันที่รับสภาพหนี้"
+        "acknowledgeDate": "วันที่รับสภาพหนี้",
+        "moneyTransferDate": "วันที่สำนักงานโอนเงินให้ผู้สูงอายุ",
+        "installmentFirstDate": "วันที่ชำระงวดแรก",
+        "installmentLastDate": "วันที่ชำระงวดสุดท้าย"
       },
       "accountReceivableHeader": {
         "accountsReceivableIDCard": "บัญชีลูกหนี้: {{idCard}}",

@@ -69,7 +69,7 @@ IAccountReceivableDetail
     if (accountReceivable.documentDate) {
       list.push({
         title: t(
-          "module.accountReceivable.accountReceivableDetail.accountOpeningDate"
+          "module.accountReceivable.accountReceivableDetail.moneyTransferDate"
         ),
         description:
           date_display_CE_TO_BE(accountReceivable.documentDate) || "-",
@@ -79,7 +79,7 @@ IAccountReceivableDetail
     if (accountReceivable.startDate) {
       list.push({
         title: t(
-          "module.accountReceivable.accountReceivableDetail.accountStartDate"
+          "module.accountReceivable.accountReceivableDetail.installmentFirstDate"
         ),
         description: date_display_CE_TO_BE(accountReceivable.startDate) || "-",
         url: ""
@@ -88,7 +88,7 @@ IAccountReceivableDetail
     if (accountReceivable.endDate) {
       list.push({
         title: t(
-          "module.accountReceivable.accountReceivableDetail.accountDueDate"
+          "module.accountReceivable.accountReceivableDetail.installmentLastDate"
         ),
         description: date_display_CE_TO_BE(accountReceivable.endDate) || "-",
         url: ""

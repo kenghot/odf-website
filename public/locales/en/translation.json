@@ -1419,7 +1419,10 @@
         "accountStartDate": "Account start date",
         "accountDueDate": "Account due date",
         "refNumber": "Receivable reference number",
-        "acknowledgeDate": "Debt acceptance date"
+        "acknowledgeDate": "Debt acceptance date",
+        "moneyTransferDate": "Money transfer date",
+        "installmentFirstDate": "Installment first date",
+        "installmentLastDate": "Installment last date"
       },
       "accountReceivableHeader": {
         "accountsReceivableIDCard": "AccountReceivable: {{idCard}}",
