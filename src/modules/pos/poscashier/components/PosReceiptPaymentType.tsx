@@ -66,7 +66,7 @@ class PosReceiptPaymentType extends React.Component<IPosReceiptPaymentType> {
                     <Item.Meta style={styles.itemMeta}>
                       <Text size="small">
                         {`${t("module.pos.posReceiptPaymentType.name")} ${
-                          previousReceipt.recieveByName || "-"
+                          previousReceipt.createdByName || "-"
                         }`}
                       </Text>
                     </Item.Meta>

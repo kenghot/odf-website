@@ -165,8 +165,8 @@ class PosDetailSummary extends React.Component<IPosDetailSummary> {
                     </Item.Meta>
                     <Item.Meta style={styles.itemMeta}>
                       <Text size="small">
-                        {t("module.pos.posStatusHeader.onDutymanager", {
-                          onDutymanager:
+                        {t("module.pos.posStatusHeader.currentCashier", {
+                          currentCashier:
                           pos.lastestPosShift.currentCashier.fullname ||
                           authStore!.userProfile.fullname
                         })}
@@ -174,9 +174,9 @@ class PosDetailSummary extends React.Component<IPosDetailSummary> {
                     </Item.Meta>
                     <Item.Meta style={styles.itemMeta}>
                       <Text size="small">
-                        {t("module.pos.posStatusHeader.currentCashier", {
-                          currentCashier:
-                            pos.lastestPosShift.onDutymanager.fullname ||
+                        {t("module.pos.posStatusHeader.onDutymanager", {
+                          onDutymanager:
+                          pos.lastestPosShift.onDutymanager.fullname ||
                             pos.manager.fullname
                         })}
                       </Text>

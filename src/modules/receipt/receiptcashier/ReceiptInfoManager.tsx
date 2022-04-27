@@ -23,13 +23,13 @@ class ReceiptInfoManager extends React.Component<IReceiptInfoManager> {
           />
           <Form.Group widths="equal">
             <FormDisplay
-              title={t("module.receipt.receiptInfoEdit.recorder")}
+              title={t("module.receipt.receiptInfoEdit.payee")}
               value={`${receipt.createdByName}${
                 receipt.createdByPosition ? " : " : ""
               }${receipt.createdByPosition}`}
             />
             <FormDisplay
-              title={t("module.receipt.receiptInfoEdit.payee")}
+              title={t("module.receipt.receiptInfoEdit.recorder")}
               value={`${receipt.recieveByName}${
                 receipt.recieveByPosition ? " : " : ""
               }${receipt.recieveByPosition}`}
