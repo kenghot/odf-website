@@ -19,6 +19,27 @@ export const calMainChar = (text: string) => {
   });
   return count;
 };
+export const calIndexSubString = (text: string,indexCalMainChar: number) => {
+  console.log('text',text);
+  console.log('indexCalMainChar',indexCalMainChar);
+  let count = 0;
+  let indexText = 0;
+  const ascii = iconv.encode(text, "TIS-620");
+  const length = Array.from(Array(+ascii.length).keys());
+  length.forEach((index: number) => {
+    if (!(validateUpper(ascii[index]) || validateLower(ascii[index]))) {
+      count += 1;
+      // console.log('count',count);
+      if(count==indexCalMainChar){
+        indexText=index;
+      }else if(count<indexCalMainChar){
+        indexText=indexCalMainChar-1;
+      }
+    }
+  });
+  console.log('indexText',indexText);
+  return indexText;
+};
 
 export const calUpperLowerChar = (text: string, lengthMainChar: number) => {
   let count = 0;

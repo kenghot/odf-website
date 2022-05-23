@@ -1,7 +1,7 @@
 import moment from "moment";
 import { IAppModel } from "../../AppModel";
 import { IMAGES } from "../../constants";
-import { calMainChar, convertFullMoney, mainCharLabel } from "../../utils";
+import { calMainChar, convertFullMoney, mainCharLabel,calIndexSubString } from "../../utils";
 import { currency, date_display_CE_TO_BE, date_To_Time } from "../../utils/format-helper";
 import { EPosDevice } from "../../utils/printer-epson";
 import { IReceiptItem, IReceiptModel, ReceiptModel } from "../receipt/ReceiptModel";
@@ -189,14 +189,19 @@ const printBody = (receipt: IReceiptModel) => {
         }
         break;
       case "PR":
-        printItem(
-          `${item.name}`,
-          `${mainCharLabel(`เลขที่สัญญา ${item.ref1}`, 30)}`,
-          //`${mainCharLabel(`${currency(item.price, 2)}`, 10, true)}`,
-          `${item.description2} ` + `${item.ref2}`,
-          `${item.ref3}`,
-          `${item.ref4}`,
-        );
+          printItem(
+            `${item.name}`,
+            `${mainCharLabel(`เลขที่สัญญา : ${item.ref1}`, 30)}`
+          );
+          epos.printThai4Pass(item.description2 ? `${item.description2} :`:'');
+          //ชื่อองค์กร
+          printLongText(item.ref2)
+          epos.printThai4Pass(item.ref3 && item.description2=='ชื่อองค์กร'?'ชื่อโครงการ : ' :'');
+          //ชื่อโครงการชุดที่1
+          printLongText(item.ref3);
+          //ชื่อโครงการชุดที่2
+          printLongText(item.ref4);
+
         if(receipt.paymentMethod === "TRANSFER"){
           if(calMainChar(item.description4)>14){
             epos.printThai4Pass(item.description3 && item.description3!= ""
@@ -488,7 +493,66 @@ const printItem = (
   // epos.printLineSpace();
 
 };
+const printLongText = (text: string) => {
+  epos.printer.addTextAlign(epos.printer.ALIGN_LEFT);
+  epos.printer.addTextStyle(0, 0, 0, epos.printer.COLOR_1);
+  if (text && text!='') {
+    let indexStrArray =[];
+    let countIndex =0;
+      try{
+        if(text.length>0){
+          indexStrArray[0]=calIndexSubString(text,text.length<41 ? text.length+1 :40);
+          epos.printThai4Pass(text.substring(0,indexStrArray[0]));
+          countIndex=countIndex+indexStrArray[0];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine2=text.substring(countIndex,text.length);
+          indexStrArray[1]=calIndexSubString(textStrLine2,textStrLine2.length<41 ? textStrLine2.length+1 :40);
+          epos.printThai4Pass(textStrLine2.substring(0,indexStrArray[1]));
+          countIndex=textStrLine2.length<41 ? 0 :countIndex+indexStrArray[1];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine3=text.substring(countIndex,text.length);
+          indexStrArray[2]=calIndexSubString(textStrLine3,textStrLine3.length<41 ? textStrLine3.length+1 :40);
+          epos.printThai4Pass(textStrLine3.substring(0,indexStrArray[2]));
+          countIndex=textStrLine3.length<41 ? 0 :countIndex+indexStrArray[2];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine4=text.substring(countIndex,text.length);
+          indexStrArray[3]=calIndexSubString(textStrLine4,textStrLine4.length<41 ? textStrLine4.length+1 :40);
+          epos.printThai4Pass(textStrLine4.substring(0,indexStrArray[3]));
+          countIndex=textStrLine4.length<41 ? 0 :countIndex+indexStrArray[3];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine5=text.substring(countIndex,text.length);
+          indexStrArray[4]=calIndexSubString(textStrLine5,textStrLine5.length<41 ? textStrLine5.length+1 :40);
+          epos.printThai4Pass(textStrLine5.substring(0,indexStrArray[4]));
+          countIndex=textStrLine5.length<41 ? 0 :countIndex+indexStrArray[4];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine6=text.substring(countIndex,text.length);
+          indexStrArray[5]=calIndexSubString(textStrLine6,textStrLine6.length<41 ? textStrLine6.length+1 :40);
+          epos.printThai4Pass(textStrLine6.substring(0,indexStrArray[5]));
+          countIndex=textStrLine6.length<41 ? 0 :countIndex+indexStrArray[5];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine7=text.substring(countIndex,text.length);
+          indexStrArray[6]=calIndexSubString(textStrLine7,textStrLine7.length<41 ? textStrLine7.length+1 :40);
+          epos.printThai4Pass(textStrLine7.substring(0,indexStrArray[6]));
+          countIndex=textStrLine7.length<41 ? 0 :countIndex+indexStrArray[6];
+        }
+        if(text.length>countIndex && countIndex!=0){
+          const textStrLine8=text.substring(countIndex,text.length);
+          indexStrArray[7]=calIndexSubString(textStrLine8,textStrLine8.length<41 ? textStrLine8.length+1 :40);
+          epos.printThai4Pass(textStrLine8.substring(0,indexStrArray[7]));
+          countIndex=textStrLine8.length<41 ? 0 :countIndex+indexStrArray[7];
+        }
+    }catch
+    {
 
+    }
+  }
+};
 const DateDisplayCeToBe = (value: any) => {
   const date = moment(value);
   return date.isValid() ? date.locale("es").add("years", 543).format("DD[/]MM[/]YYYY") : "-";

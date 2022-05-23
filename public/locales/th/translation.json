@@ -2093,6 +2093,18 @@
       },
       "ReceiptReprintReport": {
         "title": "รายงาน 4: รายงานการนำจ่ายเงินกู้"
+      },
+      "PaymentCenterDailyReport": {
+        "title": "รายงาน 6: รายงานสรุปการรับเงินประจำ วัน/เดือน/ปี (ส่วนกลาง)"
+      },
+      "PaymentByOrganizeDailyReport": {
+        "title": "รายงาน 7: รายงานสรุปการรับเงินประจำ วัน/เดือน/ปี (ภูมิภาค)"
+      },
+      "PaymentCenterSubDailyReport": {
+        "title": "รายงาน 8: รายงานสรุปย่อยการรับเงินประจำ วัน/เดือน/ปี (ส่วนกลาง)"
+      },
+      "PaymentByOrganizeSubDailyReport": {
+        "title": "รายงาน 9: รายงานสรุปย่อยการรับเงินประจำ วัน/เดือน/ปี (ภูมิภาค)"
       }
     },
     "pos": {

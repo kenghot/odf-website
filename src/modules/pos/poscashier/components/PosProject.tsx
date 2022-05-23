@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import { clone } from "mobx-state-tree";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { Button, Form, Grid, Header, Icon, Segment } from "semantic-ui-react";
+import { Button, Form, Grid, Header, Icon, Segment,TextArea } from "semantic-ui-react";
 import { IAppModel } from "../../../../AppModel";
 import { Link } from "../../../../components/common";
 import { CurrencyInput } from "../../../../components/common/input";
@@ -46,7 +46,7 @@ class PosProject extends React.Component<IPosProject> {
             required
             fluid
             maxLength={
-              calMainChar(this.receiptItem.ref1) === 35
+              calMainChar(this.receiptItem.ref1) === 30
                 ? this.receiptItem.ref1.length
                 : ""
             }
@@ -57,45 +57,61 @@ class PosProject extends React.Component<IPosProject> {
             }
             value={this.receiptItem.ref1}
           />
-          <Form.Input
+          {/* <Form.Input
             fluid
             maxLength={
               calMainChar(this.receiptItem.ref2) === 35
                 ? this.receiptItem.ref2.length
                 : ""
             }
-            label={t("ชื่อโครงการ บรรทัดที่1")}
-            placeholder={t("module.pos.posProject.placeholderName")}
+            label={t("ชื่อองค์กร")}
+            placeholder={t("ระบุชื่อองค์กร")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
               this.onChangeInputField("ref2", calMainChar(data.value)>35 ? data.value.substring(0, 35):data.value )
             }
             value={this.receiptItem.ref2}
+          /> */}
+          <Form.TextArea
+            fluid
+            maxLength={255}
+            label={t("ชื่อองค์กร")}
+            placeholder={t("ระบุชื่อองค์กร (กรอกข้อมูลได้สูงสุด 255 ตัวอักษร)")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputField("ref2", data.value.length>254 ? data.value.substring(0, 255):data.value )
+            }
+            value={this.receiptItem.ref2}
           />
-          <Form.Input
+          {/* <Form.Input
             fluid
             maxLength={
               calMainChar(this.receiptItem.ref3) === 40
                 ? this.receiptItem.ref3.length
                 : ""
             }
-            label={t("ชื่อโครงการ บรรทัดที่2")}
+            label={t("ชื่อโครงการ")}
             placeholder={t("module.pos.posProject.placeholderName")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
               this.onChangeInputField("ref3", calMainChar(data.value)>40 ? data.value.substring(0, 40):data.value )
             }
             value={this.receiptItem.ref3}
-          />
-          <Form.Input
+          /> */}
+          <Form.TextArea
             fluid
-            maxLength={
-              calMainChar(this.receiptItem.ref4) === 40
-                ? this.receiptItem.ref4.length
-                : ""
-            }
-            label={t("ชื่อโครงการ บรรทัดที่3")}
-            placeholder={t("module.pos.posProject.placeholderName")}
+            maxLength={255}
+            label={t("ชื่อโครงการ")}
+            placeholder={t("ระบุชื่อโครงการ (กรอกข้อมูลได้สูงสุด 255 ตัวอักษร)")}
             onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
-              this.onChangeInputField("ref4", calMainChar(data.value)>40 ? data.value.substring(0, 40):data.value )
+              this.onChangeInputField("ref3", data.value.length>254 ? data.value.substring(0, 255):data.value )
+            }
+            value={this.receiptItem.ref3}
+          />
+          <Form.TextArea
+            fluid
+            maxLength={255}
+            label={t("ชื่อโครงการ(ต่อ)")}
+            placeholder={t("ระบุชื่อโครงการ (กรอกข้อมูลได้สูงสุด 255 ตัวอักษร)")}
+            onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) =>
+              this.onChangeInputField("ref4", data.value.length>254 ? data.value.substring(0, 255):data.value )
             }
             value={this.receiptItem.ref4}
           />
@@ -200,7 +216,7 @@ class PosProject extends React.Component<IPosProject> {
     });
     this.receiptItem.setField({
       fieldname: "description2",
-      value: "ชื่อ"
+      value: "ชื่อองค์กร"
     });
     receipt.addReceiptItems(clone(this.receiptItem));
   };

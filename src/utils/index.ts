@@ -21,7 +21,8 @@ export {
   calMainChar,
   mainCharLabel,
   validateLower,
-  validateUpper
+  validateUpper,
+  calIndexSubString
 } from "./thai-format-helper";
 export {
   convertFullMoney,

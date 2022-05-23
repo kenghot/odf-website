@@ -2033,6 +2033,18 @@
       },
       "ReceiptReprintReport": {
         "title": "Report 5: Receipt reprint Report"
+      },
+      "PaymentCenterDailyReport": {
+        "title": "Report 6: Daily/Month/Year Receipt Summary Report (Central)"
+      },
+      "PaymentByOrganizeDailyReport": {
+        "title": "Daily/Month/Year Receipt Summary Report (Central)"
+      },
+      "PaymentCenterSubDailyReport": {
+        "title": "Report 8: Daily/Month/Year Sub-Report (Central)"
+      },
+      "PaymentByOrganizeSubDailyReport": {
+        "title": "Report 9: Day/Month/Year Sub-report Summary (Region)"
       }
     },
     "pos": {
