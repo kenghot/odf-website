@@ -193,7 +193,7 @@ const printBody = (receipt: IReceiptModel) => {
             `${item.name}`,
             `${mainCharLabel(`เลขที่สัญญา : ${item.ref1}`, 30)}`
           );
-          epos.printThai4Pass(item.description2 ? `${item.description2} :`:'');
+          epos.printThai4Pass(item.description2 && item.ref2 ? `${item.description2} :`:'');
           //ชื่อองค์กร
           printLongText(item.ref2)
           epos.printThai4Pass(item.ref3 && item.description2=='ชื่อองค์กร'?'ชื่อโครงการ : ' :'');

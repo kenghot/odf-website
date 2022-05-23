@@ -72,7 +72,6 @@ class PosProject extends React.Component<IPosProject> {
             value={this.receiptItem.ref2}
           /> */}
           <Form.TextArea
-            fluid
             maxLength={255}
             label={t("ชื่อองค์กร")}
             placeholder={t("ระบุชื่อองค์กร (กรอกข้อมูลได้สูงสุด 255 ตัวอักษร)")}
@@ -96,7 +95,6 @@ class PosProject extends React.Component<IPosProject> {
             value={this.receiptItem.ref3}
           /> */}
           <Form.TextArea
-            fluid
             maxLength={255}
             label={t("ชื่อโครงการ")}
             placeholder={t("ระบุชื่อโครงการ (กรอกข้อมูลได้สูงสุด 255 ตัวอักษร)")}
@@ -106,7 +104,6 @@ class PosProject extends React.Component<IPosProject> {
             value={this.receiptItem.ref3}
           />
           <Form.TextArea
-            fluid
             maxLength={255}
             label={t("ชื่อโครงการ(ต่อ)")}
             placeholder={t("ระบุชื่อโครงการ (กรอกข้อมูลได้สูงสุด 255 ตัวอักษร)")}
