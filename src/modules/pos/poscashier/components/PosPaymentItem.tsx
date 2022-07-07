@@ -80,7 +80,7 @@ class PosPaymentItem extends React.Component<IPosPaymentItem> {
         </Item.Content>
         <Item.Content style={styles.itemContent}>
           <Item.Header style={styles.itemHeaderIcon}>
-            {currency(receiptItem.subtotal)}
+            {currency(receiptItem.subtotal,2)}
             {editMode ? (
               <Icon
                 onClick={onDeleteItem}

@@ -89,7 +89,7 @@ class PosReceiptTable extends React.Component<IPosReceiptTable> {
                 </Table.Cell>
                 <Table.Cell>{data.clientName || "-"}</Table.Cell>
                 <Table.Cell textAlign="right">
-                  {currency(data.total) || "-"}
+                  {currency(data.total,2) || "-"}
                 </Table.Cell>
                 <Table.Cell textAlign="center">
                   {appStore!.enumItemLabel("receiptStatus", data.status)}
